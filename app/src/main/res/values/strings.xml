@@ -1,3 +1,5 @@
 <resources>
     <string name="app_name">HRM_Suffix</string>
+    <string name="version">Version :1.0.0</string>
+    <string name="design">© 2023, Designed &amp; Developed by Suffix IT Limited</string>
 </resources>
