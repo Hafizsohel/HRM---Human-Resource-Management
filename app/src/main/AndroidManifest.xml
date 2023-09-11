@@ -12,25 +12,25 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.HRM_Suffix"
         tools:targetApi="31">
+
         <activity
-            android:name=".activities.loginActivity"
-            android:exported="true">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+            android:name=".activities.view.Activities.loginActivity"
+            android:exported="false"/>
+
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.view.Activities.MainActivity"
             android:exported="false" />
+
         <activity
-            android:name=".activities.SplashActivity"
+            android:name=".activities.view.Activities.SplashActivity"
             android:theme="@style/Fullscreen"
             android:exported="true">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
     </application>
 </manifest>
