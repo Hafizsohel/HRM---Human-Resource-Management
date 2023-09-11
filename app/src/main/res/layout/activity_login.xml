@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical">
 
     <LinearLayout
@@ -24,13 +26,12 @@
                 android:layout_gravity="center"
                 app:cardCornerRadius="60dp"
                 app:cardElevation="10dp"
-                android:background="@drawable/suffixit"
                 app:strokeWidth="5dp">
 
                 <ImageView
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/suffixit"
+                    android:src="@drawable/suffix"
                     android:scaleType="centerCrop" />
             </com.google.android.material.card.MaterialCardView>
 
@@ -82,7 +83,7 @@
 
 
             <EditText
-                android:id="@+id/pass"
+                android:id="@+id/password"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:background="@color/transparent"
@@ -107,7 +108,7 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/loginbtn"
+            android:id="@+id/loginBtn"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
@@ -165,3 +166,4 @@
             />
     </LinearLayout>
 </RelativeLayout>
+</layout>
