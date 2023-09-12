@@ -10,7 +10,6 @@ import android.os.Bundle;
 import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -38,13 +37,14 @@ public class loginActivity extends AppCompatActivity {
             );
             getWindow().setStatusBarColor(Color.TRANSPARENT);
         }
+
+
         binding.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 loginBtn(v);
             }
         });
-
     }
         public void loginBtn(View view){
             String userEmail= binding.userName.getText().toString().trim();
