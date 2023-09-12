@@ -51,6 +51,7 @@ dependencies {
 
     //Circle View Image
     implementation("de.hdodenhof:circleimageview:3.1.0")
+    implementation ("androidx.room:room-common:2.5.2")
 
 
 }
