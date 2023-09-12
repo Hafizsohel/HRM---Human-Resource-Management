@@ -1,4 +1,4 @@
-package com.suffixit.hrm_suffix.activities.view.Activities;
+package com.suffixit.hrm_suffix.view.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 

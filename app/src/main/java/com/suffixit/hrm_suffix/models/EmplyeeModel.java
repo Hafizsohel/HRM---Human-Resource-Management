@@ -1,4 +1,4 @@
-package com.suffixit.hrm_suffix.activities.models;
+package com.suffixit.hrm_suffix.models;
 
 import androidx.room.Entity;
 import androidx.room.Index;

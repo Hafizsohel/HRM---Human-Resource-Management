@@ -1,4 +1,4 @@
-package com.suffixit.hrm_suffix.activities;
+package com.suffixit.hrm_suffix.view.Fragment;
 
 import android.os.Bundle;
 

@@ -1,4 +1,4 @@
-package com.suffixit.hrm_suffix.activities.view.Activities;
+package com.suffixit.hrm_suffix.view.Activities;
 
 import static java.lang.Thread.sleep;
 
@@ -30,7 +30,7 @@ public class SplashActivity extends AppCompatActivity {
                 try {
                     sleep(4000);
 
-                    Intent intent = new Intent(SplashActivity.this, loginActivity.class);
+                    Intent intent = new Intent(SplashActivity.this, LoginActivity.class);
                     startActivity(intent);
                     finish();
 
