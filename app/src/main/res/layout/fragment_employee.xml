@@ -42,6 +42,7 @@
             android:gravity="center" />
 
         <TextView
+            android:id="@+id/userName"
             android:layout_width="300dp"
             android:layout_height="50dp"
             android:text="User Name:"
@@ -53,7 +54,7 @@
     </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/address_recycler"
+        android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/headerLayout"

@@ -23,12 +23,23 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                Fragment fragment=new EmployeeFragment();
-
-                FragmentTransaction fragmentTransaction=getSupportFragmentManager().beginTransaction();
-              //  fragmentTransaction.replace(R.id.continer, fragment).commit();
+                navigateToEmployeeFragment();
 
             }
         });
     }
-}
+
+        private void navigateToEmployeeFragment() {
+            // Create a new instance of the EmployeeFragment
+            EmployeeFragment employeeFragment = new EmployeeFragment();
+
+            // Get the fragment manager
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+            // Start a fragment transaction to replace the current fragment with the EmployeeFragment
+            FragmentTransaction transaction = fragmentManager.beginTransaction();
+            transaction.replace(R.id.fragment_container, employeeFragment); // Replace with your fragment container ID
+            transaction.addToBackStack(null); // Optional: Adds the transaction to the back stack
+            transaction.commit();
+        }
+    }
