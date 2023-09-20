@@ -53,12 +53,10 @@ public class EmployeeFragment extends Fragment {
             @Override
             public void onSuccess(QuerySnapshot documentSnapshots) {
                 emplyeeList.clear();
-
                 for (QueryDocumentSnapshot document : documentSnapshots) {
                     EmplyeeModel employee = document.toObject(EmplyeeModel.class);
                     emplyeeList.add(employee);
                 }
-
                 Collections.sort(emplyeeList, new Comparator<EmplyeeModel>() {
                     @Override
                     public int compare(EmplyeeModel employee1, EmplyeeModel employee2) {

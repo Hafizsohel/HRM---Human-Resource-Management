@@ -13,9 +13,16 @@ public class EmplyeeModel implements Serializable {
 
     private String username;
     private String name;
+    private String BloodGroup;
+    private String Designation;
+    private String Email;
+    private String Gender;
+    private int PhoneNumber;
+
 
     public EmplyeeModel() {
     }
+/*
 
     public EmplyeeModel(String username, String name) {
         this.username = username;
@@ -30,3 +37,95 @@ public class EmplyeeModel implements Serializable {
         return name;
     }
 }
+*/
+
+    public EmplyeeModel(int id, String username, String name, String bloodGroup, String designation, String email, String gender, int phoneNumber) {
+        this.id = id;
+        this.username = username;
+        this.name = name;
+        BloodGroup = bloodGroup;
+        Designation = designation;
+        Email = email;
+        Gender = gender;
+        PhoneNumber = phoneNumber;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getBloodGroup() {
+        return BloodGroup;
+    }
+
+    public void setBloodGroup(String bloodGroup) {
+        BloodGroup = bloodGroup;
+    }
+
+    public String getDesignation() {
+        return Designation;
+    }
+
+    public void setDesignation(String designation) {
+        Designation = designation;
+    }
+
+    public String getEmail() {
+        return Email;
+    }
+
+    public void setEmail(String email) {
+        Email = email;
+    }
+
+    public String getGender() {
+        return Gender;
+    }
+
+    public void setGender(String gender) {
+        Gender = gender;
+    }
+
+    public int getPhoneNumber() {
+        return PhoneNumber;
+    }
+
+    public void setPhoneNumber(int phoneNumber) {
+        PhoneNumber = phoneNumber;
+    }
+
+    @Override
+    public String toString() {
+        return "EmplyeeModel{" +
+                "id=" + id +
+                ", username='" + username + '\'' +
+                ", name='" + name + '\'' +
+                ", BloodGroup='" + BloodGroup + '\'' +
+                ", Designation='" + Designation + '\'' +
+                ", Email='" + Email + '\'' +
+                ", Gender='" + Gender + '\'' +
+                ", PhoneNumber=" + PhoneNumber +
+                '}';
+    }
+}
+

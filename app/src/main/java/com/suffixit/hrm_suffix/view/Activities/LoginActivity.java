@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
 import android.content.Intent;
 import android.content.IntentFilter;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.os.Build;
@@ -35,13 +36,18 @@ public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
     private FirebaseAuth auth;
     private DatabaseReference usersRef;
+    private SharedPreferences sharedPreferences;
+    private static final String PREFS_NAME = "MyPrefsFile";
+    private static final String KEY_USERNAME = "username";
+    private static final String KEY_PASSWORD = "password";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         auth = FirebaseAuth.getInstance();
         usersRef = FirebaseDatabase.getInstance().getReference("Users");
-
+        sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -73,6 +79,13 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     private void authenticateUser(final String username, final String enteredPassword) {
+
+        // After successful authentication, save the username and password
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(KEY_USERNAME, username);
+        editor.putString(KEY_PASSWORD, enteredPassword);
+        editor.apply();
+
         CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
         Query query = usersCollection.whereEqualTo("username", username);
 
@@ -105,5 +118,19 @@ public class LoginActivity extends AppCompatActivity {
                 }
             }
         });
+    }
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        String savedUsername = sharedPreferences.getString(KEY_USERNAME, null);
+        String savedPassword = sharedPreferences.getString(KEY_PASSWORD, null);
+
+        if (savedUsername != null) {
+            binding.userName.setText(savedUsername);
+        }
+        if (savedPassword != null) {
+            binding.password.setText(savedPassword);
+        }
     }
 }
