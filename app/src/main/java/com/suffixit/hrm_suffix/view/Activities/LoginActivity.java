@@ -35,13 +35,12 @@ public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
     private FirebaseAuth auth;
     private DatabaseReference usersRef;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         auth = FirebaseAuth.getInstance();
-        usersRef = FirebaseDatabase.getInstance().getReference("users");
+        usersRef = FirebaseDatabase.getInstance().getReference("Users");
 
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -66,6 +65,7 @@ public class LoginActivity extends AppCompatActivity {
                     String username = binding.userName.getText().toString();
                     String password = binding.password.getText().toString();
                     authenticateUser(username, password);
+
                 } else {
                     Toast.makeText(LoginActivity.this, "User is not signed in.", Toast.LENGTH_SHORT).show();
                 }
@@ -73,12 +73,6 @@ public class LoginActivity extends AppCompatActivity {
         });
     }
     private void authenticateUser(final String username, final String enteredPassword) {
-        if (!NetworkUtils.isNetworkConnected(LoginActivity.this)) {
-            KeyboardUtils.hideKeyboard(LoginActivity.this);
-            Toast.makeText(LoginActivity.this, R.string.no_internet, Toast.LENGTH_SHORT).show();
-            return;
-        }
-
         CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
         Query query = usersCollection.whereEqualTo("username", username);
 
@@ -99,7 +93,10 @@ public class LoginActivity extends AppCompatActivity {
                             break;
                         }
                     }
-                    if (!userFound) {
+                    if (task.getResult().isEmpty()) {
+                        Toast.makeText(LoginActivity.this, "User with username '" + username + "' not found. User hasn't been created yet.", Toast.LENGTH_SHORT).show();
+                    }
+                    else if (!userFound) {
                         Toast.makeText(LoginActivity.this, R.string.bad_credential, Toast.LENGTH_SHORT).show();
                     }
                 } else {
