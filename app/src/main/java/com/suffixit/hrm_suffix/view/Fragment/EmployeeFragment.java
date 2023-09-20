@@ -11,12 +11,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.suffixit.hrm_suffix.Adapter.EmployeeAdapter;
 import com.suffixit.hrm_suffix.R;
+import com.suffixit.hrm_suffix.models.EmplyeeDetails;
 import com.suffixit.hrm_suffix.models.EmplyeeModel;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -30,6 +38,7 @@ public class EmployeeFragment extends Fragment {
     private EmployeeAdapter employeeAdapter;
     private List<EmplyeeModel> emplyeeList;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,8 +51,10 @@ public class EmployeeFragment extends Fragment {
         employeeAdapter = new EmployeeAdapter(emplyeeList, getContext());
         recyclerView.setAdapter(employeeAdapter);
         fetchDataFromFirebase();
+
         return rootView;
     }
+
 
     private void fetchDataFromFirebase() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
