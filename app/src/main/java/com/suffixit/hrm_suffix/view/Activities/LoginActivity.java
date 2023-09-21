@@ -46,8 +46,11 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         auth = FirebaseAuth.getInstance();
+<<<<<<< HEAD
         //usersRef = FirebaseDatabase.getInstance().getReference("Users");
 
+=======
+>>>>>>> 14c6aa5a48ae74b706a45c8f205c2fe7c55ff6f1
         db = FirebaseFirestore.getInstance();
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
@@ -71,8 +74,12 @@ public class LoginActivity extends AppCompatActivity {
                     String username = binding.userName.getText().toString();
                     String password = binding.password.getText().toString();
                     authenticateUser(username, password);
+<<<<<<< HEAD
 
                 }
+=======
+            }
+>>>>>>> 14c6aa5a48ae74b706a45c8f205c2fe7c55ff6f1
         });
     }
     private void authenticateUser(final String username, final String enteredPassword) {

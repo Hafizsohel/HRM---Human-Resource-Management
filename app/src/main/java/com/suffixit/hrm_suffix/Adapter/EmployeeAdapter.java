@@ -57,7 +57,11 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         String username = clickedItem.getUsername();
         String name = clickedItem.getName();
         String designation = clickedItem.getDesignation();
+<<<<<<< HEAD
         String  phoneNumber = clickedItem.getPhoneNumber();
+=======
+        String phoneNumber = clickedItem.getPhoneNumber();
+>>>>>>> 14c6aa5a48ae74b706a45c8f205c2fe7c55ff6f1
         String email = clickedItem.getEmail();
         String gender = clickedItem.getGender();
         String bloodGroup = clickedItem.getBloodGroup();

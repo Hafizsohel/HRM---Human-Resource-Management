@@ -30,6 +30,7 @@ public class EmployeeFragment extends Fragment {
     private EmployeeAdapter employeeAdapter;
     private List<EmplyeeModel> emplyeeList;
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -42,8 +43,10 @@ public class EmployeeFragment extends Fragment {
         employeeAdapter = new EmployeeAdapter(emplyeeList, getContext());
         recyclerView.setAdapter(employeeAdapter);
         fetchDataFromFirebase();
+
         return rootView;
     }
+
 
     private void fetchDataFromFirebase() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();

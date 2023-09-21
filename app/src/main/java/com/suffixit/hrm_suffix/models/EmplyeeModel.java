@@ -22,13 +22,9 @@ public class EmplyeeModel implements Serializable {
 
     public EmplyeeModel() {
     }
-/*
 
-    public EmplyeeModel(String username, String name) {
-        this.username = username;
-        this.name = name;
-    }
 
+<<<<<<< HEAD
     public String getUsername() {
         return username;
     }
@@ -39,6 +35,8 @@ public class EmplyeeModel implements Serializable {
 }
 */
 
+=======
+>>>>>>> 14c6aa5a48ae74b706a45c8f205c2fe7c55ff6f1
     public EmplyeeModel(int id, String username, String name, String bloodGroup, String designation, String email, String gender, String phoneNumber) {
         this.id = id;
         this.username = username;
@@ -106,7 +104,11 @@ public class EmplyeeModel implements Serializable {
         Gender = gender;
     }
 
+<<<<<<< HEAD
     public String  getPhoneNumber() {
+=======
+    public String getPhoneNumber() {
+>>>>>>> 14c6aa5a48ae74b706a45c8f205c2fe7c55ff6f1
         return PhoneNumber;
     }
 
