@@ -35,7 +35,7 @@ import java.util.Map;
 public class LoginActivity extends AppCompatActivity {
     ActivityLoginBinding binding;
     private FirebaseAuth auth;
-    private DatabaseReference usersRef;
+    private FirebaseFirestore db;
     private SharedPreferences sharedPreferences;
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String KEY_USERNAME = "username";
@@ -46,7 +46,7 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         auth = FirebaseAuth.getInstance();
-        usersRef = FirebaseDatabase.getInstance().getReference("Users");
+        db = FirebaseFirestore.getInstance();
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -66,15 +66,9 @@ public class LoginActivity extends AppCompatActivity {
         binding.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-                if (currentUser != null) {
                     String username = binding.userName.getText().toString();
                     String password = binding.password.getText().toString();
                     authenticateUser(username, password);
-
-                } else {
-                    Toast.makeText(LoginActivity.this, "User is not signed in.", Toast.LENGTH_SHORT).show();
-                }
             }
         });
     }

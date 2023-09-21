@@ -17,29 +17,14 @@ public class EmplyeeModel implements Serializable {
     private String Designation;
     private String Email;
     private String Gender;
-    private int PhoneNumber;
+    private String PhoneNumber;
 
 
     public EmplyeeModel() {
     }
-/*
 
-    public EmplyeeModel(String username, String name) {
-        this.username = username;
-        this.name = name;
-    }
 
-    public String getUsername() {
-        return username;
-    }
-
-    public String getName() {
-        return name;
-    }
-}
-*/
-
-    public EmplyeeModel(int id, String username, String name, String bloodGroup, String designation, String email, String gender, int phoneNumber) {
+    public EmplyeeModel(int id, String username, String name, String bloodGroup, String designation, String email, String gender, String phoneNumber) {
         this.id = id;
         this.username = username;
         this.name = name;
@@ -106,11 +91,11 @@ public class EmplyeeModel implements Serializable {
         Gender = gender;
     }
 
-    public int getPhoneNumber() {
+    public String getPhoneNumber() {
         return PhoneNumber;
     }
 
-    public void setPhoneNumber(int phoneNumber) {
+    public void setPhoneNumber(String phoneNumber) {
         PhoneNumber = phoneNumber;
     }
 
