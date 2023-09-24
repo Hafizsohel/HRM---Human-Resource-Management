@@ -16,8 +16,10 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
+
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.models.EmplyeeModel;
+
 import java.util.List;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
@@ -57,11 +59,10 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         String username = clickedItem.getUsername();
         String name = clickedItem.getName();
         String designation = clickedItem.getDesignation();
-<<<<<<< HEAD
-        String  phoneNumber = clickedItem.getPhoneNumber();
-=======
+
         String phoneNumber = clickedItem.getPhoneNumber();
->>>>>>> 14c6aa5a48ae74b706a45c8f205c2fe7c55ff6f1
+
+
         String email = clickedItem.getEmail();
         String gender = clickedItem.getGender();
         String bloodGroup = clickedItem.getBloodGroup();
@@ -102,7 +103,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
         ImageButton callButton = createImageButton(R.drawable.call, iconSizePx);
         ImageButton smsButton = createImageButton(R.drawable.sms, iconSizePx);
-       // ImageButton whatsappButton = createImageButton(R.drawable.ic_whatsapp, iconSizePx);
+        // ImageButton whatsappButton = createImageButton(R.drawable.ic_whatsapp, iconSizePx);
         ImageButton emailButton = createImageButton(R.drawable.ic_email, iconSizePx);
 
         // Add margins between the ImageButtons
@@ -120,7 +121,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
         iconsLayout.addView(callButton);
         iconsLayout.addView(smsButton);
-       // iconsLayout.addView(whatsappButton);
+        // iconsLayout.addView(whatsappButton);
         iconsLayout.addView(emailButton);
 
         callButton.setOnClickListener(new View.OnClickListener() {
@@ -158,17 +159,21 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
                 EmplyeeModel employee = emplyeeList.get(position);
                 String email = employee.getEmail();
 
-                Intent intent = new Intent(Intent.ACTION_SENDTO);
+                Intent intent = new Intent(Intent.ACTION_SEND);
                 intent.setData(Uri.parse("mailto:" + email));  // Specify the recipient's email
+              //  intent.setType(Intent.EXTRA_EMAIL + email);
                 intent.putExtra(Intent.EXTRA_SUBJECT, "Subject");  // Set the subject if needed
+                intent.setType("message/rfc822");
 
                 if (intent.resolveActivity(context.getPackageManager()) != null) {
                     context.startActivity(intent);
                 } else {
                     Toast.makeText(context, "No email app found", Toast.LENGTH_SHORT).show();
                 }
+
             }
         });
+
 
 
         layout.addView(iconsLayout);
@@ -182,6 +187,8 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         AlertDialog dialog = builder.create();
         dialog.show();
     }
+
+
 
     private ImageButton createImageButton(int drawableRes, int sizePx) {
         ImageButton imageButton = new ImageButton(context);

@@ -4,6 +4,7 @@ package com.suffixit.hrm_suffix.view.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
+
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
@@ -14,6 +15,7 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
+
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
@@ -29,6 +31,7 @@ import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.ActivityLoginBinding;
 import com.suffixit.hrm_suffix.utils.KeyboardUtils;
 import com.suffixit.hrm_suffix.utils.NetworkUtils;
+
 import java.util.Map;
 
 
@@ -46,11 +49,9 @@ public class LoginActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         auth = FirebaseAuth.getInstance();
-<<<<<<< HEAD
+
         //usersRef = FirebaseDatabase.getInstance().getReference("Users");
 
-=======
->>>>>>> 14c6aa5a48ae74b706a45c8f205c2fe7c55ff6f1
         db = FirebaseFirestore.getInstance();
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
@@ -71,17 +72,15 @@ public class LoginActivity extends AppCompatActivity {
         binding.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                    String username = binding.userName.getText().toString();
-                    String password = binding.password.getText().toString();
-                    authenticateUser(username, password);
-<<<<<<< HEAD
+                String username = binding.userName.getText().toString();
+                String password = binding.password.getText().toString();
+                authenticateUser(username, password);
 
-                }
-=======
             }
->>>>>>> 14c6aa5a48ae74b706a45c8f205c2fe7c55ff6f1
+
         });
     }
+
     private void authenticateUser(final String username, final String enteredPassword) {
 
         // After successful authentication, save the username and password
@@ -112,8 +111,7 @@ public class LoginActivity extends AppCompatActivity {
                     }
                     if (task.getResult().isEmpty()) {
                         Toast.makeText(LoginActivity.this, "User with username '" + username + "' not found. User hasn't been created yet.", Toast.LENGTH_SHORT).show();
-                    }
-                    else if (!userFound) {
+                    } else if (!userFound) {
                         Toast.makeText(LoginActivity.this, R.string.bad_credential, Toast.LENGTH_SHORT).show();
                     }
                 } else {
@@ -123,6 +121,7 @@ public class LoginActivity extends AppCompatActivity {
             }
         });
     }
+
     @Override
     protected void onResume() {
         super.onResume();
