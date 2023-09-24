@@ -24,7 +24,6 @@ public class EmplyeeModel implements Serializable {
     }
 
 
-
     public String getUsername() {
         return username;
     }
@@ -32,9 +31,6 @@ public class EmplyeeModel implements Serializable {
     public String getName() {
         return name;
     }
-
-
-
 
     public EmplyeeModel(int id, String username, String name, String bloodGroup, String designation, String email, String gender, String phoneNumber) {
         this.id = id;
@@ -102,7 +98,6 @@ public class EmplyeeModel implements Serializable {
     public void setGender(String gender) {
         Gender = gender;
     }
-
 
     public String getPhoneNumber() {
         return PhoneNumber;

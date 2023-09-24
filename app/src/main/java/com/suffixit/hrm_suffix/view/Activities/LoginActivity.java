@@ -51,7 +51,6 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         //usersRef = FirebaseDatabase.getInstance().getReference("Users");
-
         db = FirebaseFirestore.getInstance();
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
 
@@ -72,11 +71,14 @@ public class LoginActivity extends AppCompatActivity {
         binding.loginBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+
                 String username = binding.userName.getText().toString();
                 String password = binding.password.getText().toString();
                 authenticateUser(username, password);
 
             }
+
+
 
         });
     }

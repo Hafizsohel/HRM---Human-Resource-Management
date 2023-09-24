@@ -45,7 +45,7 @@
                     android:layout_gravity="center">
 
                     <ImageView
-                        android:id="@+id/imgEmplyeeProfile"
+                        android:id="@+id/imgEmployeeProfile"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
                         android:layout_centerHorizontal="true"
@@ -56,73 +56,71 @@
                 </RelativeLayout>
 
                 <TextView
-                    android:id="@+id/txtEmplyeeId"
+                    android:id="@+id/txtEmployeeId"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1.30dp"
-                    android:text="Emplyee ID"
+                    android:text="ID: "
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="10.40sp"
-                    android:textStyle="bold"/>
+                    android:textSize="10.40sp" />
 
                 <TextView
-                    android:id="@+id/txtEmplyeeName"
+                    android:id="@+id/txtEmployeeName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1.30dp"
-                    android:text="Emplyee Name"
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="10.40sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/txtEmplyeeDesignation"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="31.20dp"
-                    android:text="Emplyee Designation"
+                    android:text="Name: "
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="10.40sp" />
 
                 <TextView
-                    android:id="@+id/txtEmplyeeMail"
+                    android:id="@+id/txtEmployeeDesignation"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="31.20dp"
-                    android:text="Emplyee Email"
+                    android:text="Designation: "
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="10.40sp" />
 
                 <TextView
-                    android:id="@+id/txtEmplyeePhone"
+                    android:id="@+id/txtEmployeeMail"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="31.20dp"
-                    android:text="Phone NUmber"
+                    android:text="Email: "
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="10.40sp" />
 
                 <TextView
-                    android:id="@+id/txtEmplyeeBloodGroup"
+                    android:id="@+id/txtEmployeePhone"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="31.20dp"
-                    android:text="Blood Group"
+                    android:text="Phone Number: "
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="10.40sp" />
 
                 <TextView
-                    android:id="@+id/txtEmplyeeGender"
+                    android:id="@+id/txtEmployeeBloodGroup"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="31.20dp"
-                    android:text="Gender"
+                    android:text="Blood Group: "
+                    android:textAlignment="center"
+                    android:textColor="@color/white"
+                    android:textSize="10.40sp" />
+
+                <TextView
+                    android:id="@+id/txtEmployeeGender"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:paddingHorizontal="31.20dp"
+                    android:text="Gender: "
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:paddingBottom="7.80dp"
