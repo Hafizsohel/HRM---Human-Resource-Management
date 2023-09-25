@@ -1,10 +1,7 @@
 package com.suffixit.hrm_suffix.Adapter;
 
-import static androidx.core.content.ContentProviderCompat.requireContext;
-
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.net.Uri;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -13,15 +10,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.models.EmplyeeModel;
-
 import java.util.List;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
@@ -55,15 +48,10 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     private void showDetailsForItem(int position) {
         EmplyeeModel clickedItem = emplyeeList.get(position);
 
-        // Retrieve all fields associated with the clicked item
         String username = clickedItem.getUsername();
         String name = clickedItem.getName();
         String designation = clickedItem.getDesignation();
-
-
         String phoneNumber = clickedItem.getPhoneNumber();
-
-
         String email = clickedItem.getEmail();
         String gender = clickedItem.getGender();
         String bloodGroup = clickedItem.getBloodGroup();
@@ -140,33 +128,18 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
             }
         });
 
-
-
         emailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setData(Uri.parse("mailto:" + email));  // Specify the recipient's email
-              //  intent.setType(Intent.EXTRA_EMAIL + email);
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Subject");  // Set the subject if needed
-                intent.setType("message/rfc822");
-
-                if (intent.resolveActivity(context.getPackageManager()) != null) {
-                    context.startActivity(intent);
-                } else {
-                    Toast.makeText(context, "No email app found", Toast.LENGTH_SHORT).show();
-                }
-
+                EmplyeeModel employee = emplyeeList.get(position);
+                String email = String.valueOf(employee.getEmail());
+                initiateEmail(email);
             }
         });
-
 
         layout.addView(iconsLayout);
         LayoutInflater inflater = LayoutInflater.from(context);
         View customTitleView = inflater.inflate(R.layout.custom_alert_dialog_title, null);
-
-        // Set the title of the AlertDialog to the custom title view
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCustomTitle(customTitleView);
         builder.setView(layout);
@@ -174,28 +147,31 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         dialog.show();
     }
 
-
-
     private ImageButton createImageButton(int drawableRes, int sizePx) {
         ImageButton imageButton = new ImageButton(context);
         imageButton.setImageResource(drawableRes);
-
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sizePx, sizePx);
         imageButton.setLayoutParams(params);
-
         return imageButton;
     }
 
     private void initiatePhoneDial(String phoneNumber) {
         Intent intent = new Intent(Intent.ACTION_DIAL);
         intent.setData(Uri.parse("tel:" + phoneNumber));
-
         context.startActivity(intent);
     }
 
     private void initiateSms(String phoneNumber) {
         Uri smsUri = Uri.parse("smsto:" + phoneNumber);
         Intent intent = new Intent(Intent.ACTION_SENDTO, smsUri);
+        context.startActivity(intent);
+    }
+
+    private void initiateEmail(String email) {
+        Intent intent = new Intent(Intent.ACTION_SEND);
+        intent.setType("message/rfc822");
+        intent.putExtra(Intent.EXTRA_EMAIL, new String[]{email});
+        intent.setPackage("com.google.android.gm");
         context.startActivity(intent);
     }
     @Override
