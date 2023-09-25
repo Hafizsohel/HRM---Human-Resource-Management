@@ -141,27 +141,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         });
 
 
-
-        emailButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                Intent intent = new Intent(Intent.ACTION_SEND);
-                intent.setData(Uri.parse("mailto:" + email));  // Specify the recipient's email
-              //  intent.setType(Intent.EXTRA_EMAIL + email);
-                intent.putExtra(Intent.EXTRA_SUBJECT, "Subject");  // Set the subject if needed
-                intent.setType("message/rfc822");
-
-                if (intent.resolveActivity(context.getPackageManager()) != null) {
-                    context.startActivity(intent);
-                } else {
-                    Toast.makeText(context, "No email app found", Toast.LENGTH_SHORT).show();
-                }
-
-            }
-        });
-
-
         layout.addView(iconsLayout);
         LayoutInflater inflater = LayoutInflater.from(context);
         View customTitleView = inflater.inflate(R.layout.custom_alert_dialog_title, null);
@@ -173,7 +152,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         AlertDialog dialog = builder.create();
         dialog.show();
     }
-
 
 
     private ImageButton createImageButton(int drawableRes, int sizePx) {
