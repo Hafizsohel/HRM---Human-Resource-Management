@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:tools="http://schemas.android.com/tools">
+
+<RelativeLayout
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#E4E4E4"
@@ -11,6 +13,7 @@
         android:id="@+id/employee_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:navigationIcon="@drawable/arrow_back_24"
         android:background="@color/blue">
 
         <TextView
@@ -24,42 +27,16 @@
             android:layout_gravity="center" />
     </androidx.appcompat.widget.Toolbar>
 
-    <LinearLayout
-        android:id="@+id/headerLayout"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_below="@id/employee_toolbar"
-        android:background="@drawable/bordered_background"
-        android:layout_marginTop="8dp"
-        android:orientation="horizontal">
-
-        <TextView
-            android:layout_width="100dp"
-            android:layout_height="50dp"
-            android:text="ID:"
-            android:background="#808080"
-            android:textColor="#000000"
-            android:textStyle="bold"
-            android:gravity="center" />
-
-        <TextView
-            android:id="@+id/userName"
-            android:layout_width="300dp"
-            android:layout_height="50dp"
-            android:textColor="#000000"
-            android:text="User Name:"
-            android:background="#808080"
-            android:textStyle="bold"
-            android:gravity="center" />
-    </LinearLayout>
 
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/recyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="#FFFFFF"
-        android:layout_below="@id/headerLayout"
+        android:layout_below="@id/employee_toolbar"
         android:layout_marginTop="3dp"
         tools:listitem="@layout/emplyee_item" />
 
 </RelativeLayout>
+
+</layout>

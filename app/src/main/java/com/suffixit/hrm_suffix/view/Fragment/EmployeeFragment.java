@@ -1,7 +1,11 @@
 package com.suffixit.hrm_suffix.view.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -17,6 +21,8 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.suffixit.hrm_suffix.Adapter.EmployeeAdapter;
 import com.suffixit.hrm_suffix.R;
+import com.suffixit.hrm_suffix.databinding.FragmentDashboadBinding;
+import com.suffixit.hrm_suffix.databinding.FragmentEmployeeBinding;
 import com.suffixit.hrm_suffix.models.EmplyeeModel;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -26,17 +32,21 @@ import java.util.List;
 
 public class EmployeeFragment extends Fragment {
 
+    private FragmentEmployeeBinding binding;
     private RecyclerView recyclerView;
     private EmployeeAdapter employeeAdapter;
     private List<EmplyeeModel> emplyeeList;
 
 
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_employee, container, false);
+        binding = FragmentEmployeeBinding.inflate(inflater, container, false);
 
-        recyclerView = rootView.findViewById(R.id.recyclerView);
+
+      //  recyclerView = rootView.findViewById(R.id.recyclerView);
+        recyclerView = binding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         emplyeeList = new ArrayList<>();
 
@@ -44,8 +54,11 @@ public class EmployeeFragment extends Fragment {
         recyclerView.setAdapter(employeeAdapter);
         fetchDataFromFirebase();
 
-        return rootView;
+        return binding.getRoot();
+
+
     }
+
 
 
     private void fetchDataFromFirebase() {
@@ -75,5 +88,7 @@ public class EmployeeFragment extends Fragment {
                 Log.e("EmployeeFragment", "Failed to fetch data: " + e.getMessage());
             }
         });
+
     }
+
 }

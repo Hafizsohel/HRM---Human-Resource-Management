@@ -29,7 +29,6 @@ public class DashboadFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentDashboadBinding.inflate(inflater, container, false);
 
-        FirebaseAuth auth = FirebaseAuth.getInstance();
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
@@ -49,7 +48,6 @@ public class DashboadFragment extends Fragment {
                         String Gender = documentSnapshot.getString("Gender");
                         String BloodGroup = documentSnapshot.getString("BloodGroup");
 
-                        // Update UI with fetched data
                         updateUI(username, name, Designation, Email, PhoneNumber, Gender, BloodGroup);
                     } else {
                         Log.e("DashboardFragment", "Document does not exist");
@@ -64,7 +62,6 @@ public class DashboadFragment extends Fragment {
         } else {
             Log.e("DashboardFragment", "User is not authenticated");
         }
-
         return binding.getRoot();
     }
 
