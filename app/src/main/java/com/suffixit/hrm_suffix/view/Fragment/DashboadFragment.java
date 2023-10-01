@@ -1,6 +1,7 @@
 package com.suffixit.hrm_suffix.view.Fragment;
 
 import android.os.Bundle;
+
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
@@ -9,15 +10,21 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.Query;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.FragmentDashboadBinding;
+import com.suffixit.hrm_suffix.models.EmplyeeModel;
 
 
 public class DashboadFragment extends Fragment {
@@ -32,11 +39,55 @@ public class DashboadFragment extends Fragment {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+
+        if (currentUser != null) {
+            String uid = currentUser.getUid();
+
+            CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
+            Query userQuery = usersCollection.whereEqualTo("userId", uid); // Assuming there's a field 'userId' in your documents
+
+          //  userQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            usersCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+                @Override
+                public void onSuccess(QuerySnapshot documentSnapshots) {
+                    for (QueryDocumentSnapshot document : documentSnapshots) {
+                        EmplyeeModel employee = document.toObject(EmplyeeModel.class);
+
+                        if (employee != null) {
+                            String FullName = employee.getName();
+                            String UserID = employee.getUsername();
+                            String Designation = employee.getDesignation();
+                            String PhoneNumber = String.valueOf(employee.getPhoneNumber());
+                            String BloodGroup = employee.getBloodGroup();
+                            String Email = employee.getEmail();
+                            String Gender = employee.getGender();
+
+                            binding.txtEmployeeName.setText("Name: " + FullName);
+                            binding.txtEmployeeId.setText("ID: " + UserID);
+                            binding.txtEmployeeDesignation.setText("Designation: " + Designation);
+                            binding.txtEmployeePhone.setText("Phone: " + PhoneNumber);
+                            binding.txtEmployeeGender.setText("Gender: " + Gender);
+                            binding.txtEmployeeBloodGroup.setText("Blood Group: " + BloodGroup);
+                            binding.txtEmployeeMail.setText("Email: " + Email);
+                        }
+                    }
+                }
+            }).addOnFailureListener(new OnFailureListener() {
+                @Override
+                public void onFailure(@NonNull Exception e) {
+                    Log.e("DashboadFragment", "Failed to fetch data: " + e.getMessage());
+                }
+            });
+        }
+
+        /*
         if (user != null) {
             String userID = user.getUid();
 
             DocumentReference userRef = db.collection("Users").document(userID);
             userRef.get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
+
                 @Override
                 public void onSuccess(DocumentSnapshot documentSnapshot) {
                     if (documentSnapshot.exists()) {
@@ -62,6 +113,8 @@ public class DashboadFragment extends Fragment {
         } else {
             Log.e("DashboardFragment", "User is not authenticated");
         }
+*/
+
         return binding.getRoot();
     }
 
