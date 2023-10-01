@@ -4,24 +4,17 @@ package com.suffixit.hrm_suffix.view.Activities;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.databinding.DataBindingUtil;
-
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.content.SharedPreferences;
 import android.graphics.Color;
-import android.net.ConnectivityManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
-
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -31,7 +24,6 @@ import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.ActivityLoginBinding;
 import com.suffixit.hrm_suffix.utils.KeyboardUtils;
 import com.suffixit.hrm_suffix.utils.NetworkUtils;
-
 import java.util.Map;
 
 
@@ -77,8 +69,6 @@ public class LoginActivity extends AppCompatActivity {
                 authenticateUser(username, password);
 
             }
-
-
 
         });
     }
@@ -135,7 +125,7 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         } else {
-            Toast.makeText(LoginActivity.this, "You can Login In!", Toast.LENGTH_SHORT).show();
+           // Toast.makeText(LoginActivity.this, "You can Login In!", Toast.LENGTH_SHORT).show();
         }
 
         String savedUsername = sharedPreferences.getString(KEY_USERNAME, null);
