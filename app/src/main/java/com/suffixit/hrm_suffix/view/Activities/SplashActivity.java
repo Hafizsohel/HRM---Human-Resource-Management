@@ -29,7 +29,7 @@ public class SplashActivity extends AppCompatActivity {
         hideSystemBars();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
         YoYo.with(Techniques.BounceInUp)
-                .duration(3000)
+                .duration(2000)
                 .onEnd(new YoYo.AnimatorCallback() {
                     @Override
                     public void call(Animator animator) {

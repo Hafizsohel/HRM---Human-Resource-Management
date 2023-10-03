@@ -18,5 +18,6 @@
     <color name="pink">#cf4bf8</color>
     <color name="violet">#8813e4</color>
     <color name="green_light">#5ff0f7</color>
+    <color name="solid_light">#F5F5F5</color>
 
 </resources>

@@ -1,7 +1,10 @@
 package com.suffixit.hrm_suffix.view.Fragment;
 
 import android.os.Bundle;
+
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -29,12 +32,10 @@ public class EmployeeFragment extends Fragment {
     private EmployeeAdapter employeeAdapter;
     private List<EmplyeeModel> emplyeeList;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.fragment_employee, container, false);
-
 
         recyclerView = rootView.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -46,7 +47,6 @@ public class EmployeeFragment extends Fragment {
         return rootView;
     }
 
-
     private void fetchDataFromFirebase() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersCollection = db.collection("Users");
@@ -54,7 +54,6 @@ public class EmployeeFragment extends Fragment {
         usersCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot documentSnapshots) {
-                emplyeeList.clear();
                 for (QueryDocumentSnapshot document : documentSnapshots) {
                     EmplyeeModel employee = document.toObject(EmplyeeModel.class);
                     emplyeeList.add(employee);
@@ -76,4 +75,5 @@ public class EmployeeFragment extends Fragment {
         });
     }
 }
+
 
