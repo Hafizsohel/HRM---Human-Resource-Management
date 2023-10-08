@@ -23,15 +23,6 @@ public class EmplyeeModel implements Serializable {
     public EmplyeeModel() {
     }
 
-
-    public String getUsername() {
-        return username;
-    }
-
-    public String getName() {
-        return name;
-    }
-
     public EmplyeeModel(int id, String username, String name, String bloodGroup, String designation, String email, String gender, String phoneNumber) {
         this.id = id;
         this.username = username;
@@ -46,27 +37,21 @@ public class EmplyeeModel implements Serializable {
     public int getId() {
         return id;
     }
-
     public void setId(int id) {
         this.id = id;
     }
-
-    public String getUsername(String username) {
+    public String getUsername() {
         return username;
     }
-
     public void setUsername(String username) {
         this.username = username;
     }
-
-    public String getName(String name) {
+    public String getName() {
         return name;
     }
-
     public void setName(String name) {
         this.name = name;
     }
-
     public String getBloodGroup() {
         return BloodGroup;
     }

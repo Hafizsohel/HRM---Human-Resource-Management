@@ -12,6 +12,8 @@
     <color name="login_card_background">#FF4081</color>
     <color name="transparent">#0027AE60</color>
     <color name="blue">#1566e0</color>
+    <color name="light_gray">#E0E0E0</color>
+    <color name="darker_gray">#C0C0C0</color>
 
     <color name="pink">#cf4bf8</color>
     <color name="violet">#8813e4</color>

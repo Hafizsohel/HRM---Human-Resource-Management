@@ -139,8 +139,8 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
         layout.addView(iconsLayout);
         LayoutInflater inflater = LayoutInflater.from(context);
+        AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomAlertDialogStyle);
         View customTitleView = inflater.inflate(R.layout.custom_alert_dialog_title, null);
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setCustomTitle(customTitleView);
         builder.setView(layout);
         AlertDialog dialog = builder.create();
@@ -177,7 +177,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     public int getItemCount() {
         return emplyeeList.size();
     }
-
     public class EmployeeViewHolder extends RecyclerView.ViewHolder {
         public TextView username;
         public TextView nameText;

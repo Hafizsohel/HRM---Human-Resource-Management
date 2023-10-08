@@ -58,6 +58,10 @@ dependencies {
     implementation ("com.google.firebase:firebase-database:20.2.2")
     implementation ("com.google.firebase:firebase-storage:20.2.1")
 
+    implementation ("com.github.fornewid:neumorphism:0.2.1")
+    implementation ("com.daimajia.androidanimations:library:2.4@aar")
+
+
 
 
 

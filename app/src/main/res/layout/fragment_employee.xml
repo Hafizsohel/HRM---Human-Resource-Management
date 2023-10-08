@@ -3,40 +3,40 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="#E4E4E4"
-    tools:context=".view.Fragment.EmployeeFragment">
-
-    <androidx.appcompat.widget.Toolbar
-        android:id="@+id/employee_toolbar"
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:navigationIcon="@drawable/arrow_back_24"
-        android:background="@color/blue">
+        android:layout_height="match_parent"
+        android:background="#000000"
+        tools:context=".view.Fragment.EmployeeFragment">
 
-        <TextView
-            android:id="@+id/toolbar_title"
-            android:layout_width="wrap_content"
+        <androidx.appcompat.widget.Toolbar
+            android:id="@+id/employee_toolbar"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Employee List"
-            android:textColor="#000000"
-            android:textSize="18sp"
-            android:textStyle="bold"
-            android:layout_gravity="center" />
-    </androidx.appcompat.widget.Toolbar>
+            app:navigationIcon="@drawable/arrow_back_24"
+            android:background="@color/blue">
+
+            <TextView
+                android:id="@+id/toolbar_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Employee List"
+                android:textColor="#000000"
+                android:textSize="18sp"
+                android:textStyle="bold"
+                android:layout_gravity="center" />
+        </androidx.appcompat.widget.Toolbar>
 
 
-    <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:background="#FFFFFF"
-        android:layout_below="@id/employee_toolbar"
-        android:layout_marginTop="3dp"
-        tools:listitem="@layout/emplyee_item" />
 
-</RelativeLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="#FFFFFF"
+            android:layout_below="@id/employee_toolbar"
+            android:layout_marginTop="3dp"
+            tools:listitem="@layout/emplyee_item" />
+    </RelativeLayout>
 
 </layout>

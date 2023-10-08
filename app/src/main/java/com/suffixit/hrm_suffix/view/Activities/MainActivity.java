@@ -1,6 +1,8 @@
 package com.suffixit.hrm_suffix.view.Activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
 
 import android.os.Bundle;
@@ -10,7 +12,7 @@ import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.ActivityMainBinding;
 
 import com.suffixit.hrm_suffix.view.Fragment.DashboadFragment;
-
+import com.suffixit.hrm_suffix.view.Fragment.EmployeeFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -25,9 +27,10 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboadFragment()).commit();
+
         }
 
-}
+    }
 
 
 }
