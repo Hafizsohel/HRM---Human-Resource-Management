@@ -6,7 +6,9 @@ import android.os.Bundle;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+
 import androidx.appcompat.app.AlertDialog;
+
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
@@ -45,21 +47,20 @@ public class EmployeeFragment extends Fragment {
     private EmployeeAdapter employeeAdapter;
     private List<EmplyeeModel> emplyeeList;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentEmployeeBinding.inflate(inflater, container, false);
 
+
         setUpOnBackPressed();
         adaper();
         fetchDataFromFirebase();
 
-
-
         return binding.getRoot();
 
     }
+
 
     private void setUpOnBackPressed() {
         requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), new OnBackPressedCallback(true) {
@@ -75,10 +76,6 @@ public class EmployeeFragment extends Fragment {
         });
     }
 
-
-
-
-
     private void fetchDataFromFirebase() {
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersCollection = db.collection("Users");
@@ -86,7 +83,6 @@ public class EmployeeFragment extends Fragment {
         usersCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot documentSnapshots) {
-                emplyeeList.clear();
                 for (QueryDocumentSnapshot document : documentSnapshots) {
                     EmplyeeModel employee = document.toObject(EmplyeeModel.class);
                     emplyeeList.add(employee);
@@ -132,4 +128,5 @@ public class EmployeeFragment extends Fragment {
 
     }
 }
+
 

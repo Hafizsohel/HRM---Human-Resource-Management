@@ -1,5 +1,7 @@
 package com.suffixit.hrm_suffix.Adapter;
 
+import static android.view.Gravity.CENTER;
+
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -15,6 +17,8 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.recyclerview.widget.RecyclerView;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.models.EmplyeeModel;
+
+import java.util.Arrays;
 import java.util.List;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
@@ -56,7 +60,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         String gender = clickedItem.getGender();
         String bloodGroup = clickedItem.getBloodGroup();
 
-        // Create a string with all the details
         StringBuilder detailsBuilder = new StringBuilder();
         detailsBuilder.append("User Name: ").append(username).append("\n");
         detailsBuilder.append("Name: ").append(name).append("\n");
@@ -69,17 +72,20 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         // Create a layout to hold the details and buttons
         LinearLayout layout = new LinearLayout(context);
         layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setGravity(Gravity.START | Gravity.CENTER_VERTICAL);
-        layout.setPadding(20, 20, 20, 20);  // Adjust padding as needed
+        layout.setGravity(Gravity.CENTER_VERTICAL);
+        layout.setPadding(20, 20, 20, 20);
+
+
 
         // Create TextView to display details
         TextView detailsTextView = new TextView(context);
         detailsTextView.setText(detailsBuilder.toString());
-        detailsTextView.setGravity(Gravity.CENTER);
+        detailsTextView.setGravity(Gravity.CENTER_HORIZONTAL);
         layout.addView(detailsTextView);
         LinearLayout iconsLayout = new LinearLayout(context);
         iconsLayout.setOrientation(LinearLayout.HORIZONTAL);
-        iconsLayout.setGravity(Gravity.CENTER);
+        iconsLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+
 
         float density = context.getResources().getDisplayMetrics().density;
         int iconSizeDp = 30;
@@ -94,11 +100,11 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
         // Add margins between the ImageButtons
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(iconSizePx, iconSizePx);
-        params.setMargins(0, 0, 25, 0);  // Adjust the right margin as needed
+        params.setMargins(0, 0, 25, 35);
         callButton.setLayoutParams(params);
 
         params = new LinearLayout.LayoutParams(iconSizePx, iconSizePx);
-        params.setMargins(0, 0, 25, 0);  // Adjust the right margin as needed
+        params.setMargins(0, 0, 25, 35);
         smsButton.setLayoutParams(params);
 
         /*params = new LinearLayout.LayoutParams(iconSizePx, iconSizePx);
@@ -144,6 +150,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         builder.setCustomTitle(customTitleView);
         builder.setView(layout);
         AlertDialog dialog = builder.create();
+        dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.show();
     }
     private ImageButton createImageButton(int drawableRes, int sizePx) {

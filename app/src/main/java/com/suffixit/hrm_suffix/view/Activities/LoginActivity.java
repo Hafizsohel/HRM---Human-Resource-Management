@@ -45,6 +45,7 @@ public class LoginActivity extends AppCompatActivity {
         //usersRef = FirebaseDatabase.getInstance().getReference("Users");
         db = FirebaseFirestore.getInstance();
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
+        checkAutoLogin();
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             getWindow().clearFlags(WindowManager.LayoutParams.FLAG_TRANSLUCENT_STATUS);
@@ -67,7 +68,6 @@ public class LoginActivity extends AppCompatActivity {
                 String username = binding.userName.getText().toString();
                 String password = binding.password.getText().toString();
                 authenticateUser(username, password);
-
             }
 
         });
@@ -75,11 +75,12 @@ public class LoginActivity extends AppCompatActivity {
 
     private void authenticateUser(final String username, final String enteredPassword) {
 
-        // After successful authentication, save the username and password
+        //Save username and password
         SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_USERNAME, username);
         editor.putString(KEY_PASSWORD, enteredPassword);
         editor.apply();
+
 
         CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
         Query query = usersCollection.whereEqualTo("username", username);
@@ -117,6 +118,7 @@ public class LoginActivity extends AppCompatActivity {
     @Override
     protected void onResume() {
         super.onResume();
+
 /*
         if (auth.getCurrentUser() != null) {
             Toast.makeText(LoginActivity.this, "Already Logged In!", Toast.LENGTH_SHORT).show();
@@ -130,6 +132,7 @@ public class LoginActivity extends AppCompatActivity {
         */
 
 
+
         String savedUsername = sharedPreferences.getString(KEY_USERNAME, null);
         String savedPassword = sharedPreferences.getString(KEY_PASSWORD, null);
 
@@ -139,7 +142,14 @@ public class LoginActivity extends AppCompatActivity {
         if (savedPassword != null) {
             binding.password.setText(savedPassword);
         }
-
-
+    }
+    private void checkAutoLogin() {
+        String savedUsername = sharedPreferences.getString(KEY_USERNAME, null);
+        String savedPassword = sharedPreferences.getString(KEY_PASSWORD, null);
+        if (savedUsername != null && savedPassword != null) {
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(intent);
+            finish();
+        }
     }
 }

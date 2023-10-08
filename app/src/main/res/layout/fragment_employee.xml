@@ -6,7 +6,7 @@
     <RelativeLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="#000000"
+        android:background="@color/white"
         tools:context=".view.Fragment.EmployeeFragment">
 
         <androidx.appcompat.widget.Toolbar
@@ -35,7 +35,7 @@
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
             android:layout_below="@id/employee_toolbar"
-            android:layout_marginTop="3dp"
+            android:layout_marginTop="1dp"
             tools:listitem="@layout/emplyee_item" />
     </RelativeLayout>
 
