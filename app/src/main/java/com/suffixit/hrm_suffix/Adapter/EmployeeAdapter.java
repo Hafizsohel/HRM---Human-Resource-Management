@@ -1,10 +1,15 @@
 package com.suffixit.hrm_suffix.Adapter;
 
 import static android.view.Gravity.CENTER;
+import static android.view.Gravity.NO_GRAVITY;
+import static android.view.Gravity.START;
 
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
+import android.provider.SyncStateContract;
+import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +17,11 @@ import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
+import androidx.annotation.GravityInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.RecyclerView;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.models.EmplyeeModel;
@@ -76,15 +84,18 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         layout.setPadding(20, 20, 20, 20);
 
 
-
         // Create TextView to display details
         TextView detailsTextView = new TextView(context);
         detailsTextView.setText(detailsBuilder.toString());
-        detailsTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+        //detailsTextView.setGravity(Gravity.CENTER_HORIZONTAL);
+        detailsTextView.setGravity(START);
+        detailsTextView.setPadding(100,0,0,0);
+
         layout.addView(detailsTextView);
         LinearLayout iconsLayout = new LinearLayout(context);
         iconsLayout.setOrientation(LinearLayout.HORIZONTAL);
         iconsLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+
 
 
         float density = context.getResources().getDisplayMetrics().density;
@@ -94,27 +105,33 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
         ImageButton callButton = createImageButton(R.drawable.call_icon, iconSizePx);
         ImageButton smsButton = createImageButton(R.drawable.message, iconSizePx);
-       // ImageButton whatsappButton = createImageButton(R.drawable.whatsapp_icon, iconSizePx);
         ImageButton emailButton = createImageButton(R.drawable.gmail, iconSizePx);
 
 
         // Add margins between the ImageButtons
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(iconSizePx, iconSizePx);
-        params.setMargins(0, 0, 25, 35);
+        params.setMargins(60, 0, 60, 35);
         callButton.setLayoutParams(params);
 
         params = new LinearLayout.LayoutParams(iconSizePx, iconSizePx);
-        params.setMargins(0, 0, 25, 35);
+        params.setMargins(60, 0, 60, 35);
         smsButton.setLayoutParams(params);
+
+        params = new LinearLayout.LayoutParams(iconSizePx, iconSizePx);
+        params.setMargins(60, 0, 60, 35);
+        emailButton.setLayoutParams(params);
 
         /*params = new LinearLayout.LayoutParams(iconSizePx, iconSizePx);
         params.setMargins(0, 0, 25, 0);  // Adjust the right margin as needed
         whatsappButton.setLayoutParams(params);*/
 
+
         iconsLayout.addView(callButton);
         iconsLayout.addView(smsButton);
         // iconsLayout.addView(whatsappButton);
         iconsLayout.addView(emailButton);
+
+
 
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
