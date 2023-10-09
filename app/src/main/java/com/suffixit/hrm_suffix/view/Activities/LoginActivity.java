@@ -119,20 +119,6 @@ public class LoginActivity extends AppCompatActivity {
     protected void onResume() {
         super.onResume();
 
-/*
-        if (auth.getCurrentUser() != null) {
-            Toast.makeText(LoginActivity.this, "Already Logged In!", Toast.LENGTH_SHORT).show();
-
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-            finish();
-        } else {
-            Toast.makeText(LoginActivity.this, "You can Login In!", Toast.LENGTH_SHORT).show();
-        }
-        */
-
-
-
         String savedUsername = sharedPreferences.getString(KEY_USERNAME, null);
         String savedPassword = sharedPreferences.getString(KEY_PASSWORD, null);
 

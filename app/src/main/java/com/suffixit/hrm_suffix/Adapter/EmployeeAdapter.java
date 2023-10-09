@@ -1,7 +1,5 @@
 package com.suffixit.hrm_suffix.Adapter;
 
-import static android.view.Gravity.CENTER;
-import static android.view.Gravity.NO_GRAVITY;
 import static android.view.Gravity.START;
 
 import android.content.Context;
@@ -26,7 +24,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.models.EmplyeeModel;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
@@ -42,7 +39,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     @Override
     public EmployeeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.emplyee_item, parent, false);
+                .inflate(R.layout.employee_item, parent, false);
         return new EmployeeViewHolder(view);
     }
 
@@ -68,6 +65,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         String gender = clickedItem.getGender();
         String bloodGroup = clickedItem.getBloodGroup();
 
+
         StringBuilder detailsBuilder = new StringBuilder();
         detailsBuilder.append("User Name: ").append(username).append("\n");
         detailsBuilder.append("Name: ").append(name).append("\n");
@@ -89,13 +87,14 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         detailsTextView.setText(detailsBuilder.toString());
         //detailsTextView.setGravity(Gravity.CENTER_HORIZONTAL);
         detailsTextView.setGravity(START);
-        detailsTextView.setPadding(100,0,0,0);
+        detailsTextView.setPadding(130,0,0,0);
 
         layout.addView(detailsTextView);
+
+        // Create Icon to display details
         LinearLayout iconsLayout = new LinearLayout(context);
         iconsLayout.setOrientation(LinearLayout.HORIZONTAL);
         iconsLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-
 
 
         float density = context.getResources().getDisplayMetrics().density;
@@ -110,20 +109,16 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
 
         // Add margins between the ImageButtons
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(iconSizePx, iconSizePx);
-        params.setMargins(60, 0, 60, 35);
+        params.setMargins(55, 0, 55, 35);
         callButton.setLayoutParams(params);
 
         params = new LinearLayout.LayoutParams(iconSizePx, iconSizePx);
-        params.setMargins(60, 0, 60, 35);
+        params.setMargins(55, 0, 55, 35);
         smsButton.setLayoutParams(params);
 
         params = new LinearLayout.LayoutParams(iconSizePx, iconSizePx);
-        params.setMargins(60, 0, 60, 35);
+        params.setMargins(55, 0, 55, 35);
         emailButton.setLayoutParams(params);
-
-        /*params = new LinearLayout.LayoutParams(iconSizePx, iconSizePx);
-        params.setMargins(0, 0, 25, 0);  // Adjust the right margin as needed
-        whatsappButton.setLayoutParams(params);*/
 
 
         iconsLayout.addView(callButton);

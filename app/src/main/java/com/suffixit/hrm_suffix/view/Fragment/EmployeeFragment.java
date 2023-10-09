@@ -19,6 +19,8 @@ import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
@@ -29,7 +31,6 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.suffixit.hrm_suffix.Adapter.EmployeeAdapter;
 import com.suffixit.hrm_suffix.R;
-import com.suffixit.hrm_suffix.databinding.FragmentDashboadBinding;
 import com.suffixit.hrm_suffix.databinding.FragmentEmployeeBinding;
 import com.suffixit.hrm_suffix.models.EmplyeeModel;
 import com.suffixit.hrm_suffix.view.Activities.MainActivity;
@@ -42,6 +43,7 @@ import java.util.List;
 
 public class EmployeeFragment extends Fragment {
 
+    private TextView pleaseWaitText;
     private FragmentEmployeeBinding binding;
     private RecyclerView recyclerView;
     private EmployeeAdapter employeeAdapter;
@@ -52,13 +54,13 @@ public class EmployeeFragment extends Fragment {
                              Bundle savedInstanceState) {
         binding = FragmentEmployeeBinding.inflate(inflater, container, false);
 
+        pleaseWaitText = binding.getRoot().findViewById(R.id.pleaseWaitText);
 
         setUpOnBackPressed();
         adaper();
         fetchDataFromFirebase();
 
         return binding.getRoot();
-
     }
 
 
@@ -67,22 +69,25 @@ public class EmployeeFragment extends Fragment {
             @Override
             public void handleOnBackPressed() {
                 if (isEnabled()){
-                    Toast.makeText(requireContext(), "Go back", Toast.LENGTH_SHORT).show();
                     setEnabled(false);
                     requireActivity().onBackPressed();
                 }
-
             }
         });
     }
 
     private void fetchDataFromFirebase() {
+
+        pleaseWaitText.setVisibility(View.VISIBLE);
+
+
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersCollection = db.collection("Users");
 
         usersCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot documentSnapshots) {
+                pleaseWaitText.setVisibility(View.GONE);
                 for (QueryDocumentSnapshot document : documentSnapshots) {
                     EmplyeeModel employee = document.toObject(EmplyeeModel.class);
                     emplyeeList.add(employee);
@@ -99,6 +104,7 @@ public class EmployeeFragment extends Fragment {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
+                pleaseWaitText.setVisibility(View.GONE);
                 Log.e("EmployeeFragment", "Failed to fetch data: " + e.getMessage());
             }
         });
@@ -122,7 +128,7 @@ public class EmployeeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboadFragment()).commit();
-                Toast.makeText(getActivity(), "Go Back", Toast.LENGTH_SHORT).show();
+                //Toast.makeText(getActivity(), "Go Back", Toast.LENGTH_SHORT).show();
             }
         });
 

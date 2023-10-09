@@ -56,9 +56,8 @@ public class DashboadFragment extends Fragment {
             String uid = currentUser.getUid();
 
             CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
-            Query userQuery = usersCollection.whereEqualTo("userId", uid); // Assuming there's a field 'userId' in your documents
+            Query userQuery = usersCollection.whereEqualTo("userId", uid);
 
-            //   userQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             usersCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
                 public void onSuccess(QuerySnapshot documentSnapshots) {
