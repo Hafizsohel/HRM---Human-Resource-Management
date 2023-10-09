@@ -1,7 +1,5 @@
 package com.suffixit.hrm_suffix.Adapter;
 
-import static android.view.Gravity.CENTER;
-
 import android.content.Context;
 import android.content.Intent;
 import android.net.Uri;
@@ -18,7 +16,6 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.models.EmplyeeModel;
 
-import java.util.Arrays;
 import java.util.List;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
@@ -34,7 +31,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     @Override
     public EmployeeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.emplyee_item, parent, false);
+                .inflate(R.layout.employee_item, parent, false);
         return new EmployeeViewHolder(view);
     }
 
@@ -60,6 +57,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         String gender = clickedItem.getGender();
         String bloodGroup = clickedItem.getBloodGroup();
 
+
         StringBuilder detailsBuilder = new StringBuilder();
         detailsBuilder.append("User Name: ").append(username).append("\n");
         detailsBuilder.append("Name: ").append(name).append("\n");
@@ -76,16 +74,16 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         layout.setPadding(20, 20, 20, 20);
 
 
-
         // Create TextView to display details
         TextView detailsTextView = new TextView(context);
         detailsTextView.setText(detailsBuilder.toString());
         detailsTextView.setGravity(Gravity.CENTER_HORIZONTAL);
         layout.addView(detailsTextView);
+
+        // Create Icon to display details
         LinearLayout iconsLayout = new LinearLayout(context);
         iconsLayout.setOrientation(LinearLayout.HORIZONTAL);
         iconsLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-
 
         float density = context.getResources().getDisplayMetrics().density;
         int iconSizeDp = 30;
