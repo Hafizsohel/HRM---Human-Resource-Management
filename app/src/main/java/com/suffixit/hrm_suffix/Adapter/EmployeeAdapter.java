@@ -85,7 +85,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         // Create TextView to display details
         TextView detailsTextView = new TextView(context);
         detailsTextView.setText(detailsBuilder.toString());
-        //detailsTextView.setGravity(Gravity.CENTER_HORIZONTAL);
         detailsTextView.setGravity(START);
         detailsTextView.setPadding(130,0,0,0);
 
@@ -106,7 +105,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         ImageButton smsButton = createImageButton(R.drawable.message, iconSizePx);
         ImageButton emailButton = createImageButton(R.drawable.gmail, iconSizePx);
 
-
         // Add margins between the ImageButtons
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(iconSizePx, iconSizePx);
         params.setMargins(55, 0, 55, 35);
@@ -125,7 +123,6 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         iconsLayout.addView(smsButton);
         // iconsLayout.addView(whatsappButton);
         iconsLayout.addView(emailButton);
-
 
 
         callButton.setOnClickListener(new View.OnClickListener() {
