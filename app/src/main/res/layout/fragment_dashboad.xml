@@ -21,13 +21,13 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:layout_marginTop="25dp"
-                android:layout_marginBottom="50dp"
+                android:layout_marginBottom="40dp"
                 android:orientation="vertical">
 
                 <TextView
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="20dp"
+                    android:layout_marginTop="10dp"
                     android:text="Human Resource Management"
                     android:textColor="@color/white"
                     android:textSize="18dp" />
@@ -94,38 +94,6 @@
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="10.40sp" />
-
-                <TextView
-                    android:id="@+id/txtEmployeePhone"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="31.20dp"
-                    android:text="Phone Number: "
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="10.40sp" />
-
-                <TextView
-                    android:id="@+id/txtEmployeeBloodGroup"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="31.20dp"
-                    android:text="Blood Group: "
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="10.40sp" />
-
-                <TextView
-                    android:id="@+id/txtEmployeeGender"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="31.20dp"
-                    android:text="Gender: "
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:paddingBottom="7.80dp"
-                    android:textSize="10.40sp" />
-
 
             </LinearLayout>
         </LinearLayout>

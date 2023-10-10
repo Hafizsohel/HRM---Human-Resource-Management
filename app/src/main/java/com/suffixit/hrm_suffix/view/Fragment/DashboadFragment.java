@@ -58,28 +58,22 @@ public class DashboadFragment extends Fragment {
             CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
             Query userQuery = usersCollection.whereEqualTo("userId", uid);
 
-            usersCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
+            userQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                 @Override
-                public void onSuccess(QuerySnapshot documentSnapshots) {
-                    for (QueryDocumentSnapshot document : documentSnapshots) {
-                        EmplyeeModel employee = document.toObject(EmplyeeModel.class);
+                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
+                    if (!queryDocumentSnapshots.isEmpty()) {
+                        EmplyeeModel employee = queryDocumentSnapshots.getDocuments().get(4).toObject(EmplyeeModel.class);
 
                         if (employee != null) {
                             String FullName = employee.getName();
                             String UserID = employee.getUsername();
                             String Designation = employee.getDesignation();
-                            String PhoneNumber = String.valueOf(employee.getPhoneNumber());
-                            String BloodGroup = employee.getBloodGroup();
                             String Email = employee.getEmail();
-                            String Gender = employee.getGender();
 
-                            binding.txtEmployeeName.setText("Name: " + FullName);
-                            binding.txtEmployeeId.setText("ID: " + UserID);
-                            binding.txtEmployeeDesignation.setText("Designation: " + Designation);
-                            binding.txtEmployeePhone.setText("Phone: " + PhoneNumber);
-                            binding.txtEmployeeGender.setText("Gender: " + Gender);
-                            binding.txtEmployeeBloodGroup.setText("Blood Group: " + BloodGroup);
-                            binding.txtEmployeeMail.setText("Email: " + Email);
+                            binding.txtEmployeeName.setText(FullName);
+                            binding.txtEmployeeId.setText(UserID);
+                            binding.txtEmployeeDesignation.setText(Designation);
+                            binding.txtEmployeeMail.setText(Email);
                         }
                     }
                 }
@@ -90,7 +84,6 @@ public class DashboadFragment extends Fragment {
                 }
             });
         }
-
         return binding.getRoot();
     }
 
@@ -113,7 +106,6 @@ public class DashboadFragment extends Fragment {
                 showLogoutConfirmationDialog();
             }
         });
-
     }
 
     private void showLogoutConfirmationDialog() {
@@ -146,4 +138,5 @@ public class DashboadFragment extends Fragment {
         startActivity(intent);
         requireActivity().finish();
     }
+
 }

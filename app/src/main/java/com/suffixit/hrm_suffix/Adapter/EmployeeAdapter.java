@@ -1,13 +1,12 @@
 package com.suffixit.hrm_suffix.Adapter;
 
+import static android.view.Gravity.CENTER;
 import static android.view.Gravity.START;
 
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.net.Uri;
-import android.provider.SyncStateContract;
-import android.text.TextUtils;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,10 +15,9 @@ import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 
-import androidx.annotation.GravityInt;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
-import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.models.EmplyeeModel;
@@ -57,73 +55,38 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     private void showDetailsForItem(int position) {
         EmplyeeModel clickedItem = emplyeeList.get(position);
 
-        String username = clickedItem.getUsername();
-        String name = clickedItem.getName();
-        String designation = clickedItem.getDesignation();
-        String phoneNumber = clickedItem.getPhoneNumber();
-        String email = clickedItem.getEmail();
-        String gender = clickedItem.getGender();
-        String bloodGroup = clickedItem.getBloodGroup();
+        String detailsBuilder = "User Name: " + clickedItem.getUsername() + "\n" +
+                "Name: " + clickedItem.getName() + "\n" +
+                "Designation: " + clickedItem.getDesignation() + "\n" +
+                "Phone Number: " + clickedItem.getPhoneNumber() + "\n" +
+                "Email: " + clickedItem.getEmail() + "\n" +
+                "Gender: " + clickedItem.getGender() + "\n" +
+                "Blood Group: " + clickedItem.getBloodGroup();
 
-
-        StringBuilder detailsBuilder = new StringBuilder();
-        detailsBuilder.append("User Name: ").append(username).append("\n");
-        detailsBuilder.append("Name: ").append(name).append("\n");
-        detailsBuilder.append("Designation: ").append(designation).append("\n");
-        detailsBuilder.append("Phone Number: ").append(phoneNumber).append("\n");
-        detailsBuilder.append("Email: ").append(email).append("\n");
-        detailsBuilder.append("Gender: ").append(gender).append("\n");
-        detailsBuilder.append("Blood Group: ").append(bloodGroup).append("\n");
-
-        // Create a layout to hold the details and buttons
         LinearLayout layout = new LinearLayout(context);
-        layout.setOrientation(LinearLayout.VERTICAL);
-        layout.setGravity(Gravity.CENTER_VERTICAL);
+        View customBottomView = LayoutInflater.from(context).inflate(R.layout.custom_dialog_bottom, null);
+        layout.setOrientation(LinearLayout.VERTICAL);  // Set orientation to vertical
+        layout.setGravity(Gravity.CENTER_HORIZONTAL);
         layout.setPadding(20, 20, 20, 20);
 
+        // Create a horizontal layout to hold the bar and text
+        LinearLayout horizontalLayout = new LinearLayout(context);
+        horizontalLayout.setOrientation(LinearLayout.HORIZONTAL);
+        horizontalLayout.setGravity(Gravity.CENTER_HORIZONTAL);
+        layout.addView(horizontalLayout);
 
         // Create TextView to display details
         TextView detailsTextView = new TextView(context);
-        detailsTextView.setText(detailsBuilder.toString());
+        detailsTextView.setText(detailsBuilder);
         detailsTextView.setGravity(START);
-        detailsTextView.setPadding(130,0,0,0);
+        horizontalLayout.addView(detailsTextView);
 
-        layout.addView(detailsTextView);
+        // Access the buttons from the inflated layout
+        ImageButton callButton = customBottomView.findViewById(R.id.callButton);
+        ImageButton smsButton = customBottomView.findViewById(R.id.smsButton);
+        ImageButton emailButton = customBottomView.findViewById(R.id.emailButton);
 
-        // Create Icon to display details
         LinearLayout iconsLayout = new LinearLayout(context);
-        iconsLayout.setOrientation(LinearLayout.HORIZONTAL);
-        iconsLayout.setGravity(Gravity.CENTER_HORIZONTAL);
-
-
-        float density = context.getResources().getDisplayMetrics().density;
-        int iconSizeDp = 30;
-        int iconSizePx = (int) (iconSizeDp * density);
-
-
-        ImageButton callButton = createImageButton(R.drawable.call_icon, iconSizePx);
-        ImageButton smsButton = createImageButton(R.drawable.message, iconSizePx);
-        ImageButton emailButton = createImageButton(R.drawable.gmail, iconSizePx);
-
-        // Add margins between the ImageButtons
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(iconSizePx, iconSizePx);
-        params.setMargins(55, 0, 55, 35);
-        callButton.setLayoutParams(params);
-
-        params = new LinearLayout.LayoutParams(iconSizePx, iconSizePx);
-        params.setMargins(55, 0, 55, 35);
-        smsButton.setLayoutParams(params);
-
-        params = new LinearLayout.LayoutParams(iconSizePx, iconSizePx);
-        params.setMargins(55, 0, 55, 35);
-        emailButton.setLayoutParams(params);
-
-
-        iconsLayout.addView(callButton);
-        iconsLayout.addView(smsButton);
-        // iconsLayout.addView(whatsappButton);
-        iconsLayout.addView(emailButton);
-
 
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -156,18 +119,14 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         LayoutInflater inflater = LayoutInflater.from(context);
         AlertDialog.Builder builder = new AlertDialog.Builder(context, R.style.CustomAlertDialogStyle);
         View customTitleView = inflater.inflate(R.layout.custom_alert_dialog_title, null);
-        builder.setCustomTitle(customTitleView);
+
+        builder.setView(customBottomView);
         builder.setView(layout);
+        builder.setCustomTitle(customTitleView);
+        layout.addView(customBottomView);
         AlertDialog dialog = builder.create();
         dialog.getWindow().getAttributes().windowAnimations = R.style.DialogAnimation;
         dialog.show();
-    }
-    private ImageButton createImageButton(int drawableRes, int sizePx) {
-        ImageButton imageButton = new ImageButton(context);
-        imageButton.setImageResource(drawableRes);
-        LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(sizePx, sizePx);
-        imageButton.setLayoutParams(params);
-        return imageButton;
     }
 
     private void initiatePhoneDial(String phoneNumber) {

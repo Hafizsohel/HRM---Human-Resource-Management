@@ -1,6 +1,7 @@
 package com.suffixit.hrm_suffix.view.Fragment;
 
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -12,6 +13,9 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.fragment.app.Fragment;
 import androidx.fragment.app.FragmentManager;
 import androidx.fragment.app.FragmentTransaction;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.util.Log;
@@ -47,7 +51,8 @@ public class EmployeeFragment extends Fragment {
     private FragmentEmployeeBinding binding;
     private RecyclerView recyclerView;
     private EmployeeAdapter employeeAdapter;
-    private List<EmplyeeModel> emplyeeList;
+    private List<EmplyeeModel> employeeList;
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,24 +68,31 @@ public class EmployeeFragment extends Fragment {
         return binding.getRoot();
     }
 
-
     private void setUpOnBackPressed() {
-        requireActivity().getOnBackPressedDispatcher().addCallback(getActivity(), new OnBackPressedCallback(true) {
+        OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
-                if (isEnabled()){
+                if (isAdded()) {
                     setEnabled(false);
-                    requireActivity().onBackPressed();
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), onBackPressedCallback);
+
+        getLifecycle().addObserver(new LifecycleObserver() {
+            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+            public void onDestroy() {
+                onBackPressedCallback.remove();
             }
         });
     }
 
+
     private void fetchDataFromFirebase() {
-
         pleaseWaitText.setVisibility(View.VISIBLE);
-
-
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersCollection = db.collection("Users");
 
@@ -88,17 +100,17 @@ public class EmployeeFragment extends Fragment {
             @Override
             public void onSuccess(QuerySnapshot documentSnapshots) {
                 pleaseWaitText.setVisibility(View.GONE);
+                employeeList.clear(); // Clear the list before adding data
                 for (QueryDocumentSnapshot document : documentSnapshots) {
                     EmplyeeModel employee = document.toObject(EmplyeeModel.class);
-                    emplyeeList.add(employee);
+                    employeeList.add(employee);
                 }
-                Collections.sort(emplyeeList, new Comparator<EmplyeeModel>() {
+                Collections.sort(employeeList, new Comparator<EmplyeeModel>() {
                     @Override
                     public int compare(EmplyeeModel employee1, EmplyeeModel employee2) {
                         return employee1.getUsername().compareTo(employee2.getUsername());
                     }
                 });
-
                 employeeAdapter.notifyDataSetChanged();
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -113,11 +125,9 @@ public class EmployeeFragment extends Fragment {
     private void adaper() {
         recyclerView = binding.recyclerView;
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        emplyeeList = new ArrayList<>();
-
-        employeeAdapter = new EmployeeAdapter(emplyeeList, getContext());
+        employeeList = new ArrayList<>();
+        employeeAdapter = new EmployeeAdapter(employeeList, getContext());
         recyclerView.setAdapter(employeeAdapter);
-
     }
 
     @Override
@@ -128,10 +138,8 @@ public class EmployeeFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboadFragment()).commit();
-                //Toast.makeText(getActivity(), "Go Back", Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 }
 
