@@ -106,6 +106,13 @@ public class DashboadFragment extends Fragment {
                 showLogoutConfirmationDialog();
             }
         });
+
+        binding.cardViewAttendance.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new AttendanceFragment()).commit();
+            }
+        });
     }
 
     private void showLogoutConfirmationDialog() {

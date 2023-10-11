@@ -55,7 +55,8 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
     private void showDetailsForItem(int position) {
         EmplyeeModel clickedItem = emplyeeList.get(position);
 
-        String detailsBuilder = "User Name: " + clickedItem.getUsername() + "\n" +
+        String detailsBuilder =
+                "User Name: " + clickedItem.getUsername() + "\n" +
                 "Name: " + clickedItem.getName() + "\n" +
                 "Designation: " + clickedItem.getDesignation() + "\n" +
                 "Phone Number: " + clickedItem.getPhoneNumber() + "\n" +
@@ -163,4 +164,3 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         }
     }
 }
-
