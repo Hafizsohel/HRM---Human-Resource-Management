@@ -87,7 +87,6 @@ public class DashboadFragment extends Fragment {
         return binding.getRoot();
     }
 
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -111,6 +110,12 @@ public class DashboadFragment extends Fragment {
             @Override
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new AttendanceFragment()).commit();
+            }
+        });
+        binding.imgScrumMeeting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new ScrumFragment()).commit();
             }
         });
     }
