@@ -1,22 +1,40 @@
 package com.suffixit.hrm_suffix.models;
 
 
-public class AttendanceModel {
+import androidx.room.Entity;
+import androidx.room.Index;
+import androidx.room.PrimaryKey;
+
+import java.io.Serializable;
+
+@Entity(tableName = "attendance_table", indices = @Index(value = {"id"}, unique = true))
+public class AttendanceModel implements Serializable {
+    @PrimaryKey(autoGenerate = true)
+    public int id;
     private String date;
     private String day;
     private String checkInTime;
     private String checkoutTime;
+    private String totalHrs;
 
     public AttendanceModel() {
     }
 
-    public AttendanceModel(String date, String day, String checkInTime, String checkoutTime) {
+    public AttendanceModel(String date, String day, String checkInTime, String checkoutTime, String totalHrs) {
+        this.id = id;
         this.date = date;
         this.day = day;
         this.checkInTime = checkInTime;
         this.checkoutTime = checkoutTime;
-    }
+        this.totalHrs = totalHrs;
 
+    }
+    public int getId() {
+        return id;
+    }
+    public void setId(int id) {
+        this.id = id;
+    }
     public String getDate() {
         return date;
     }
@@ -49,13 +67,23 @@ public class AttendanceModel {
         this.checkoutTime = checkoutTime;
     }
 
+    public String getTotalHrs() {
+        return totalHrs;
+    }
+
+    public void setTotalHrs(String totalHrs) {
+        this.totalHrs = totalHrs;
+    }
+
     @Override
     public String toString() {
         return "AttendanceModel{" +
-                "date='" + date + '\'' +
+                "id=" + id +
+                ", date='" + date + '\'' +
                 ", day='" + day + '\'' +
                 ", checkInTime='" + checkInTime + '\'' +
                 ", checkoutTime='" + checkoutTime + '\'' +
+                ", totalHrs=" + totalHrs +
                 '}';
     }
 }
