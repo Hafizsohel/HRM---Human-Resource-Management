@@ -37,14 +37,12 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.Vi
             holder.txtCheckIn.setText(item.getCheckInTime());
             holder.txtCheckOut.setText(item.getCheckoutTime());
             holder.txtTotalHrs.setText(item.getTotalHrs());
-
-            // Format and set the total hours
             holder.txtTotalHrs.setText(formatTotalHrsString(Double.parseDouble(item.getTotalHrs())));
 
         }
 
     private String formatTotalHrsString(double totalHrs) {
-        int hours = (int) totalHrs;  // Extract hours
+        int hours = (int) totalHrs;
         int minutes = (int) ((totalHrs - hours) * 60);  // Extract minutes
 
         return String.format("%d:%02d %s", hours, minutes, (hours >= 12 ? "h" : "m"));
