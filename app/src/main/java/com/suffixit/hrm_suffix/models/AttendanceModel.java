@@ -11,6 +11,7 @@ import java.io.Serializable;
 public class AttendanceModel implements Serializable {
     @PrimaryKey(autoGenerate = true)
     public int id;
+    private String userId;
     private String date;
     private String day;
     private String checkInTime;
@@ -29,6 +30,15 @@ public class AttendanceModel implements Serializable {
         this.totalHrs = totalHrs;
 
     }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
+    }
+
     public int getId() {
         return id;
     }

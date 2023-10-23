@@ -150,7 +150,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
-                    android:text="Your Last 30 days CheckIn and CheckOut Activity"
+                    android:text="Your Last 30 days Check-In and Check-Out Activity"
                     android:textAlignment="center"
                     android:textStyle="bold"
                     android:textColor="#121111" />
@@ -183,7 +183,7 @@
                             android:textAlignment="center"
                             android:textColor="@color/white"
                             android:textStyle="bold"
-                            android:textSize="16sp" />
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/txtDay"
@@ -194,27 +194,27 @@
                             android:textStyle="bold"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/txtCheckIn"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="CheckIn"
+                            android:text="Check-In"
                             android:textStyle="bold"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="15sp" />
 
                         <TextView
                             android:id="@+id/txtCheckOut"
                             android:layout_width="0dp"
                             android:layout_height="wrap_content"
                             android:layout_weight="1"
-                            android:text="CheckOut"
+                            android:text="Check-Out"
                             android:textStyle="bold"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="15sp" />
                         <TextView
                             android:id="@+id/txtTotalhrs"
                             android:layout_width="0dp"
@@ -224,7 +224,7 @@
                             android:textStyle="bold"
                             android:textAlignment="center"
                             android:textColor="@color/white"
-                            android:textSize="16sp" />
+                            android:textSize="15sp" />
 
 
                     </LinearLayout>
@@ -233,14 +233,30 @@
 
             </RelativeLayout>
 
+            <RelativeLayout
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content">
+
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewId"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_below="@+id/app_bar_layout"
                 tools:listitem="@layout/checkin_checkout_list">
             </androidx.recyclerview.widget.RecyclerView>
 
+            <TextView
+                android:id="@+id/pleaseWaitText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:text="Please Wait..."
+                android:textSize="16sp"
+                android:textColor="@color/black"
+                android:textStyle="bold"
+                android:visibility="visible" />
 
             <TextView
                 android:id="@+id/savedCheckInTimeTextView"
@@ -248,7 +264,10 @@
                 android:layout_height="wrap_content"
                 android:text="Check-in time:"
                 android:textSize="16sp"
-                android:textColor="@color/black" />
+                android:textColor="@color/black"
+                android:visibility="gone"/>
+
+            </RelativeLayout>
         </LinearLayout>
 
 

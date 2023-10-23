@@ -43,6 +43,7 @@ import java.util.Locale;
 
 public class AttendanceFragment extends Fragment {
     private FragmentAttendanceBinding binding;
+    private TextView pleaseWaitText;
     private DatabaseReference databaseReference;
     private RecyclerView recyclerView;
     private AttendanceAdapter attendanceAdapter;
@@ -55,7 +56,7 @@ public class AttendanceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAttendanceBinding.inflate(inflater, container, false);
-
+        pleaseWaitText = binding.getRoot().findViewById(R.id.pleaseWaitText);
         autoCheckoutAtMidnight();
         setUpOnBackPressed();
         recyclerView = binding.recyclerViewId;
@@ -75,48 +76,48 @@ public class AttendanceFragment extends Fragment {
             binding.savedCheckInTimeTextView.setText("Check-in time: " + savedCheckInTime);
         }
 
-        databaseReference = FirebaseDatabase.getInstance().getReference().child("Check-ins");
+        databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child("username");
         fetchDataFromFirebase();
         binding.cardViewCheckIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (!hasCheckedInForDay) {
-                String checkInTime = getCurrentTime();
-                SharedPreferences.Editor editor = sharedPreferences.edit();
-                editor.putString(PREFS_KEY_CHECKIN_TIME, checkInTime);
-                editor.apply();
+                    String checkInTime = getCurrentTime();
+                    SharedPreferences.Editor editor = sharedPreferences.edit();
+                    editor.putString(PREFS_KEY_CHECKIN_TIME, checkInTime);
+                    editor.apply();
 
-                binding.cardViewCheckIn.setVisibility(View.GONE);
-                binding.cardViewCheckout.setVisibility(View.VISIBLE);
+                    binding.cardViewCheckIn.setVisibility(View.GONE);
+                    binding.cardViewCheckout.setVisibility(View.VISIBLE);
 
-                binding.savedCheckInTimeTextView.setText("Check-in time: " + checkInTime);
-                String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-                String currentDay = new SimpleDateFormat("EEEE", Locale.getDefault()).format(new Date());
-                String checkoutTime = "00.00";
-                String totalHrs="00.00";
+                    binding.savedCheckInTimeTextView.setText("Check-in time: " + checkInTime);
+                    String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                    String currentDay = new SimpleDateFormat("EEEE", Locale.getDefault()).format(new Date());
+                    String checkoutTime = "00.00";
+                    String totalHrs="00.00";
 
-                AttendanceModel checkIn = new AttendanceModel(currentDate, currentDay, checkInTime, checkoutTime, totalHrs);
-                employeeList.add(checkIn);
-                attendanceAdapter.notifyDataSetChanged();
-                databaseReference.push().setValue(checkIn)
-                        .addOnSuccessListener(new OnSuccessListener<Void>() {
-                            @Override
-                            public void onSuccess(Void aVoid) {
+                    AttendanceModel checkIn = new AttendanceModel(currentDate, currentDay, checkInTime, checkoutTime, totalHrs);
+                    employeeList.add(checkIn);
+                    attendanceAdapter.notifyDataSetChanged();
+                    databaseReference.push().setValue(checkIn)
+                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
                                     Toast.makeText(getActivity(), "Check-in successful", Toast.LENGTH_SHORT).show();
-                            }
-                        })
-                        .addOnFailureListener(new OnFailureListener() {
-                            @Override
-                            public void onFailure(@NonNull Exception e) {
-                                Toast.makeText(getActivity(), "Failed to check in", Toast.LENGTH_SHORT).show();
-                            }
-                        });
+                                }
+                            })
+                            .addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    Toast.makeText(getActivity(), "Failed to check in", Toast.LENGTH_SHORT).show();
+                                }
+                            });
 
                     hasCheckedInForDay = true;
                 } else {
                     Toast.makeText(getActivity(), "You have already checked in for the day", Toast.LENGTH_SHORT).show();
                 }
-                }
+            }
         });
 
         binding.cardViewCheckout.setOnClickListener(new View.OnClickListener() {
@@ -270,9 +271,11 @@ public class AttendanceFragment extends Fragment {
     }
 
     private void fetchDataFromFirebase() {
+        pleaseWaitText.setVisibility(View.VISIBLE);
         databaseReference.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                pleaseWaitText.setVisibility(View.GONE);
                 employeeList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     AttendanceModel attendance = snapshot.getValue(AttendanceModel.class);
@@ -282,6 +285,7 @@ public class AttendanceFragment extends Fragment {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                pleaseWaitText.setVisibility(View.GONE);
                 Toast.makeText(getActivity(), "Failed to fetch data", Toast.LENGTH_SHORT).show();
             }
         });
