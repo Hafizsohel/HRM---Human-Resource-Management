@@ -1,10 +1,8 @@
 package com.suffixit.hrm_suffix.view.Fragment;
 
 
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -16,11 +14,19 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -33,57 +39,54 @@ import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.FragmentDashboadBinding;
 import com.suffixit.hrm_suffix.models.EmplyeeModel;
 
+import com.suffixit.hrm_suffix.preference.AppPreference;
 import com.suffixit.hrm_suffix.view.Activities.LoginActivity;
 
 
 public class DashboadFragment extends Fragment {
+    private static final String TAG = "DashboadFragment";
     private FragmentDashboadBinding binding;
-    private static final String KEY_USERNAME = "username";
-    private static final String KEY_PASSWORD = "password";
-    private static final String PREFS_NAME = "MyPrefsFile";
-    private SharedPreferences sharedPreferences;
-
+    private AppPreference localStorage;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentDashboadBinding.inflate(inflater, container, false);
 
-        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
-        sharedPreferences = requireContext().getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        localStorage = new AppPreference(requireContext());
+        String userId = localStorage.getUserName();
+        Log.d(TAG, "userName: "+userId);
+       // binding.txtEmployeeId.setText("ID: "+name);
 
-        if (currentUser != null) {
-            String uid = currentUser.getUid();
+        CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
+        Query query = usersCollection.whereEqualTo("username", userId);
 
-            CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
-            Query userQuery = usersCollection.whereEqualTo("userId", uid);
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    boolean userFound = false;
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String name = document.getString("name");
+                        String email = document.getString("Email");
+                        String designation = document.getString("Designation");
 
-            userQuery.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
-                @Override
-                public void onSuccess(QuerySnapshot queryDocumentSnapshots) {
-                    if (!queryDocumentSnapshots.isEmpty()) {
-                        EmplyeeModel employee = queryDocumentSnapshots.getDocuments().get(4).toObject(EmplyeeModel.class);
+                        binding. txtEmployeeId.setText("User ID: " + userId);
+                        binding.txtEmployeeName.setText("Name: " + name);
+                        binding.txtEmployeeMail.setText("Email: "+ email);
+                        binding.txtEmployeeDesignation.setText("Designation: "+ designation);
 
-                        if (employee != null) {
-                            String FullName = employee.getName();
-                            String UserID = employee.getUsername();
-                            String Designation = employee.getDesignation();
-                            String Email = employee.getEmail();
-
-                            binding.txtEmployeeName.setText(FullName);
-                            binding.txtEmployeeId.setText(UserID);
-                            binding.txtEmployeeDesignation.setText(Designation);
-                            binding.txtEmployeeMail.setText(Email);
-                        }
+                        userFound = true;
+                        break;
                     }
+
+                    if (!userFound) {
+                      }
+                } else {
+                   task.getException().printStackTrace();
                 }
-            }).addOnFailureListener(new OnFailureListener() {
-                @Override
-                public void onFailure(@NonNull Exception e) {
-                    Log.e("DashboadFragment", "Failed to fetch data: " + e.getMessage());
-                }
-            });
-        }
+            }
+        });
         return binding.getRoot();
     }
 
@@ -97,7 +100,6 @@ public class DashboadFragment extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new EmployeeFragment()).commit();
             }
         });
-
 
         binding.cardViewLeave.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -141,14 +143,12 @@ public class DashboadFragment extends Fragment {
 
     private void navigateToLogoutPage() {
         // Clear saved username and password
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+       /* SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.remove(KEY_USERNAME);
         editor.remove(KEY_PASSWORD);
-        editor.apply();
-
+        editor.apply()*/;
         Intent intent = new Intent(requireContext(), LoginActivity.class);
         startActivity(intent);
         requireActivity().finish();
     }
-
 }

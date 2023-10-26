@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".view.Fragment.AttendanceFragment">
+    tools:context=".view.Fragment.ScrumFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,7 +26,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
-                    android:text="Today Scrum meeting (23-OCT-2023)"
+                    android:text="Today Scrum meeting (25-OCT-2023)"
                     android:textAlignment="center"
                     android:textStyle="bold"
                     android:textColor="#121111" />
@@ -35,7 +35,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
-                    android:text="Total member:"
+                    android:text="TOTAL MEMBER:"
                     android:textAlignment="center"
                     android:textStyle="bold"
                     android:textColor="#121111"/>
@@ -44,7 +44,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:padding="3dp"
-                    android:text="TOTAL PRESENT: "
+                    android:text=" TOTAL PRESENT: "
                     android:textAlignment="center"
                     android:textStyle="bold"
                     android:textColor="#121111"/>
@@ -75,6 +75,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:background="#393836"
+                        android:gravity="center"
                         android:padding="5dp"
                         android:weightSum="2">
 
@@ -149,4 +150,4 @@
         </RelativeLayout>
     </LinearLayout>
 
-</FrameLayout>
+</RelativeLayout>

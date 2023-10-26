@@ -22,10 +22,12 @@ import com.suffixit.hrm_suffix.preference.AppPreference;
 
 public class SplashActivity extends AppCompatActivity {
     private ActivitySplashBinding binding;
+    private AppPreference appPreference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        appPreference = new AppPreference(this);
         hideSystemBars();
         binding = DataBindingUtil.setContentView(this, R.layout.activity_splash);
         YoYo.with(Techniques.BounceInUp)
@@ -35,8 +37,7 @@ public class SplashActivity extends AppCompatActivity {
                     public void call(Animator animator) {
                         Intent intent;
                         try {
-                            String loginResponse = new AppPreference(SplashActivity.this).getUserId();
-                            intent = !TextUtils.isEmpty(loginResponse) ?
+                            intent = appPreference.getLoginResponse() ?
                                     new Intent(SplashActivity.this, MainActivity.class) :
                                     new Intent(SplashActivity.this, LoginActivity.class);
                             startActivity(intent);

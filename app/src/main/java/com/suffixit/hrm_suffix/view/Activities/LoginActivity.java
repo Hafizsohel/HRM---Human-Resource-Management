@@ -22,6 +22,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.ActivityLoginBinding;
+import com.suffixit.hrm_suffix.preference.AppPreference;
 import com.suffixit.hrm_suffix.utils.KeyboardUtils;
 import com.suffixit.hrm_suffix.utils.NetworkUtils;
 import java.util.Map;
@@ -35,6 +36,7 @@ public class LoginActivity extends AppCompatActivity {
     private static final String PREFS_NAME = "MyPrefsFile";
     private static final String KEY_USERNAME = "username";
     private static final String KEY_PASSWORD = "password";
+    private AppPreference localStorage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +44,7 @@ public class LoginActivity extends AppCompatActivity {
         binding = DataBindingUtil.setContentView(this, R.layout.activity_login);
         auth = FirebaseAuth.getInstance();
 
+        localStorage = new AppPreference(this);
         //usersRef = FirebaseDatabase.getInstance().getReference("Users");
         db = FirebaseFirestore.getInstance();
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
@@ -69,17 +72,16 @@ public class LoginActivity extends AppCompatActivity {
                 String password = binding.password.getText().toString();
                 authenticateUser(username, password);
             }
-
         });
     }
 
     private void authenticateUser(final String username, final String enteredPassword) {
 
         //Save username and password
-        SharedPreferences.Editor editor = sharedPreferences.edit();
+      /*  SharedPreferences.Editor editor = sharedPreferences.edit();
         editor.putString(KEY_USERNAME, username);
         editor.putString(KEY_PASSWORD, enteredPassword);
-        editor.apply();
+        editor.apply();*/
 
 
         CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
@@ -95,6 +97,8 @@ public class LoginActivity extends AppCompatActivity {
                         String storedPassword = (String) userData.get("password");
 
                         if (storedPassword != null && storedPassword.equals(enteredPassword)) {
+                            localStorage.putUserName(username);
+                            localStorage.putLoginResponse(true);
                             Intent intent = new Intent(LoginActivity.this, MainActivity.class);
                             startActivity(intent);
                             finish();

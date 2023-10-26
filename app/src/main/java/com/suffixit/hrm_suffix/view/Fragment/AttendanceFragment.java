@@ -15,6 +15,7 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import android.os.Handler;
 import android.os.Looper;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,15 +23,18 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.suffixit.hrm_suffix.Adapter.AttendanceAdapter;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.FragmentAttendanceBinding;
 import com.suffixit.hrm_suffix.models.AttendanceModel;
+import com.suffixit.hrm_suffix.preference.AppPreference;
 import com.suffixit.hrm_suffix.view.Activities.MainActivity;
 
 import java.text.ParseException;
@@ -42,6 +46,7 @@ import java.util.List;
 import java.util.Locale;
 
 public class AttendanceFragment extends Fragment {
+    private static final String TAG = "AttendanceFragment";
     private FragmentAttendanceBinding binding;
     private TextView pleaseWaitText;
     private DatabaseReference databaseReference;
@@ -49,6 +54,7 @@ public class AttendanceFragment extends Fragment {
     private AttendanceAdapter attendanceAdapter;
     private List<AttendanceModel> employeeList;
     private SharedPreferences sharedPreferences;
+    private AppPreference localStorage;
     private boolean hasCheckedInForDay = false;
     private static final String PREFS_KEY_CHECKIN_TIME = "checkin_time";
 
@@ -56,6 +62,12 @@ public class AttendanceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAttendanceBinding.inflate(inflater, container, false);
+        sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
+        localStorage = new AppPreference(requireContext());
+        String name = localStorage.getUserName();
+        Log.d(TAG, "userName: "+name);
+
         pleaseWaitText = binding.getRoot().findViewById(R.id.pleaseWaitText);
         autoCheckoutAtMidnight();
         setUpOnBackPressed();
@@ -66,7 +78,7 @@ public class AttendanceFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(attendanceAdapter);
 
-        sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
+
         String savedCheckInTime = sharedPreferences.getString(PREFS_KEY_CHECKIN_TIME, "");
 
 
@@ -89,14 +101,15 @@ public class AttendanceFragment extends Fragment {
 
                     binding.cardViewCheckIn.setVisibility(View.GONE);
                     binding.cardViewCheckout.setVisibility(View.VISIBLE);
-
                     binding.savedCheckInTimeTextView.setText("Check-in time: " + checkInTime);
+
                     String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
                     String currentDay = new SimpleDateFormat("EEEE", Locale.getDefault()).format(new Date());
                     String checkoutTime = "00.00";
                     String totalHrs="00.00";
+                    String username=name;
 
-                    AttendanceModel checkIn = new AttendanceModel(currentDate, currentDay, checkInTime, checkoutTime, totalHrs);
+                    AttendanceModel checkIn = new AttendanceModel(username, currentDate, currentDay, checkInTime, checkoutTime, totalHrs);
                     employeeList.add(checkIn);
                     attendanceAdapter.notifyDataSetChanged();
                     databaseReference.push().setValue(checkIn)
@@ -277,10 +290,13 @@ public class AttendanceFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 pleaseWaitText.setVisibility(View.GONE);
                 employeeList.clear();
+
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    Log.d("FirebaseData", snapshot.getValue().toString());
                     AttendanceModel attendance = snapshot.getValue(AttendanceModel.class);
                     employeeList.add(attendance);
                 }
+
                 attendanceAdapter.notifyDataSetChanged();
             }
             @Override

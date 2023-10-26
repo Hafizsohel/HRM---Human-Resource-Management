@@ -21,8 +21,8 @@ public class AttendanceModel implements Serializable {
     public AttendanceModel() {
     }
 
-    public AttendanceModel(String date, String day, String checkInTime, String checkoutTime, String totalHrs) {
-        this.id = id;
+    public AttendanceModel(String userId,String date, String day, String checkInTime, String checkoutTime, String totalHrs) {
+        this.userId = userId;
         this.date = date;
         this.day = day;
         this.checkInTime = checkInTime;
@@ -89,11 +89,12 @@ public class AttendanceModel implements Serializable {
     public String toString() {
         return "AttendanceModel{" +
                 "id=" + id +
+                ", userId='" + userId + '\'' +
                 ", date='" + date + '\'' +
                 ", day='" + day + '\'' +
                 ", checkInTime='" + checkInTime + '\'' +
                 ", checkoutTime='" + checkoutTime + '\'' +
-                ", totalHrs=" + totalHrs +
+                ", totalHrs='" + totalHrs + '\'' +
                 '}';
     }
 }

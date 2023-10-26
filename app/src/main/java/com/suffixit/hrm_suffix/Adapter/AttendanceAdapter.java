@@ -13,33 +13,33 @@ import com.suffixit.hrm_suffix.models.AttendanceModel;
 import java.util.List;
 
 public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.ViewHolder> {
-        private Context context;
-        private List<AttendanceModel> checkinCheckoutList;
+    private Context context;
+    private List<AttendanceModel> checkinCheckoutList;
 
-        public AttendanceAdapter(Context context, List<AttendanceModel> checkinCheckoutList) {
-            this.context = context;
-            this.checkinCheckoutList = checkinCheckoutList;
-        }
+    public AttendanceAdapter(Context context, List<AttendanceModel> checkinCheckoutList) {
+        this.context = context;
+        this.checkinCheckoutList = checkinCheckoutList;
+    }
 
-        @NonNull
-        @Override
-        public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-            View view = LayoutInflater.from(context).inflate(R.layout.checkin_checkout_list, parent, false);
-            return new ViewHolder(view);
-        }
+    @NonNull
+    @Override
+    public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater.from(context).inflate(R.layout.checkin_checkout_list, parent, false);
+        return new ViewHolder(view);
+    }
 
-        @Override
-        public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-            AttendanceModel item = checkinCheckoutList.get(checkinCheckoutList.size() - 1 - position);
+    @Override
+    public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+        AttendanceModel item = checkinCheckoutList.get(checkinCheckoutList.size() - 1 - position);
 
-            holder.txtDate.setText(item.getDate());
-            holder.txtDay.setText(item.getDay());
-            holder.txtCheckIn.setText(item.getCheckInTime());
-            holder.txtCheckOut.setText(item.getCheckoutTime());
-            holder.txtTotalHrs.setText(item.getTotalHrs());
-            holder.txtTotalHrs.setText(formatTotalHrsString(Double.parseDouble(item.getTotalHrs())));
+        holder.txtDate.setText(item.getDate());
+        holder.txtDay.setText(item.getDay());
+        holder.txtCheckIn.setText(item.getCheckInTime());
+        holder.txtCheckOut.setText(item.getCheckoutTime());
+        holder.txtTotalHrs.setText(item.getTotalHrs());
+        holder.txtTotalHrs.setText(formatTotalHrsString(Double.parseDouble(item.getTotalHrs())));
 
-        }
+    }
 
     private String formatTotalHrsString(double totalHrs) {
         int hours = (int) totalHrs;
@@ -50,20 +50,20 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.Vi
 
 
     @Override
-        public int getItemCount() {
+    public int getItemCount() {
         return Math.min(checkinCheckoutList.size(), 30);
-        }
+    }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            TextView txtDate, txtDay, txtCheckIn, txtCheckOut, txtTotalHrs;
+    public class ViewHolder extends RecyclerView.ViewHolder {
+        TextView txtDate, txtDay, txtCheckIn, txtCheckOut, txtTotalHrs;
 
-            public ViewHolder(@NonNull View itemView) {
-                super(itemView);
-                txtDate = itemView.findViewById(R.id.txtDate);
-                txtDay = itemView.findViewById(R.id.txtDay);
-                txtCheckIn = itemView.findViewById(R.id.txtCheckIn);
-                txtCheckOut = itemView.findViewById(R.id.txtCheckOut);
-                txtTotalHrs = itemView.findViewById(R.id.txtTotalHrs);
-            }
+        public ViewHolder(@NonNull View itemView) {
+            super(itemView);
+            txtDate = itemView.findViewById(R.id.txtDate);
+            txtDay = itemView.findViewById(R.id.txtDay);
+            txtCheckIn = itemView.findViewById(R.id.txtCheckIn);
+            txtCheckOut = itemView.findViewById(R.id.txtCheckOut);
+            txtTotalHrs = itemView.findViewById(R.id.txtTotalHrs);
         }
     }
+}
