@@ -21,15 +21,22 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QueryDocumentSnapshot;
+import com.google.firebase.firestore.QuerySnapshot;
 import com.suffixit.hrm_suffix.Adapter.AttendanceAdapter;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.FragmentAttendanceBinding;
@@ -65,8 +72,32 @@ public class AttendanceFragment extends Fragment {
         sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
         localStorage = new AppPreference(requireContext());
-        String name = localStorage.getUserName();
-        Log.d(TAG, "userName: "+name);
+        String userName = localStorage.getUserName();
+        Log.d(TAG, "userName: "+userName);
+
+        CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
+        com.google.firebase.firestore.Query query = usersCollection.whereEqualTo("username", userName);
+
+        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                if (task.isSuccessful()) {
+                    boolean userFound = false;
+                    for (QueryDocumentSnapshot document : task.getResult()) {
+                        String name = document.getString("name");
+
+                        Log.d(TAG, "onComplete: "+name);
+                        userFound = true;
+                        break;
+                    }
+
+                    if (!userFound) {
+                    }
+                } else {
+                    task.getException().printStackTrace();
+                }
+            }
+        });
 
         pleaseWaitText = binding.getRoot().findViewById(R.id.pleaseWaitText);
         autoCheckoutAtMidnight();
@@ -78,9 +109,7 @@ public class AttendanceFragment extends Fragment {
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(attendanceAdapter);
 
-
         String savedCheckInTime = sharedPreferences.getString(PREFS_KEY_CHECKIN_TIME, "");
-
 
         if (!savedCheckInTime.isEmpty()) {
             binding.cardViewCheckIn.setVisibility(View.GONE);
@@ -89,7 +118,7 @@ public class AttendanceFragment extends Fragment {
         }
 
         databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child("username");
-        fetchDataFromFirebase();
+        fetchDataFromFirebase(userName);
         binding.cardViewCheckIn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -107,24 +136,48 @@ public class AttendanceFragment extends Fragment {
                     String currentDay = new SimpleDateFormat("EEEE", Locale.getDefault()).format(new Date());
                     String checkoutTime = "00.00";
                     String totalHrs="00.00";
-                    String username=name;
+                    String username=userName;
 
-                    AttendanceModel checkIn = new AttendanceModel(username, currentDate, currentDay, checkInTime, checkoutTime, totalHrs);
-                    employeeList.add(checkIn);
-                    attendanceAdapter.notifyDataSetChanged();
-                    databaseReference.push().setValue(checkIn)
-                            .addOnSuccessListener(new OnSuccessListener<Void>() {
-                                @Override
-                                public void onSuccess(Void aVoid) {
-                                    Toast.makeText(getActivity(), "Check-in successful", Toast.LENGTH_SHORT).show();
+                    usersCollection.whereEqualTo("username", userName).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                            if (task.isSuccessful()) {
+                                boolean userFound = false;
+                                for (QueryDocumentSnapshot document : task.getResult()) {
+                                    String name = document.getString("name");
+                                    userFound = true;
+
+                                    String fullName = name;
+
+                                    AttendanceModel userDetails = new AttendanceModel(username, fullName, currentDate, currentDay, checkInTime, checkoutTime, totalHrs);
+                                    employeeList.add(userDetails);
+                                    attendanceAdapter.notifyDataSetChanged();
+
+                                    DatabaseReference checkInRef = FirebaseDatabase.getInstance().getReference().child("Users").child("username").push();
+                                    checkInRef.setValue(userDetails)
+                                            .addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                @Override
+                                                public void onSuccess(Void aVoid) {
+                                                    Toast.makeText(getActivity(), "Check-in successful", Toast.LENGTH_SHORT).show();
+                                                }
+                                            })
+                                            .addOnFailureListener(new OnFailureListener() {
+                                                @Override
+                                                public void onFailure(@NonNull Exception e) {
+                                                    Toast.makeText(getActivity(), "Failed to check in", Toast.LENGTH_SHORT).show();
+                                                }
+                                            });
+
+                                    break;
                                 }
-                            })
-                            .addOnFailureListener(new OnFailureListener() {
-                                @Override
-                                public void onFailure(@NonNull Exception e) {
-                                    Toast.makeText(getActivity(), "Failed to check in", Toast.LENGTH_SHORT).show();
+
+                                if (!userFound) {
                                 }
-                            });
+                            } else {
+                                task.getException().printStackTrace();
+                            }
+                        }
+                    });
 
                     hasCheckedInForDay = true;
                 } else {
@@ -151,7 +204,6 @@ public class AttendanceFragment extends Fragment {
                                         snapshot.getRef().child("checkoutTime").setValue(finalCheckoutTime);
                                         snapshot.getRef().child("totalHrs").setValue(String.format("%.2f", totalHrs));
                                     }
-
                                     attendanceAdapter.notifyDataSetChanged();
 
                                     SharedPreferences.Editor editor = sharedPreferences.edit();
@@ -173,7 +225,6 @@ public class AttendanceFragment extends Fragment {
                 }
             }
         });
-
 
         final Handler handler = new Handler(Looper.getMainLooper());
         handler.post(new Runnable() {
@@ -231,7 +282,6 @@ public class AttendanceFragment extends Fragment {
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.remove(PREFS_KEY_CHECKIN_TIME);
                             editor.apply();
-
                             binding.cardViewCheckIn.setVisibility(View.VISIBLE);
                             binding.cardViewCheckout.setVisibility(View.GONE);
 
@@ -254,9 +304,7 @@ public class AttendanceFragment extends Fragment {
         handler.postDelayed(new Runnable() {
             @Override
             public void run() {
-                // Get the current time
                 String currentTime = getCurrentTime();
-
                 // Check if it's 11:59 PM to trigger auto-checkout
                 if (currentTime.equals("11:59 PM")) {
                     performAutoCheckout();
@@ -283,9 +331,11 @@ public class AttendanceFragment extends Fragment {
         }
     }
 
-    private void fetchDataFromFirebase() {
+    private void fetchDataFromFirebase(String userId) {
         pleaseWaitText.setVisibility(View.VISIBLE);
-        databaseReference.addValueEventListener(new ValueEventListener() {
+        Query query = databaseReference.orderByChild("userId").equalTo(userId);
+
+        query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 pleaseWaitText.setVisibility(View.GONE);
@@ -299,6 +349,7 @@ public class AttendanceFragment extends Fragment {
 
                 attendanceAdapter.notifyDataSetChanged();
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
                 pleaseWaitText.setVisibility(View.GONE);

@@ -240,7 +240,7 @@
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/recyclerViewId"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
+                android:layout_height="wrap_content"
                 tools:listitem="@layout/checkin_checkout_list">
             </androidx.recyclerview.widget.RecyclerView>
 

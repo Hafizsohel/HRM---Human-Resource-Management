@@ -56,7 +56,6 @@ public class DashboadFragment extends Fragment {
         localStorage = new AppPreference(requireContext());
         String userId = localStorage.getUserName();
         Log.d(TAG, "userName: "+userId);
-       // binding.txtEmployeeId.setText("ID: "+name);
 
         CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
         Query query = usersCollection.whereEqualTo("username", userId);
@@ -75,6 +74,7 @@ public class DashboadFragment extends Fragment {
                         binding.txtEmployeeName.setText("Name: " + name);
                         binding.txtEmployeeMail.setText("Email: "+ email);
                         binding.txtEmployeeDesignation.setText("Designation: "+ designation);
+
 
                         userFound = true;
                         break;
@@ -143,10 +143,6 @@ public class DashboadFragment extends Fragment {
 
     private void navigateToLogoutPage() {
         // Clear saved username and password
-       /* SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.remove(KEY_USERNAME);
-        editor.remove(KEY_PASSWORD);
-        editor.apply()*/;
         Intent intent = new Intent(requireContext(), LoginActivity.class);
         startActivity(intent);
         requireActivity().finish();

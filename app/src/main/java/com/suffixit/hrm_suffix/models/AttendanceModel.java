@@ -9,20 +9,21 @@ import java.io.Serializable;
 
 @Entity(tableName = "attendance_table", indices = @Index(value = {"id"}, unique = true))
 public class AttendanceModel implements Serializable {
-    @PrimaryKey(autoGenerate = true)
-    public int id;
+    @PrimaryKey()
     private String userId;
     private String date;
     private String day;
     private String checkInTime;
     private String checkoutTime;
     private String totalHrs;
+    private String name;
 
     public AttendanceModel() {
     }
 
-    public AttendanceModel(String userId,String date, String day, String checkInTime, String checkoutTime, String totalHrs) {
+    public AttendanceModel(String userId,String name, String date, String day, String checkInTime, String checkoutTime, String totalHrs) {
         this.userId = userId;
+        this.name = name;
         this.date = date;
         this.day = day;
         this.checkInTime = checkInTime;
@@ -39,12 +40,14 @@ public class AttendanceModel implements Serializable {
         this.userId = userId;
     }
 
-    public int getId() {
-        return id;
+    public String getName() {
+        return name;
     }
-    public void setId(int id) {
-        this.id = id;
+
+    public void setName(String name) {
+        this.name = name;
     }
+
     public String getDate() {
         return date;
     }
@@ -88,7 +91,6 @@ public class AttendanceModel implements Serializable {
     @Override
     public String toString() {
         return "AttendanceModel{" +
-                "id=" + id +
                 ", userId='" + userId + '\'' +
                 ", date='" + date + '\'' +
                 ", day='" + day + '\'' +

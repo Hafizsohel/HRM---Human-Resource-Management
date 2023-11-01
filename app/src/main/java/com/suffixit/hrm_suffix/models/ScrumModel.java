@@ -1,24 +1,23 @@
 package com.suffixit.hrm_suffix.models;
 
 public class ScrumModel {
-
-    private int id;
+    private String userId;
     private String name;
 
     public ScrumModel() {
     }
 
-    public ScrumModel(int id, String name) {
-        this.id = id;
+    public ScrumModel(String userId, String name) {
+        this.userId = userId;
         this.name = name;
     }
 
-    public int getId() {
-        return id;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getName() {
