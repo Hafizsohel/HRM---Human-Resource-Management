@@ -19,10 +19,14 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
+
+import com.squareup.picasso.Picasso;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.models.EmplyeeModel;
 
 import java.util.List;
+
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
 
@@ -46,6 +50,11 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         EmplyeeModel employee = emplyeeList.get(position);
         holder.username.setText(employee.getUsername());
         holder.nameText.setText(employee.getName());
+
+        // Load and display the profile image using Picasso (make sure to have Picasso imported)
+        if (employee.getProfileImg() != null && !employee.getProfileImg().isEmpty()) {
+            Picasso.get().load(Uri.parse(employee.getProfileImg())).into(holder.profileImg);
+        }
 
         holder.itemView.setOnClickListener(v -> {
             showDetailsForItem(position);
@@ -154,13 +163,15 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         return emplyeeList.size();
     }
     public class EmployeeViewHolder extends RecyclerView.ViewHolder {
-        public TextView username;
-        public TextView nameText;
+        public TextView username,nameText;
+        public CircleImageView profileImg;
+
 
         public EmployeeViewHolder(View itemView) {
             super(itemView);
             username = itemView.findViewById(R.id.empID);
             nameText = itemView.findViewById(R.id.empName);
+            profileImg=itemView.findViewById(R.id.imgEmployee);
         }
     }
 }

@@ -18,14 +18,16 @@ public class EmplyeeModel implements Serializable {
     private String Email;
     private String Gender;
     private String PhoneNumber;
+    private String profileImg;
 
 
     public EmplyeeModel() {
     }
 
-    public EmplyeeModel(int id, String username, String name, String bloodGroup, String designation, String email, String gender, String phoneNumber) {
+    public EmplyeeModel(int id, String profileImg, String username, String name, String bloodGroup, String designation, String email, String gender, String phoneNumber) {
         this.id = id;
         this.username = username;
+        this.profileImg = profileImg;
         this.name = name;
         BloodGroup = bloodGroup;
         Designation = designation;
@@ -46,6 +48,15 @@ public class EmplyeeModel implements Serializable {
     public void setUsername(String username) {
         this.username = username;
     }
+
+    public String getProfileImg() {
+        return profileImg;
+    }
+
+    public void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
+    }
+
     public String getName() {
         return name;
     }
@@ -102,7 +113,8 @@ public class EmplyeeModel implements Serializable {
                 ", Designation='" + Designation + '\'' +
                 ", Email='" + Email + '\'' +
                 ", Gender='" + Gender + '\'' +
-                ", PhoneNumber=" + PhoneNumber +
+                ", PhoneNumber='" + PhoneNumber + '\'' +
+                ", profileImg='" + profileImg + '\'' +
                 '}';
     }
 }

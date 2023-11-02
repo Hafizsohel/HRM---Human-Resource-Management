@@ -9,12 +9,12 @@
     android:background="@drawable/neumorphic_background"
     android:padding="16dp">
 
-    <ImageView
+    <de.hdodenhof.circleimageview.CircleImageView
         android:id="@+id/imgEmployee"
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_gravity="center"
-        android:src="@drawable/person_pin_24" />
+        android:src="@drawable/circle_shape" />
 
     <LinearLayout
         android:layout_width="wrap_content"

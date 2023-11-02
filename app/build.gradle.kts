@@ -57,7 +57,9 @@ dependencies {
 
     //animated flash screen
     implementation ("com.daimajia.androidanimations:library:2.4@aar")
-   // implementation ("androidx.lifecycle:lifecycle-runtime:2.6.2")
+    //get image
+    implementation ("com.squareup.picasso:picasso:2.71828")
+
 
 
 

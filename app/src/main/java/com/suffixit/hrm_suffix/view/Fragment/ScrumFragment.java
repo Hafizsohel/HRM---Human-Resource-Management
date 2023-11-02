@@ -25,23 +25,13 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.firestore.CollectionReference;
-import com.google.firebase.firestore.DocumentSnapshot;
-import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.Query;
-import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
 import com.suffixit.hrm_suffix.Adapter.ScrumAdapter;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.FragmentScrumBinding;
-import com.suffixit.hrm_suffix.models.AttendanceModel;
 import com.suffixit.hrm_suffix.models.ScrumModel;
-import com.suffixit.hrm_suffix.preference.AppPreference;
 import com.suffixit.hrm_suffix.view.Activities.MainActivity;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 public class ScrumFragment extends Fragment {
@@ -51,6 +41,7 @@ public class ScrumFragment extends Fragment {
     private ScrumAdapter adapter;
     List<ScrumModel> scrumModelList = new ArrayList<>();
     private DatabaseReference databaseReference;
+    private TextView pleaseWaitText;
 
 
     @Override
@@ -60,10 +51,9 @@ public class ScrumFragment extends Fragment {
 
         binding = FragmentScrumBinding.inflate(inflater, container, false);
         View rootView = binding.getRoot();
-
+        pleaseWaitText = binding.getRoot().findViewById(R.id.pleaseWaitText);
         databaseReference = FirebaseDatabase.getInstance().getReference();
         fetchUserIdsFromFirebase();
-
         recyclerView = binding.recyclerId;
         adapter = new ScrumAdapter(scrumModelList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -95,9 +85,11 @@ public class ScrumFragment extends Fragment {
     }
 
     private void fetchUserIdsFromFirebase() {
+        pleaseWaitText.setVisibility(View.VISIBLE);
         databaseReference.child("Users").child("username").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                pleaseWaitText.setVisibility(View.GONE);
                 scrumModelList.clear();
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     String userId = userSnapshot.child("userId").getValue(String.class);
@@ -114,6 +106,7 @@ public class ScrumFragment extends Fragment {
             }
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                pleaseWaitText.setVisibility(View.GONE);
                 Toast.makeText(getActivity(), "Failed to fetch data", Toast.LENGTH_SHORT).show();
             }
         });
@@ -126,7 +119,7 @@ public class ScrumFragment extends Fragment {
         binding.scrumToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboadFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboardFragment()).commit();
             }
         });
     }

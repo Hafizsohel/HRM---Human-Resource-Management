@@ -14,19 +14,10 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Toast;
+import android.widget.ImageView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.OnFailureListener;
-import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 
@@ -35,23 +26,27 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 
 
+import com.squareup.picasso.Picasso;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.FragmentDashboadBinding;
-import com.suffixit.hrm_suffix.models.EmplyeeModel;
 
 import com.suffixit.hrm_suffix.preference.AppPreference;
 import com.suffixit.hrm_suffix.view.Activities.LoginActivity;
 
+import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DashboadFragment extends Fragment {
+
+public class DashboardFragment extends Fragment {
     private static final String TAG = "DashboadFragment";
     private FragmentDashboadBinding binding;
     private AppPreference localStorage;
+    private CircleImageView profileImageView;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentDashboadBinding.inflate(inflater, container, false);
+
 
         localStorage = new AppPreference(requireContext());
         String userId = localStorage.getUserName();
@@ -69,6 +64,8 @@ public class DashboadFragment extends Fragment {
                         String name = document.getString("name");
                         String email = document.getString("Email");
                         String designation = document.getString("Designation");
+                        String imageUrl = document.getString("profileImg");
+
 
                         binding. txtEmployeeId.setText("User ID: " + userId);
                         binding.txtEmployeeName.setText("Name: " + name);
@@ -77,6 +74,12 @@ public class DashboadFragment extends Fragment {
 
 
                         userFound = true;
+
+                        // Load and display the profile image using Picasso
+                        if (imageUrl != null && !imageUrl.isEmpty()) {
+                            Picasso.get().load(imageUrl).into(profileImageView);
+                        }
+
                         break;
                     }
 
@@ -87,6 +90,8 @@ public class DashboadFragment extends Fragment {
                 }
             }
         });
+
+        profileImageView = binding.imgEmployeeProfile;
         return binding.getRoot();
     }
 

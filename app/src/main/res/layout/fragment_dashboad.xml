@@ -44,14 +44,14 @@
                     android:layout_height="52dp"
                     android:layout_gravity="center">
 
-                    <ImageView
+                    <de.hdodenhof.circleimageview.CircleImageView
                         android:id="@+id/imgEmployeeProfile"
                         android:layout_width="65dp"
                         android:layout_height="65dp"
                         android:layout_centerHorizontal="true"
-                        android:background="@drawable/round_white"
                         android:padding="2dp"
-                        android:src="@drawable/placeholder" />
+                        android:background="#1566e0"
+                        android:src="@drawable/circle_shape"/>
 
                 </RelativeLayout>
 
