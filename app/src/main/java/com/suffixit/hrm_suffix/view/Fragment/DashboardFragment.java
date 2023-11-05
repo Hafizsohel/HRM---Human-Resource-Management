@@ -122,7 +122,7 @@ public class DashboardFragment extends Fragment {
         binding.imgScrumMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new ScrumFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new ScrumDashboardFragment()).commit();
             }
         });
     }

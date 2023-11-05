@@ -1,6 +1,5 @@
 package com.suffixit.hrm_suffix.view.Fragment;
 
-import android.content.Intent;
 import android.os.Bundle;
 import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
@@ -11,7 +10,7 @@ import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
-import android.util.Log;
+
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -33,14 +32,14 @@ import com.suffixit.hrm_suffix.Adapter.ScrumAdapter;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.FragmentScrumBinding;
 import com.suffixit.hrm_suffix.models.ScrumModel;
-import com.suffixit.hrm_suffix.view.Activities.MainActivity;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 public class ScrumFragment extends Fragment {
     private static final String TAG = "ScrumFragment";
@@ -50,41 +49,44 @@ public class ScrumFragment extends Fragment {
     List<ScrumModel> scrumModelList = new ArrayList<>();
     private DatabaseReference databaseReference;
     private TextView pleaseWaitText;
+    ScrumAdapter.OnButtonClickListener buttonClickListener;
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                             Bundle savedInstanceState) {
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         setUpOnBackPressed();
-
         binding = FragmentScrumBinding.inflate(inflater, container, false);
         View rootView = binding.getRoot();
+
         pleaseWaitText = binding.getRoot().findViewById(R.id.pleaseWaitText);
         databaseReference = FirebaseDatabase.getInstance().getReference();
+
+        adapter = new ScrumAdapter(scrumModelList, new ScrumAdapter.OnButtonClickListener() {
+            @Override
+            public void onButtonClick(ScrumModel scrum, int position) {
+                insertUserDataToFirebase(scrum.getUserId(), scrum.getName());
+                hideItem(scrum.getUserId());
+            }
+        });
 
         countTotalMembers();
         fetchUserIdsFromFirebase();
 
         recyclerView = binding.recyclerId;
-        adapter = new ScrumAdapter(scrumModelList);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         recyclerView.setAdapter(adapter);
 
-       // String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-
-
         return rootView;
     }
+
 
     private void setUpOnBackPressed() {
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override
             public void handleOnBackPressed() {
                 if (isAdded()) {
-                    setEnabled(false);
-                    Intent intent = new Intent(getActivity(), MainActivity.class);
-                    startActivity(intent);
-                    getActivity().finish();
+                    getParentFragmentManager().popBackStack();
                 }
+
             }
         };
         requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), onBackPressedCallback);
@@ -144,13 +146,12 @@ public class ScrumFragment extends Fragment {
         binding.scrumToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboardFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new ScrumDashboardFragment()).commit();
             }
         });
     }
     private void countTotalMembers() {
         CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
-
         usersCollection.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
             public void onComplete(@NonNull Task<QuerySnapshot> task) {
@@ -171,4 +172,33 @@ public class ScrumFragment extends Fragment {
         binding.totalPresent.setText("TOTAL PRESENT: " + checkedInUsersCount);
     }
 
+    private void insertUserDataToFirebase(String userId, String name) {
+        DatabaseReference usersReference = databaseReference.child("Users").child("present");
+        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+        String userKey = usersReference.push().getKey();
+
+        Map<String, Object> userData = new HashMap<>();
+        userData.put("userId", userId);
+        userData.put("name", name);
+        userData.put("date", currentDate);
+
+        usersReference.child(userKey).setValue(userData);
+    }
+
+    private void hideItem(String userId) {
+        // Implement the code to hide the item here.
+        int positionToRemove = -1;
+        for (int i = 0; i < scrumModelList.size(); i++) {
+            if (scrumModelList.get(i).getUserId().equals(userId)) {
+                positionToRemove = i;
+                break;
+            }
+        }
+
+        if (positionToRemove != -1) {
+            scrumModelList.remove(positionToRemove);
+            adapter.notifyItemRemoved(positionToRemove);
+            adapter.notifyItemRangeChanged(positionToRemove, scrumModelList.size());
+        }
+    }
 }

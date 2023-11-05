@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="50dp"
     android:layout_marginStart="4dp"
@@ -18,7 +21,7 @@
             android:id="@+id/txtID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
+            android:layout_marginStart="10dp"
             android:text="SIL-163"
             android:textColor="#000000"
             android:textStyle="bold" />
@@ -28,10 +31,19 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="Hafizur Rahman"
-            android:layout_marginStart="100dp"
+            android:layout_marginStart="70dp"
             android:textColor="#000000"
             android:textStyle="bold" />
 
     </LinearLayout>
 
+    <ImageButton
+        android:id="@+id/btnPresent"
+        android:layout_width="70dp"
+        android:layout_height="40dp"
+        android:layout_alignParentEnd="true"
+        android:layout_centerVertical="true"
+        android:background="@drawable/neumorphic_background"
+        android:src="@drawable/present" />
 </RelativeLayout>
+</layout>
