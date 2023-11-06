@@ -47,6 +47,14 @@ public class ScrumDashboardFragment extends Fragment {
             }
         });
 
+        binding.imgReportDownload.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new ReportFragment()).commit();
+
+            }
+        });
+
     }
     private void setUpOnBackPressed() {
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {

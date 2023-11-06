@@ -114,14 +114,6 @@ public class ScrumAdapter extends RecyclerView.Adapter<ScrumAdapter.ViewHolder> 
         holder.txtName.setText(scrum.getName());
         holder.txtID.setText(scrum.getUserId());
 
-        holder.btnPresent.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                if (buttonClickListener != null) {
-                    buttonClickListener.onButtonClick(scrum, position);
-                }
-            }
-        });
     }
 
     @Override
@@ -143,15 +135,14 @@ public class ScrumAdapter extends RecyclerView.Adapter<ScrumAdapter.ViewHolder> 
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        public TextView txtID;
-        public TextView txtName;
-        public ImageButton btnPresent;
+        public TextView txtID, txtName,txtDate;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
             txtID = itemView.findViewById(R.id.txtID);
             txtName = itemView.findViewById(R.id.txtName);
-            btnPresent = itemView.findViewById(R.id.btnPresent);
+            txtDate = itemView.findViewById(R.id.txtDate);
         }
     }
 }
