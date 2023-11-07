@@ -10,6 +10,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.models.ReportModel;
+
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder> {
@@ -29,16 +32,19 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
+
         ReportModel report = reportModelList.get(position);
+
         holder.txtName.setText(report.getName());
         holder.txtID.setText(report.getUserId());
         holder.txtDate.setText(report.getDate());
+        holder.txtStatus.setText(report.getStatus());
     }
 
 
         @Override
         public int getItemCount() {
-            return reportModelList.size();
+            return Math.min(reportModelList.size(),30);
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
@@ -49,6 +55,8 @@ public class ReportAdapter extends RecyclerView.Adapter<ReportAdapter.ViewHolder
                 txtID = itemView.findViewById(R.id.txtID);
                 txtName = itemView.findViewById(R.id.txtName);
                 txtDate = itemView.findViewById(R.id.txtDate);
+                txtStatus = itemView.findViewById(R.id.txtStatus);
+
             }
         }
     }

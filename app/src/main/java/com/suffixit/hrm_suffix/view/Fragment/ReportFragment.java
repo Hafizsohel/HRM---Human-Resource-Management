@@ -1,5 +1,6 @@
 package com.suffixit.hrm_suffix.view.Fragment;
 
+import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
@@ -31,9 +32,13 @@ import com.suffixit.hrm_suffix.databinding.FragmentReportBinding;
 import com.suffixit.hrm_suffix.databinding.FragmentScrumBinding;
 import com.suffixit.hrm_suffix.models.ReportModel;
 import com.suffixit.hrm_suffix.models.ScrumModel;
+import com.suffixit.hrm_suffix.preference.AppPreference;
+import com.suffixit.hrm_suffix.view.Activities.MainActivity;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.Locale;
@@ -46,6 +51,7 @@ public class ReportFragment extends Fragment {
     List<ReportModel> reportModelList = new ArrayList();
     private ReportAdapter adapter;
     private TextView pleaseWaitText;
+    private AppPreference localStorage;
 
 
     @Override
@@ -58,6 +64,9 @@ public class ReportFragment extends Fragment {
         binding = FragmentReportBinding.inflate(inflater, container, false);
         View rootView = binding.getRoot();
 
+        localStorage = new AppPreference(requireContext());
+        String userId = localStorage.getUserName();
+
         RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerId);
         recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
         adapter = new ReportAdapter(reportModelList);
@@ -66,7 +75,7 @@ public class ReportFragment extends Fragment {
         pleaseWaitText = binding.getRoot().findViewById(R.id.pleaseWaitText);
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        fetchUserDataFromFirebase();
+        fetchUserDataFromFirebase(userId);
         return rootView;
     }
 
@@ -75,7 +84,10 @@ public class ReportFragment extends Fragment {
             @Override
             public void handleOnBackPressed() {
                 if (isAdded()) {
-                    getParentFragmentManager().popBackStack();
+                    setEnabled(false);
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intent);
+                    getActivity().finish();
                 }
 
             }
@@ -102,76 +114,59 @@ public class ReportFragment extends Fragment {
         });
     }
 
-  /*  private void fetchUserIdsFromFirebase() {
+    private void fetchUserDataFromFirebase(String userId) {
         pleaseWaitText.setVisibility(View.VISIBLE);
-        String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-
         DatabaseReference usersReference = databaseReference.child("Users").child("username");
-        Query query = usersReference.orderByChild("date").equalTo(currentDate);
 
+        Query query = usersReference.orderByChild("userId").equalTo(userId);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+            public void onDataChange(DataSnapshot dataSnapshot) {
                 pleaseWaitText.setVisibility(View.GONE);
                 reportModelList.clear();
 
+                List<String> existingDates = new ArrayList<>();
+
+
 
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-
                     String userId = userSnapshot.child("userId").getValue(String.class);
                     String name = userSnapshot.child("name").getValue(String.class);
+                    String date = userSnapshot.child("date").getValue(String.class);
 
-                    if (userId != null && name != null) {
-                        ReportModel report = new ReportModel(userId, name);
+                    if (userId != null && name != null && date != null) {
+
+                        ReportModel report = new ReportModel(userId, name, date,"P");
                         reportModelList.add(report);
-
+                        existingDates.add(date);
                     }
                 }
-               // adapter.notifyDataSetChanged();
+
+                String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                Calendar calendar = Calendar.getInstance();
+                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    String defaultName = userSnapshot.child("name").getValue(String.class);
+
+                    for (int i = 0; i < 28; i++) {
+                        calendar.add(Calendar.DAY_OF_MONTH, -1);
+                        String pastDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.getTime());
+                        if (!existingDates.contains(pastDate)) {
+                            ReportModel absentReport = new ReportModel(userId, defaultName, pastDate, "A");
+                            reportModelList.add(absentReport);
+                        }
+                    }
+                }
+
+                adapter.notifyDataSetChanged();
             }
 
             @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
+            public void onCancelled(DatabaseError databaseError) {
                 pleaseWaitText.setVisibility(View.GONE);
                 Toast.makeText(getActivity(), "Failed to fetch data", Toast.LENGTH_SHORT).show();
+                Log.e(TAG, "Failed to fetch data: " + databaseError.getMessage());
             }
         });
-    } */
-  private void fetchUserDataFromFirebase() {
-      pleaseWaitText.setVisibility(View.VISIBLE);
-      String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-
-      DatabaseReference usersReference = databaseReference.child("Users").child("username");
-
-      Query query = usersReference.orderByChild("date").equalTo(currentDate);
-
-      query.addListenerForSingleValueEvent(new ValueEventListener() {
-          @Override
-          public void onDataChange(DataSnapshot dataSnapshot) {
-              pleaseWaitText.setVisibility(View.GONE);
-              reportModelList.clear();
-
-              for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                  String userId = userSnapshot.child("userId").getValue(String.class);
-                  String name = userSnapshot.child("name").getValue(String.class);
-                  String date = userSnapshot.child("date").getValue(String.class);
-
-                  if (userId != null && name != null && date != null) {
-                      ReportModel report = new ReportModel(userId, name, date);
-                      reportModelList.add(report);
-                  }
-              }
-
-              adapter.notifyDataSetChanged();
-          }
-
-          @Override
-          public void onCancelled(DatabaseError databaseError) {
-              pleaseWaitText.setVisibility(View.GONE);
-              Toast.makeText(getActivity(), "Failed to fetch data", Toast.LENGTH_SHORT).show();
-              Log.e(TAG, "Failed to fetch data: " + databaseError.getMessage());
-          }
-      });
-  }
+    }
 
 }
