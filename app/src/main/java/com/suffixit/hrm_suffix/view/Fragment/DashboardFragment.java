@@ -8,13 +8,15 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
 
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
+import android.widget.TextView;
 
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -28,8 +30,8 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import com.squareup.picasso.Picasso;
 import com.suffixit.hrm_suffix.R;
-import com.suffixit.hrm_suffix.databinding.FragmentDashboadBinding;
 
+import com.suffixit.hrm_suffix.databinding.FragmentDashboadBinding;
 import com.suffixit.hrm_suffix.preference.AppPreference;
 import com.suffixit.hrm_suffix.view.Activities.LoginActivity;
 
@@ -41,6 +43,9 @@ public class DashboardFragment extends Fragment {
     private FragmentDashboadBinding binding;
     private AppPreference localStorage;
     private CircleImageView profileImageView;
+    private DrawerLayout drawerLayout;
+    TextView name;
+    private String imageUrl;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -51,6 +56,7 @@ public class DashboardFragment extends Fragment {
         localStorage = new AppPreference(requireContext());
         String userId = localStorage.getUserName();
         Log.d(TAG, "userName: "+userId);
+
 
         CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
         Query query = usersCollection.whereEqualTo("username", userId);
@@ -66,7 +72,6 @@ public class DashboardFragment extends Fragment {
                         String designation = document.getString("Designation");
                         String imageUrl = document.getString("profileImg");
 
-
                         binding. txtEmployeeId.setText("User ID: " + userId);
                         binding.txtEmployeeName.setText("Name: " + name);
                         binding.txtEmployeeMail.setText("Email: "+ email);
@@ -75,9 +80,16 @@ public class DashboardFragment extends Fragment {
 
                         userFound = true;
 
-                        // Load and display the profile image using Picasso
                         if (imageUrl != null && !imageUrl.isEmpty()) {
                             Picasso.get().load(imageUrl).into(profileImageView);
+                        }
+                        if (getActivity() != null) {
+                            TextView drawerName = getActivity().findViewById(R.id.name);
+                            CircleImageView drawerProfileImage = getActivity().findViewById(R.id.profileImg);
+                            drawerName.setText(name);
+                            if (imageUrl != null && !imageUrl.isEmpty()) {
+                                Picasso.get().load(imageUrl).into(drawerProfileImage);
+                            }
                         }
 
                         break;
@@ -99,6 +111,15 @@ public class DashboardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
+        drawerLayout = view.findViewById(R.id.drawer_layer);
+        if (imageUrl != null && !imageUrl.isEmpty()) {
+            Picasso.get().load(imageUrl).into(profileImageView);
+        }
+        //name = view.findViewById(R.id.name);
+        //name.setText(imageUrl);
+
+
+
         binding.cardViewEmployee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,7 +130,8 @@ public class DashboardFragment extends Fragment {
         binding.cardViewLeave.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                showLogoutConfirmationDialog();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new ApplicationDashboardFragment()).commit();
+
             }
         });
 
@@ -119,10 +141,23 @@ public class DashboardFragment extends Fragment {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new AttendanceFragment()).commit();
             }
         });
-        binding.imgScrumMeeting.setOnClickListener(new View.OnClickListener() {
+        binding.imgScrumReport.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new ReportFragment()).commit();
+            }
+        });
+
+        binding.btnMenu.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                openDrawer(drawerLayout);
+            }
+        });
+        binding.menuLogout.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showLogoutConfirmationDialog();
             }
         });
     }
@@ -151,5 +186,8 @@ public class DashboardFragment extends Fragment {
         Intent intent = new Intent(requireContext(), LoginActivity.class);
         startActivity(intent);
         requireActivity().finish();
+    }
+    private void openDrawer(DrawerLayout drawerLayout){
+        drawerLayout.openDrawer(GravityCompat.START);
     }
 }

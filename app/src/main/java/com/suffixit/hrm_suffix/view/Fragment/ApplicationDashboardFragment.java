@@ -19,7 +19,7 @@ import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.FragmentScrumDashboardBinding;
 import com.suffixit.hrm_suffix.view.Activities.MainActivity;
 
-public class ScrumDashboardFragment extends Fragment {
+public class ApplicationDashboardFragment extends Fragment {
     private FragmentScrumDashboardBinding binding;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -43,14 +43,14 @@ public class ScrumDashboardFragment extends Fragment {
         binding.imgScrum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new ScrumFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new LeaveApplicationFragment()).commit();
             }
         });
 
-        binding.imgReportDownload.setOnClickListener(new View.OnClickListener() {
+        binding.imgStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new ReportFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new LeaveStatusFragment()).commit();
 
             }
         });

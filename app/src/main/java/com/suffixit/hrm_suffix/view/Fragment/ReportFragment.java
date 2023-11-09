@@ -147,7 +147,7 @@ public class ReportFragment extends Fragment {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     String defaultName = userSnapshot.child("name").getValue(String.class);
 
-                    for (int i = 0; i < 28; i++) {
+                    for (int i = 0; i < 30; i++) {
                         calendar.add(Calendar.DAY_OF_MONTH, -1);
                         String pastDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.getTime());
                         if (!existingDates.contains(pastDate)) {

@@ -1,6 +1,10 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <androidx.drawerlayout.widget.DrawerLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/drawer_layer">
 
     <LinearLayout
         android:id="@+id/fragment_container"
@@ -10,27 +14,23 @@
         android:orientation="vertical"
         tools:context=".view.Fragment.DashboadFragment">
 
+
         <LinearLayout
             android:id="@+id/layoutUserInfo"
             android:layout_width="match_parent"
-            android:layout_height="320dp"
+            android:layout_height="280dp"
             android:orientation="vertical">
+
+            <include layout="@layout/menu_toolbar"/>
+
 
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_marginTop="25dp"
-                android:layout_marginBottom="40dp"
+                android:layout_marginTop="35dp"
                 android:orientation="vertical">
 
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="10dp"
-                    android:text="Human Resource Management"
-                    android:textColor="@color/white"
-                    android:textSize="18dp" />
             </LinearLayout>
 
             <LinearLayout
@@ -184,7 +184,7 @@
                             android:layout_centerHorizontal="true"
                             android:background="@drawable/round_white"
                             android:padding="2dp"
-                            android:src="@drawable/exit_to_app_24" />
+                            android:src="@drawable/leaves"/>
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -259,12 +259,12 @@
                         android:orientation="vertical">
 
                         <ImageView
-                            android:id="@+id/imgScrumMeeting"
+                            android:id="@+id/imgScrumReport"
                             android:layout_width="65dp"
                             android:layout_height="65dp"
                             android:layout_centerHorizontal="true"
                             android:padding="2dp"
-                            android:src="@drawable/diversity_2_24" />
+                            android:src="@drawable/report" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -284,4 +284,24 @@
 
         </LinearLayout>
     </LinearLayout>
+
+        <RelativeLayout
+            android:layout_width="300dp"
+            android:layout_height="match_parent"
+            android:layout_gravity="start">
+            <include layout="@layout/nav_drawer"/>
+
+            <ImageView
+                android:id="@+id/btnMenu"
+                android:layout_width="42dp"
+                android:layout_height="36dp" />
+
+            <ImageView
+                android:id="@+id/menu_logout"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+
+        </RelativeLayout>
+        
+    </androidx.drawerlayout.widget.DrawerLayout>
 </layout>
