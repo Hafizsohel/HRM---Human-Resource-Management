@@ -1,20 +1,33 @@
 package com.suffixit.hrm_suffix.view.Fragment;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.app.ActivityCompat;
+import androidx.core.app.NotificationCompat;
+import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
 
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -43,7 +56,7 @@ public class LeaveApplicationFragment extends Fragment {
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
     private AppPreference localStorage;
-    private EditText editTextDateOfApplication, editTextFromDate, editTextToDate, editTextName,editTextEmployeeID, editTextDesignation;
+    private EditText editTextDateOfApplication, editTextFromDate, editTextToDate, editTextName, editTextEmployeeID, editTextDesignation;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -51,17 +64,21 @@ public class LeaveApplicationFragment extends Fragment {
         View view = binding.getRoot();
 
         mAuth = FirebaseAuth.getInstance();
-        FirebaseUser currentUser = mAuth.getCurrentUser();
 
-            databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child("leave_applications");
-
-       editTextDateOfApplication = binding.editTextDateOfApplication;
+        editTextDateOfApplication = binding.editTextDateOfApplication;
+        editTextName = binding.editTextName;
+        editTextToDate = binding.editTextToDate;
         editTextFromDate = binding.editTextFromDate;
-        editTextToDate= binding.editTextToDate;
-        editTextName= binding.editTextName;
-        editTextEmployeeID= binding.editTextEmployeeID;
-        editTextDesignation= binding.editTextDesignation;
+        editTextEmployeeID = binding.editTextEmployeeID;
+        editTextDesignation = binding.editTextDesignation;
 
+
+        CheckBox openingBalanceCLCheckbox = binding.openingBalanceCLCheckbox;
+        CheckBox openingBalanceMLCheckbox = binding.openingBalanceMLCheckbox;
+        CheckBox requestForCLCheckbox = binding.requestForCLCheckbox;
+        CheckBox requestForMLCheckbox = binding.requestForMLCheckbox;
+        CheckBox balanceCLCheckbox = binding.balanceCLCheckbox;
+        CheckBox balanceMLCheckbox = binding.balanceMLCheckbox;
 
 
         Date currentDate = new Date();
@@ -74,9 +91,8 @@ public class LeaveApplicationFragment extends Fragment {
         localStorage = new AppPreference(requireContext());
         String userId = localStorage.getUserName();
 
-        editTextEmployeeID.setText(userId);
+        editTextEmployeeID.setText( userId);
         editTextEmployeeID.setEnabled(false);
-
 
         CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
         Query query = usersCollection.whereEqualTo("username", userId);
@@ -107,11 +123,7 @@ public class LeaveApplicationFragment extends Fragment {
             }
         });
 
-
-
-
-
-                binding.editTextFromDate.setOnClickListener(new View.OnClickListener() {
+        binding.editTextFromDate.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 showDatePickerDialog(editTextFromDate);
@@ -124,18 +136,29 @@ public class LeaveApplicationFragment extends Fragment {
                 showDatePickerDialog(editTextToDate);
             }
         });
+
         binding.btnSubmit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Get data from UI elements
-                String dateOfApplication = "";
-                String name = "";
-                String employeeId = "";
-                String designation = "";
-                String leaveReason = "";
-                String fromDate = "";
-                String toDate = "";
-                String contactNumber = "";
+
+                String leaveReason = binding.editTextLeaveReason.getText().toString();
+                String fromDate = binding.editTextFromDate.getText().toString();
+                String toDate = binding.editTextToDate.getText().toString();
+                String contactNumber = binding.editTextContactNumber.getText().toString();
+                String dateOfApplication = binding.editTextDateOfApplication.getText().toString();
+                String name = binding.editTextName.getText().toString();
+                String employeeId = binding.editTextEmployeeID.getText().toString();
+                String designation = binding.editTextDesignation.getText().toString();
+
+
+                boolean openingBalanceCLCheckbox = binding.openingBalanceCLCheckbox.isChecked();
+                boolean openingBalanceMLCheckbox = binding.openingBalanceMLCheckbox.isChecked();
+                boolean requestForCLCheckbox = binding.requestForCLCheckbox.isChecked();
+                boolean requestForMLCheckbox = binding.requestForMLCheckbox.isChecked();
+                boolean balanceCLCheckbox = binding.balanceCLCheckbox.isChecked();
+                boolean balanceMLCheckbox = binding.balanceMLCheckbox.isChecked();
+
+
 
                 if (TextUtils.isEmpty(leaveReason)) {
                     Toast.makeText(getContext(), "Please enter your Leave Reason", Toast.LENGTH_SHORT).show();
@@ -152,19 +175,49 @@ public class LeaveApplicationFragment extends Fragment {
                     Toast.makeText(getContext(), "Please enter to date", Toast.LENGTH_SHORT).show();
                     return;
                 }
+
                 if (TextUtils.isEmpty(contactNumber)) {
+                    binding.editTextContactNumber.requestFocus();
                     Toast.makeText(getContext(), "Please enter alternative contact number", Toast.LENGTH_SHORT).show();
                     return;
                 }
 
+                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child("leave_applications");
 
-                Toast.makeText(getActivity(), "Button Click", Toast.LENGTH_SHORT).show();
-                LeaveApplicationModel leaveApplication = new LeaveApplicationModel(dateOfApplication, name, employeeId, designation, leaveReason, fromDate, toDate, contactNumber);
 
-                if (currentUser != null) {
-                    databaseReference.push().setValue(leaveApplication);
-                    Toast.makeText(getActivity(), "Data Update", Toast.LENGTH_SHORT).show();
+                if (userId == null) {
+                    Toast.makeText(getActivity(), "User not authenticated", Toast.LENGTH_SHORT).show();
+                    return;
                 }
+
+                LeaveApplicationModel leaveApplication = new LeaveApplicationModel(
+                        dateOfApplication, name, employeeId, designation, leaveReason,
+                        fromDate, toDate, contactNumber,
+                        openingBalanceCLCheckbox, openingBalanceMLCheckbox,
+                        requestForCLCheckbox, requestForMLCheckbox,
+                        balanceCLCheckbox, balanceMLCheckbox
+                );
+
+                leaveApplication.setStatus("Pending");
+                databaseReference.push().setValue(leaveApplication)
+                        .addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Toast.makeText(getActivity(), "Submit successfully", Toast.LENGTH_SHORT).show();
+
+                                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new SuccessFragment()).commit();
+
+                            }
+
+
+                        })
+                        .addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+                                Toast.makeText(getActivity(), "Failed to update data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
+
+                            }
+                        });
             }
         });
 

@@ -15,33 +15,26 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:weightSum="5">
+            android:weightSum="3">
 
             <TextView
                 android:id="@+id/txtUserID"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:text="SIL-120"
+                android:layout_marginStart="15dp"
                 android:textColor="#000000"
                 android:textStyle="bold" />
 
             <TextView
-                android:id="@+id/txtRDate"
+                android:id="@+id/txtApplicationDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="30dp"
+                android:layout_marginStart="90dp"
                 android:text="09-11-23"
                 android:textColor="#000000"
                 android:textStyle="bold" />
 
-            <TextView
-                android:id="@+id/txtADate"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="09-11-23"
-                android:layout_marginStart="30dp"
-                android:textColor="#000000"
-                android:textStyle="bold" />
 
             <TextView
                 android:id="@+id/txtStatus"
@@ -49,7 +42,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="3"
                 android:text="Approved"
-                android:layout_marginStart="25dp"
+                android:layout_marginStart="80dp"
                 android:textColor="#000000"
                 android:textStyle="bold"
                 android:gravity="start" />

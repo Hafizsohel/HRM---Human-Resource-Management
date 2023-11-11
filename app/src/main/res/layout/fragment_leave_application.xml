@@ -45,7 +45,7 @@
             android:padding="16dp"
             android:orientation="vertical">
 
-            <androidx.cardview.widget.CardView
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 app:cardCornerRadius="8dp"
@@ -59,146 +59,152 @@
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:hint="Date of Application">
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:background="@color/white"
+                        style="@style/TitleField">
 
-                       <com.google.android.material.textfield.TextInputEditText
+                        <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextDateOfApplication"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
+                            android:layout_height="50dp"
                             android:drawableEnd="@drawable/calendar"
-                            android:focusable="false"
-                            android:inputType="none"
-                           android:background="@color/white"/>
+                            android:hint="Date of Application" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Name -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:hint="Name">
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:background="@color/white"
+                        style="@style/TitleField">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextName"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="50dp"
                             android:drawableStart="@drawable/person"
-                            android:background="@color/white"/>
+                            android:hint=" Name" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Employee ID -->
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:hint="Employee ID">
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:background="@color/white"
+                        style="@style/TitleField">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextEmployeeID"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="50dp"
                             android:drawableStart="@drawable/id"
-                            android:background="@color/white"/>
+                            android:hint=" Employee ID" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Designation -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:hint="Designation">
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:background="@color/white"
+                        style="@style/TitleField">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextDesignation"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
+                            android:layout_height="50dp"
                             android:drawableStart="@drawable/id"
-                            android:background="@color/white"/>
+                            android:hint=" Designation" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Leave Reason -->
+
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
-                        android:layout_height="50dp"
-                        android:hint="Leave Reason">
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:background="@color/white"
+                        style="@style/TitleField">
 
                         <com.google.android.material.textfield.TextInputEditText
                             android:id="@+id/editTextLeaveReason"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:drawableStart="@drawable/problem"
-                            android:background="@color/white"/>
+                            android:layout_height="50dp"
+                            android:drawableStart="@drawable/id"
+                            android:hint=" Leave Reason" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="Leave Dates"
-                        android:layout_marginStart="16dp"
-                        android:textSize="16sp"
-                        android:drawableStart="@drawable/calendar"
-                        android:textAppearance="?android:attr/textAppearanceMedium" />
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:hint="Leave Dates"
-                        app:boxBackgroundMode="outline"
-                        app:boxStrokeColor="#F8F8FF">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal">
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/editTextFromDate"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:hint="From Date"
-                                android:clickable="true"
-                                android:drawableEnd="@drawable/calendar"
-                                android:focusable="false"
-                                android:inputType="none"
-                                android:background="@color/white" />
-
-                            <View
-                                android:layout_width="8dp"
-                                android:layout_height="1dp" />
-
-                            <com.google.android.material.textfield.TextInputEditText
-                                android:id="@+id/editTextToDate"
-                                android:layout_width="0dp"
-                                android:layout_height="wrap_content"
-                                android:layout_weight="1"
-                                android:hint="To Date"
-                                android:clickable="true"
-                                android:drawableEnd="@drawable/calendar"
-                                android:focusable="false"
-                                android:inputType="none"
-                                android:background="@color/white" />
-                        </LinearLayout>
-                    </com.google.android.material.textfield.TextInputLayout>
-
-                    <com.google.android.material.textfield.TextInputLayout
+                        android:background="@color/white"
+                        app:boxBackgroundColor="@color/blue"
+                        style="@style/TitleField">
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="50dp"
-                        android:hint="Alternative Contact Number"
-                        android:background="#EFEFEF">
+                        android:orientation="horizontal">
 
                         <com.google.android.material.textfield.TextInputEditText
-                            android:id="@+id/editTextContactNumber"
-                            android:layout_width="match_parent"
+                            android:id="@+id/editTextFromDate"
+                            android:layout_width="0dp"
                             android:layout_height="wrap_content"
-                            android:drawableStart="@drawable/phone_24"
-                            android:inputType="phone"
-                            android:background="@color/white"/>
+                            android:layout_weight="1"
+                            android:hint="From Date"
+                            android:clickable="true"
+                            android:drawableEnd="@drawable/calendar"
+                            android:focusable="false"
+                            android:inputType="none"
+                            android:background="@color/white" />
+                        <View
+                            android:layout_width="8dp"
+                            android:layout_height="1dp" />
+
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/editTextToDate"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_weight="1"
+                            android:hint="To Date"
+                            android:clickable="true"
+                            android:drawableEnd="@drawable/calendar"
+                            android:focusable="false"
+                            android:inputType="none"
+                            android:background="@color/white" />
+                    </LinearLayout>
                     </com.google.android.material.textfield.TextInputLayout>
 
 
+
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:clickable="true"
+                        android:focusable="false"
+                        android:inputType="none"
+                        android:background="@color/white"
+                        style="@style/TitleField">
+                    <com.google.android.material.textfield.TextInputEditText
+                        android:id="@+id/editTextContactNumber"
+                        android:layout_width="match_parent"
+                        android:layout_height="50dp"
+                        android:drawableStart="@drawable/phone_24"
+                        android:hint=" Alternative Contact Number" />
+                    </com.google.android.material.textfield.TextInputLayout>
+
                 </LinearLayout>
-            </androidx.cardview.widget.CardView>
+            </com.google.android.material.card.MaterialCardView>
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -232,7 +238,7 @@
                         android:layout_gravity="center"
                         android:paddingBottom="8dp"/>
 
-                    <!-- Leave Summary Table -->
+
                     <TableLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
@@ -272,7 +278,6 @@
                                     android:padding="8dp" />
                             </TableRow>
 
-                            <!-- Table Row 2 -->
                             <TableRow>
                                 <TextView
                                     android:layout_width="wrap_content"
@@ -282,12 +287,14 @@
                                     android:padding="8dp" />
 
                                 <CheckBox
+                                    android:id="@+id/openingBalanceCLCheckbox"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:padding="8dp" />
 
                                 <CheckBox
+                                    android:id="@+id/openingBalanceMLCheckbox"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
@@ -304,12 +311,14 @@
                                     android:padding="8dp" />
 
                                 <CheckBox
+                                    android:id="@+id/requestForCLCheckbox"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:padding="8dp" />
 
                                 <CheckBox
+                                    android:id="@+id/requestForMLCheckbox"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
@@ -326,12 +335,14 @@
                                     android:padding="8dp" />
 
                                 <CheckBox
+                                    android:id="@+id/balanceCLCheckbox"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
                                     android:padding="8dp" />
 
                                 <CheckBox
+                                    android:id="@+id/balanceMLCheckbox"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
                                     android:layout_gravity="center"
