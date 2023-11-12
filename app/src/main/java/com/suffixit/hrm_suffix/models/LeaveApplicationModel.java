@@ -3,7 +3,7 @@ package com.suffixit.hrm_suffix.models;
 public class LeaveApplicationModel {
     private String dateOfApplication;
     private String name;
-    private String employeeId;
+    private String userId;
     private String designation;
     private String leaveReason;
     private String fromDate;
@@ -21,7 +21,7 @@ public class LeaveApplicationModel {
     public LeaveApplicationModel() {
     }
 
-    public LeaveApplicationModel(String dateOfApplication, String name, String employeeId, String designation,
+    public LeaveApplicationModel(String dateOfApplication, String name, String userId, String designation,
                                  String leaveReason, String fromDate, String toDate, String contactNumber,
                                  boolean openingBalanceCL, boolean openingBalanceML,
                                  boolean requestForCL, boolean requestForML,
@@ -29,7 +29,7 @@ public class LeaveApplicationModel {
         this.dateOfApplication = dateOfApplication;
         this.name = name;
         this.status = "Pending";
-        this.employeeId = employeeId;
+        this.userId = userId;
         this.designation = designation;
         this.leaveReason = leaveReason;
         this.fromDate = fromDate;
@@ -68,12 +68,12 @@ public class LeaveApplicationModel {
         this.name = name;
     }
 
-    public String getEmployeeId() {
-        return employeeId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getDesignation() {
@@ -169,7 +169,7 @@ public class LeaveApplicationModel {
         return "LeaveApplicationModel{" +
                 "dateOfApplication='" + dateOfApplication + '\'' +
                 ", name='" + name + '\'' +
-                ", employeeId='" + employeeId + '\'' +
+                ", userId='" + userId + '\'' +
                 ", designation='" + designation + '\'' +
                 ", leaveReason='" + leaveReason + '\'' +
                 ", fromDate='" + fromDate + '\'' +

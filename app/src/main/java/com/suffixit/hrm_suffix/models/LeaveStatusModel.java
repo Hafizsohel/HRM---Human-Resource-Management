@@ -2,25 +2,25 @@ package com.suffixit.hrm_suffix.models;
 
 public class LeaveStatusModel {
 
-    private String employeeId;
+    private String userId;
     private String dateOfApplication;
     private String status;
 
     public LeaveStatusModel() {
     }
 
-    public LeaveStatusModel(String employeeId, String dateOfApplication, String status) {
-        this.employeeId = employeeId;
+    public LeaveStatusModel(String userId, String dateOfApplication, String status) {
+        this.userId = userId;
         this.dateOfApplication = dateOfApplication;
         this.status = status;
     }
 
-    public String getEmployeeId() {
-        return employeeId;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setEmployeeId(String employeeId) {
-        this.employeeId = employeeId;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
     public String getDateOfApplication() {
@@ -42,7 +42,7 @@ public class LeaveStatusModel {
     @Override
     public String toString() {
         return "LeaveStatusModel{" +
-                "employeeId='" + employeeId + '\'' +
+                "userId='" + userId + '\'' +
                 ", dateOfApplication='" + dateOfApplication + '\'' +
                 ", status='" + status + '\'' +
                 '}';

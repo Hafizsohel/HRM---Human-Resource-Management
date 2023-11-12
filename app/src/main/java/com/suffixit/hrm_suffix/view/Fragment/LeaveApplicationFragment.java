@@ -8,12 +8,17 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
 
+import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
 
 import android.text.TextUtils;
 import android.util.Log;
@@ -65,6 +70,16 @@ public class LeaveApplicationFragment extends Fragment {
 
         mAuth = FirebaseAuth.getInstance();
 
+        if (binding.leaveApplicationToolbar != null) {
+            binding.leaveApplicationToolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    requireActivity().onBackPressed();
+                }
+            });
+        } else {
+            Log.e("LeaveApplicationFragment", "leaveApplicationToolbar is null");
+        }
         editTextDateOfApplication = binding.editTextDateOfApplication;
         editTextName = binding.editTextName;
         editTextToDate = binding.editTextToDate;
@@ -72,14 +87,12 @@ public class LeaveApplicationFragment extends Fragment {
         editTextEmployeeID = binding.editTextEmployeeID;
         editTextDesignation = binding.editTextDesignation;
 
-
         CheckBox openingBalanceCLCheckbox = binding.openingBalanceCLCheckbox;
         CheckBox openingBalanceMLCheckbox = binding.openingBalanceMLCheckbox;
         CheckBox requestForCLCheckbox = binding.requestForCLCheckbox;
         CheckBox requestForMLCheckbox = binding.requestForMLCheckbox;
         CheckBox balanceCLCheckbox = binding.balanceCLCheckbox;
         CheckBox balanceMLCheckbox = binding.balanceMLCheckbox;
-
 
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
@@ -147,9 +160,8 @@ public class LeaveApplicationFragment extends Fragment {
                 String contactNumber = binding.editTextContactNumber.getText().toString();
                 String dateOfApplication = binding.editTextDateOfApplication.getText().toString();
                 String name = binding.editTextName.getText().toString();
-                String employeeId = binding.editTextEmployeeID.getText().toString();
+                String userId = binding.editTextEmployeeID.getText().toString();
                 String designation = binding.editTextDesignation.getText().toString();
-
 
                 boolean openingBalanceCLCheckbox = binding.openingBalanceCLCheckbox.isChecked();
                 boolean openingBalanceMLCheckbox = binding.openingBalanceMLCheckbox.isChecked();
@@ -157,8 +169,6 @@ public class LeaveApplicationFragment extends Fragment {
                 boolean requestForMLCheckbox = binding.requestForMLCheckbox.isChecked();
                 boolean balanceCLCheckbox = binding.balanceCLCheckbox.isChecked();
                 boolean balanceMLCheckbox = binding.balanceMLCheckbox.isChecked();
-
-
 
                 if (TextUtils.isEmpty(leaveReason)) {
                     Toast.makeText(getContext(), "Please enter your Leave Reason", Toast.LENGTH_SHORT).show();
@@ -181,9 +191,7 @@ public class LeaveApplicationFragment extends Fragment {
                     Toast.makeText(getContext(), "Please enter alternative contact number", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child("leave_applications");
-
 
                 if (userId == null) {
                     Toast.makeText(getActivity(), "User not authenticated", Toast.LENGTH_SHORT).show();
@@ -191,7 +199,7 @@ public class LeaveApplicationFragment extends Fragment {
                 }
 
                 LeaveApplicationModel leaveApplication = new LeaveApplicationModel(
-                        dateOfApplication, name, employeeId, designation, leaveReason,
+                        dateOfApplication, name, userId, designation, leaveReason,
                         fromDate, toDate, contactNumber,
                         openingBalanceCLCheckbox, openingBalanceMLCheckbox,
                         requestForCLCheckbox, requestForMLCheckbox,
@@ -207,9 +215,8 @@ public class LeaveApplicationFragment extends Fragment {
 
                                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new SuccessFragment()).commit();
 
+
                             }
-
-
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
@@ -218,7 +225,7 @@ public class LeaveApplicationFragment extends Fragment {
 
                             }
                         });
-            }
+                }
         });
 
         return view;

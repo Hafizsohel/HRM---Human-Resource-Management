@@ -3,6 +3,8 @@ package com.suffixit.hrm_suffix.view.Fragment;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -41,7 +43,6 @@ public class LeaveStatusFragment extends Fragment {
     private AppPreference localStorage;
     private TextView pleaseWaitText;
 
-
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -51,42 +52,62 @@ public class LeaveStatusFragment extends Fragment {
         databaseReference = database.getReference("Users").child("leave_applications");
 
         localStorage = new AppPreference(requireContext());
-        String userId = localStorage.getUserName();
+        String userName = localStorage.getUserName();
+        pleaseWaitText=view.findViewById(R.id.pleaseWaitText);
 
-        // Initialize RecyclerView and adapter
         RecyclerView recyclerView = view.findViewById(R.id.recyclerStatusId);
         recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
         leaveStatusList = new ArrayList<>();
         adapter = new LeaveStatusAdapter(leaveStatusList);
         recyclerView.setAdapter(adapter);
 
-        // Fetch data from Firebase
-        fetchLeaveStatus();
 
+        Toolbar toolbar = view.findViewById(R.id.Toolbar);
+        AppCompatActivity activity = (AppCompatActivity) requireActivity();
+        activity.setSupportActionBar(toolbar);
+        activity.getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                requireActivity().getSupportFragmentManager().popBackStack();
+            }
+        });
 
+        fetchLeaveStatus(userName);
         return view;
     }
 
-    private void fetchLeaveStatus() {
-        databaseReference.addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                leaveStatusList.clear();
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    LeaveStatusModel leaveStatus = snapshot.getValue(LeaveStatusModel.class);
+ private void fetchLeaveStatus(String userId) {
+     pleaseWaitText.setVisibility(View.VISIBLE);
+     DatabaseReference usersReference = databaseReference;
+     Query query = usersReference.orderByChild("userId").equalTo(userId);
+     query.addListenerForSingleValueEvent(new ValueEventListener() {
+         @Override
+         public void onDataChange(DataSnapshot dataSnapshot) {
+             pleaseWaitText.setVisibility(View.GONE);
+             leaveStatusList.clear();
+             for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                 Log.d(TAG, "Snapshot: " + userSnapshot);
 
-                    Log.d(TAG, "onDataChange: " + dataSnapshot);
-                    if (leaveStatus != null) {
-                        leaveStatusList.add(leaveStatus);
-                    }
-                }
-                adapter.notifyDataSetChanged();
-            }
+                 String userId = userSnapshot.child("userId").getValue(String.class);
+                 String dateOfApplication = userSnapshot.child("dateOfApplication").getValue(String.class);
+                 String status = userSnapshot.child("status").getValue(String.class);
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-                // Handle errors
-            }
-        });
-    }
+                 if (userId != null && dateOfApplication != null && status != null) {
+                     LeaveStatusModel statusModel = new LeaveStatusModel(userId, dateOfApplication, status);
+                     leaveStatusList.add(statusModel);
+                 }
+                 Log.d(TAG, "onDataChange" + userSnapshot);
+             }
+             adapter.notifyDataSetChanged();
+         }
+
+         @Override
+         public void onCancelled(DatabaseError databaseError) {
+             pleaseWaitText.setVisibility(View.GONE);
+             Toast.makeText(getActivity(), "Failed to fetch data", Toast.LENGTH_SHORT).show();
+             Log.e(TAG, "Failed to fetch data: " + databaseError.getMessage());
+         }
+     });
+ }
 }

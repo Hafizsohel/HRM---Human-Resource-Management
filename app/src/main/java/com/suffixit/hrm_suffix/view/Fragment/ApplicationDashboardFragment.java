@@ -7,6 +7,7 @@ import androidx.activity.OnBackPressedCallback;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentTransaction;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
 import androidx.lifecycle.OnLifecycleEvent;
@@ -33,24 +34,24 @@ public class ApplicationDashboardFragment extends Fragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        binding.scrumDashboardToolbar.setOnClickListener(new View.OnClickListener() {
+        binding.applicationDashboardToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboardFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboardFragment(), null).addToBackStack(null).commit();
             }
         });
 
         binding.imgScrum.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new LeaveApplicationFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new LeaveApplicationFragment(),null).addToBackStack(null).commit();
             }
         });
 
         binding.imgStatus.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new LeaveStatusFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new LeaveStatusFragment(), null).addToBackStack(null).commit();
 
             }
         });
