@@ -41,14 +41,14 @@ public class ApplicationDashboardFragment extends Fragment {
             }
         });
 
-        binding.imgScrum.setOnClickListener(new View.OnClickListener() {
+        binding.cardViewEmployee.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new LeaveApplicationFragment(),null).addToBackStack(null).commit();
             }
         });
 
-        binding.imgStatus.setOnClickListener(new View.OnClickListener() {
+        binding.cardViewScrumMeeting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new LeaveStatusFragment(), null).addToBackStack(null).commit();

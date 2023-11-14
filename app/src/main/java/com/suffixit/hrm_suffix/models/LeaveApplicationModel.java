@@ -10,12 +10,8 @@ public class LeaveApplicationModel {
     private String toDate;
     private String contactNumber;
 
-    private boolean openingBalanceCL;
-    private boolean openingBalanceML;
-    private boolean requestForCL;
-    private boolean requestForML;
-    private boolean balanceCL;
-    private boolean balanceML;
+    private boolean radioCL;
+    private boolean radioML;
     private String status;
 
     public LeaveApplicationModel() {
@@ -23,9 +19,8 @@ public class LeaveApplicationModel {
 
     public LeaveApplicationModel(String dateOfApplication, String name, String userId, String designation,
                                  String leaveReason, String fromDate, String toDate, String contactNumber,
-                                 boolean openingBalanceCL, boolean openingBalanceML,
-                                 boolean requestForCL, boolean requestForML,
-                                 boolean balanceCL, boolean balanceML) {
+                                 boolean radioCL, boolean radioML
+                                 ) {
         this.dateOfApplication = dateOfApplication;
         this.name = name;
         this.status = "Pending";
@@ -36,12 +31,8 @@ public class LeaveApplicationModel {
         this.toDate = toDate;
         this.contactNumber = contactNumber;
 
-        this.openingBalanceCL = openingBalanceCL;
-        this.openingBalanceML = openingBalanceML;
-        this.requestForCL = requestForCL;
-        this.requestForML = requestForML;
-        this.balanceCL = balanceCL;
-        this.balanceML = balanceML;
+        this.radioCL = radioCL;
+        this.radioML = radioML;
     }
 
     public String getDateOfApplication() {
@@ -116,52 +107,20 @@ public class LeaveApplicationModel {
         this.contactNumber = contactNumber;
     }
 
-    public boolean isOpeningBalanceCL() {
-        return openingBalanceCL;
+    public boolean isRadioCL() {
+        return radioCL;
     }
 
-    public void setOpeningBalanceCL(boolean openingBalanceCL) {
-        this.openingBalanceCL = openingBalanceCL;
+    public void setRadioCL(boolean radioCL) {
+        this.radioCL = radioCL;
     }
 
-    public boolean isOpeningBalanceML() {
-        return openingBalanceML;
+    public boolean isRadioML() {
+        return radioML;
     }
 
-    public void setOpeningBalanceML(boolean openingBalanceML) {
-        this.openingBalanceML = openingBalanceML;
-    }
-
-    public boolean isRequestForCL() {
-        return requestForCL;
-    }
-
-    public void setRequestForCL(boolean requestForCL) {
-        this.requestForCL = requestForCL;
-    }
-
-    public boolean isRequestForML() {
-        return requestForML;
-    }
-
-    public void setRequestForML(boolean requestForML) {
-        this.requestForML = requestForML;
-    }
-
-    public boolean isBalanceCL() {
-        return balanceCL;
-    }
-
-    public void setBalanceCL(boolean balanceCL) {
-        this.balanceCL = balanceCL;
-    }
-
-    public boolean isBalanceML() {
-        return balanceML;
-    }
-
-    public void setBalanceML(boolean balanceML) {
-        this.balanceML = balanceML;
+    public void setRadioML(boolean radioML) {
+        this.radioML = radioML;
     }
 
     @Override
@@ -175,12 +134,8 @@ public class LeaveApplicationModel {
                 ", fromDate='" + fromDate + '\'' +
                 ", toDate='" + toDate + '\'' +
                 ", contactNumber='" + contactNumber + '\'' +
-                ", openingBalanceCL=" + openingBalanceCL +
-                ", openingBalanceML=" + openingBalanceML +
-                ", requestForCL=" + requestForCL +
-                ", requestForML=" + requestForML +
-                ", balanceCL=" + balanceCL +
-                ", balanceML=" + balanceML +
+                ", radioCL=" + radioCL +
+                ", radioML=" + radioML +
                 ", status='" + status + '\'' +
                 '}';
     }

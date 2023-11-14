@@ -1,6 +1,5 @@
 package com.suffixit.hrm_suffix.view.Fragment;
 
-
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -36,7 +35,6 @@ import com.suffixit.hrm_suffix.preference.AppPreference;
 import com.suffixit.hrm_suffix.view.Activities.LoginActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
-
 
 public class DashboardFragment extends Fragment {
     private static final String TAG = "DashboadFragment";
@@ -117,7 +115,6 @@ public class DashboardFragment extends Fragment {
         }
         //name = view.findViewById(R.id.name);
         //name.setText(imageUrl);
-
 
 
         binding.cardViewEmployee.setOnClickListener(new View.OnClickListener() {

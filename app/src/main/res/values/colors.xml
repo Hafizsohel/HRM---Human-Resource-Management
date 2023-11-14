@@ -19,5 +19,10 @@
     <color name="violet">#8813e4</color>
     <color name="green_light">#5ff0f7</color>
     <color name="solid_light">#F5F5F5</color>
+    <color name="gradiant">#dade6b</color>
+    <color name="green">#4ff878</color>
+    <color name="red">#f564ab</color>
+    <color name="blue_shades">#2196F3</color>
+    <color name="blue_shade">#4682B4</color>
 
 </resources>

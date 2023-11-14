@@ -1,5 +1,4 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
@@ -71,6 +70,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:drawableEnd="@drawable/calendar"
+                            android:drawablePadding="8dp"
                             android:hint="Date of Application" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -88,6 +88,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:drawableStart="@drawable/person"
+                            android:drawablePadding="8dp"
                             android:hint=" Name" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -106,6 +107,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:drawableStart="@drawable/id"
+                            android:drawablePadding="8dp"
                             android:hint=" Employee ID" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -123,9 +125,9 @@
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:drawableStart="@drawable/id"
+                            android:drawablePadding="8dp"
                             android:hint=" Designation" />
                     </com.google.android.material.textfield.TextInputLayout>
-
 
                     <com.google.android.material.textfield.TextInputLayout
                         android:layout_width="match_parent"
@@ -141,6 +143,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="50dp"
                             android:drawableStart="@drawable/id"
+                            android:drawablePadding="8dp"
                             android:hint=" Leave Reason" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -201,6 +204,8 @@
                         android:layout_height="50dp"
                         android:drawableStart="@drawable/phone_24"
                         android:inputType="number"
+                        android:maxLength="11"
+                        android:drawablePadding="8dp"
                         android:hint=" Alternative Contact Number" />
                     </com.google.android.material.textfield.TextInputLayout>
 
@@ -214,10 +219,11 @@
             android:background="@color/white"
             android:layout_marginTop="4dp"
             android:padding="8dp">
-
             <androidx.cardview.widget.CardView
+                android:id="@+id/cardView"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_margin="8dp"
                 app:cardCornerRadius="8dp"
                 app:cardElevation="4dp"
                 android:background="@color/white">
@@ -233,128 +239,45 @@
                         android:layout_width="wrap_content"
                         android:layout_height="35dp"
                         android:text="Leave Summary"
-                        android:background="@color/light_blue"
                         android:textSize="20sp"
                         android:textStyle="bold"
                         android:layout_gravity="center"
                         android:paddingBottom="8dp"/>
 
-
-                    <TableLayout
+                    <RadioGroup
+                        android:id="@+id/radioGroup"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:stretchColumns="0,1,2">
+                        android:orientation="horizontal">
 
-                        <TableLayout
-                            android:layout_width="match_parent"
+                        <TextView
+                            android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:stretchColumns="0,1,2">
+                            android:textSize="16sp"
+                            android:textStyle="bold"
+                            android:text="Leave Type:"/>
 
-                            <TableRow
-                                android:layout_marginTop="2dp"
-                                android:background="@color/solid_light">
+                        <RadioButton
+                            android:id="@+id/radioCL"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="CL"
+                            android:checked="true"/>
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Type"
-                                    android:textStyle="bold"
-                                    android:gravity="start"
-                                    android:padding="8dp" />
+                        <RadioButton
+                            android:id="@+id/radioML"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="20dp"
+                            android:text="ML"/>
+                    </RadioGroup>
 
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:text="CL"
-                                    android:textStyle="bold"
-                                    android:padding="8dp" />
-
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:textStyle="bold"
-                                    android:text="ML"
-                                    android:padding="8dp" />
-                            </TableRow>
-
-                            <TableRow>
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Opening Balance"
-                                    android:gravity="start"
-                                    android:padding="8dp" />
-
-                                <CheckBox
-                                    android:id="@+id/openingBalanceCLCheckbox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:padding="8dp" />
-
-                                <CheckBox
-                                    android:id="@+id/openingBalanceMLCheckbox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:padding="8dp" />
-                            </TableRow>
-
-                            <!-- Table Row 3 -->
-                            <TableRow>
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Request for"
-                                    android:gravity="start"
-                                    android:padding="8dp" />
-
-                                <CheckBox
-                                    android:id="@+id/requestForCLCheckbox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:padding="8dp" />
-
-                                <CheckBox
-                                    android:id="@+id/requestForMLCheckbox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:padding="8dp" />
-                            </TableRow>
-
-
-                            <TableRow>
-                                <TextView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:text="Balance"
-                                    android:gravity="start"
-                                    android:padding="8dp" />
-
-                                <CheckBox
-                                    android:id="@+id/balanceCLCheckbox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:padding="8dp" />
-
-                                <CheckBox
-                                    android:id="@+id/balanceMLCheckbox"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_gravity="center"
-                                    android:padding="8dp" />
-                            </TableRow>
-                        </TableLayout>
-                    </TableLayout>
-
+                    <!-- Other UI elements go here -->
 
                 </LinearLayout>
             </androidx.cardview.widget.CardView>
+
         </LinearLayout>
             <Button
                 android:id="@+id/btnSubmit"
@@ -365,9 +288,24 @@
                 android:background="@drawable/color_border_round"
                 android:gravity="center"
                 android:text="Submit" />
-
-
+            <TextView
+                android:id="@+id/pleaseWaitText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentStart="true"
+                android:layout_alignParentEnd="true"
+                android:layout_centerInParent="true"
+                android:layout_marginTop="8dp"
+                android:gravity="center"
+                android:text="Please Wait..."
+                android:textColor="@color/black"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                android:visibility="gone" />
         </LinearLayout>
+
+
+
     </ScrollView>
 </androidx.constraintlayout.widget.ConstraintLayout>
 

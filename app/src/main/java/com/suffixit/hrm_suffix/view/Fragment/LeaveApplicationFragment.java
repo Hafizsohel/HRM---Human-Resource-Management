@@ -27,6 +27,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
 import android.widget.EditText;
+import android.widget.RadioButton;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -61,6 +62,8 @@ public class LeaveApplicationFragment extends Fragment {
     private FirebaseAuth mAuth;
     private DatabaseReference databaseReference;
     private AppPreference localStorage;
+    private TextView pleaseWaitText;
+    private RadioButton requestForCL,requestForML;
     private EditText editTextDateOfApplication, editTextFromDate, editTextToDate, editTextName, editTextEmployeeID, editTextDesignation;
 
     @Override
@@ -69,6 +72,7 @@ public class LeaveApplicationFragment extends Fragment {
         View view = binding.getRoot();
 
         mAuth = FirebaseAuth.getInstance();
+        pleaseWaitText = binding.getRoot().findViewById(R.id.pleaseWaitText);
 
         if (binding.leaveApplicationToolbar != null) {
             binding.leaveApplicationToolbar.setNavigationOnClickListener(new View.OnClickListener() {
@@ -87,12 +91,8 @@ public class LeaveApplicationFragment extends Fragment {
         editTextEmployeeID = binding.editTextEmployeeID;
         editTextDesignation = binding.editTextDesignation;
 
-        CheckBox openingBalanceCLCheckbox = binding.openingBalanceCLCheckbox;
-        CheckBox openingBalanceMLCheckbox = binding.openingBalanceMLCheckbox;
-        CheckBox requestForCLCheckbox = binding.requestForCLCheckbox;
-        CheckBox requestForMLCheckbox = binding.requestForMLCheckbox;
-        CheckBox balanceCLCheckbox = binding.balanceCLCheckbox;
-        CheckBox balanceMLCheckbox = binding.balanceMLCheckbox;
+        requestForCL = binding.radioCL;
+        requestForML = binding.radioML;
 
         Date currentDate = new Date();
         SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy", Locale.US);
@@ -124,10 +124,8 @@ public class LeaveApplicationFragment extends Fragment {
 
                         binding.editTextDesignation.setText(designation);
                         editTextDesignation.setEnabled(false);
-
                         break;
                     }
-
                     if (!userFound) {
                     }
                 } else {
@@ -154,6 +152,9 @@ public class LeaveApplicationFragment extends Fragment {
             @Override
             public void onClick(View v) {
 
+                binding.editTextFromDate.setOnClickListener(null);
+                binding.editTextToDate.setOnClickListener(null);
+
                 String leaveReason = binding.editTextLeaveReason.getText().toString();
                 String fromDate = binding.editTextFromDate.getText().toString();
                 String toDate = binding.editTextToDate.getText().toString();
@@ -163,12 +164,8 @@ public class LeaveApplicationFragment extends Fragment {
                 String userId = binding.editTextEmployeeID.getText().toString();
                 String designation = binding.editTextDesignation.getText().toString();
 
-                boolean openingBalanceCLCheckbox = binding.openingBalanceCLCheckbox.isChecked();
-                boolean openingBalanceMLCheckbox = binding.openingBalanceMLCheckbox.isChecked();
-                boolean requestForCLCheckbox = binding.requestForCLCheckbox.isChecked();
-                boolean requestForMLCheckbox = binding.requestForMLCheckbox.isChecked();
-                boolean balanceCLCheckbox = binding.balanceCLCheckbox.isChecked();
-                boolean balanceMLCheckbox = binding.balanceMLCheckbox.isChecked();
+                boolean requestForCL = binding.radioCL.isChecked();
+                boolean requestForML = binding.radioML.isChecked();
 
                 if (TextUtils.isEmpty(leaveReason)) {
                     Toast.makeText(getContext(), "Please enter your Leave Reason", Toast.LENGTH_SHORT).show();
@@ -197,32 +194,27 @@ public class LeaveApplicationFragment extends Fragment {
                     Toast.makeText(getActivity(), "User not authenticated", Toast.LENGTH_SHORT).show();
                     return;
                 }
-
+                pleaseWaitText.setVisibility(View.VISIBLE);
                 LeaveApplicationModel leaveApplication = new LeaveApplicationModel(
                         dateOfApplication, name, userId, designation, leaveReason,
-                        fromDate, toDate, contactNumber,
-                        openingBalanceCLCheckbox, openingBalanceMLCheckbox,
-                        requestForCLCheckbox, requestForMLCheckbox,
-                        balanceCLCheckbox, balanceMLCheckbox
-                );
+                        fromDate, toDate, contactNumber,requestForCL, requestForML);
 
                 leaveApplication.setStatus("Pending");
                 databaseReference.push().setValue(leaveApplication)
                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
                             public void onSuccess(Void aVoid) {
+                                pleaseWaitText.setVisibility(View.GONE);
                                 Toast.makeText(getActivity(), "Submit successfully", Toast.LENGTH_SHORT).show();
 
                                 getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new SuccessFragment()).commit();
-
-
                             }
                         })
                         .addOnFailureListener(new OnFailureListener() {
                             @Override
                             public void onFailure(@NonNull Exception e) {
+                                pleaseWaitText.setVisibility(View.GONE);
                                 Toast.makeText(getActivity(), "Failed to update data: " + e.getMessage(), Toast.LENGTH_SHORT).show();
-
                             }
                         });
                 }
@@ -261,5 +253,4 @@ public class LeaveApplicationFragment extends Fragment {
 
         datePickerDialog.show();
     }
-
 }
