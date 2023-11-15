@@ -37,7 +37,8 @@
                 android:layout_height="match_parent"
                 android:layout_below="@id/employee_toolbar"
                 android:background="#FFFFFF"
-                tools:listitem="@layout/employee_item" />
+                tools:listitem="@layout/employee_item"
+                android:layout_marginBottom="6dp"/>
 
             <TextView
             android:id="@+id/pleaseWaitText"
