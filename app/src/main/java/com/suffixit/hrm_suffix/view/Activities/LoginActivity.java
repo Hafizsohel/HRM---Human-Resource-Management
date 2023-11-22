@@ -9,11 +9,13 @@ import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Build;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.view.View;
 import android.view.WindowManager;
 import android.widget.Toast;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
@@ -45,7 +47,6 @@ public class LoginActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
 
         localStorage = new AppPreference(this);
-        //usersRef = FirebaseDatabase.getInstance().getReference("Users");
         db = FirebaseFirestore.getInstance();
         sharedPreferences = getSharedPreferences(PREFS_NAME, MODE_PRIVATE);
         checkAutoLogin();
@@ -64,57 +65,68 @@ public class LoginActivity extends AppCompatActivity {
             return;
         }
 
-        binding.loginBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
+        binding.loginBtn.setOnClickListener(v -> {
 
-                String username = binding.userName.getText().toString();
-                String password = binding.password.getText().toString();
-                authenticateUser(username, password);
+            String username = binding.userName.getText().toString().trim();
+            String password = binding.password.getText().toString().trim();
+
+            if (!NetworkUtils.isNetworkConnected(LoginActivity.this)) {
+                KeyboardUtils.hideKeyboard(LoginActivity.this);
+                Toast.makeText(LoginActivity.this, getString(R.string.no_internet), Toast.LENGTH_SHORT).show();
+                return;
             }
+
+            if (TextUtils.isEmpty(username)) {
+                KeyboardUtils.hideKeyboard(LoginActivity.this);
+                binding.userName.requestFocus();
+                Snackbar.make(binding.userName, "Please Enter username", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+            if (TextUtils.isEmpty(password)) {
+                KeyboardUtils.hideKeyboard(LoginActivity.this);
+                binding.password.requestFocus();
+                Snackbar.make(binding.password, "Please Enter password", Snackbar.LENGTH_SHORT).show();
+                return;
+            }
+
+            authenticateUser(username, password);
         });
     }
 
     private void authenticateUser(final String username, final String enteredPassword) {
 
-        //Save username and password
-      /*  SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putString(KEY_USERNAME, username);
-        editor.putString(KEY_PASSWORD, enteredPassword);
-        editor.apply();*/
-
-
         CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
         Query query = usersCollection.whereEqualTo("username", username);
 
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    boolean userFound = false;
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        Map<String, Object> userData = document.getData();
-                        String storedPassword = (String) userData.get("password");
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                boolean userFound = false;
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    Map<String, Object> userData = document.getData();
+                    String storedPassword = (String) userData.get("password");
 
-                        if (storedPassword != null && storedPassword.equals(enteredPassword)) {
-                            localStorage.putUserName(username);
-                            localStorage.putLoginResponse(true);
-                            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-                            startActivity(intent);
-                            finish();
-                            userFound = true;
-                            break;
-                        }
+                    if (storedPassword != null && storedPassword.equals(enteredPassword)) {
+                        localStorage.putUserName(username);
+                        localStorage.putLoginResponse(true);
+                        Intent intent = new Intent(LoginActivity.this, MainActivity.class);
+                        startActivity(intent);
+                        finish();
+                        userFound = true;
+                        break;
                     }
-                    if (task.getResult().isEmpty()) {
-                        Toast.makeText(LoginActivity.this, "User with username '" + username + "' not found. User hasn't been created yet.", Toast.LENGTH_SHORT).show();
-                    } else if (!userFound) {
-                        Toast.makeText(LoginActivity.this, R.string.bad_credential, Toast.LENGTH_SHORT).show();
-                    }
-                } else {
-                    Toast.makeText(LoginActivity.this, "Error querying Firestore: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
-                    task.getException().printStackTrace();
                 }
+                if (task.getResult().isEmpty()) {
+                    KeyboardUtils.hideKeyboard(LoginActivity.this);
+                    binding.userName.requestFocus();
+                    Snackbar.make(binding.userName, "User with username '" + username + "' not found. User hasn't been created yet.", Snackbar.LENGTH_SHORT).show();
+                } else if (!userFound) {
+                    KeyboardUtils.hideKeyboard(LoginActivity.this);
+                    binding.password.requestFocus();
+                    Toast.makeText(LoginActivity.this, R.string.bad_credential, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(LoginActivity.this, "Error querying Firestore: " + task.getException().getMessage(), Toast.LENGTH_SHORT).show();
+                task.getException().printStackTrace();
             }
         });
     }
@@ -133,6 +145,7 @@ public class LoginActivity extends AppCompatActivity {
             binding.password.setText(savedPassword);
         }
     }
+
     private void checkAutoLogin() {
         String savedUsername = sharedPreferences.getString(KEY_USERNAME, null);
         String savedPassword = sharedPreferences.getString(KEY_PASSWORD, null);

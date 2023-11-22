@@ -38,5 +38,5 @@ public class LeaveStatusModel {
                 ", dateOfApplication='" + dateOfApplication + '\'' +
                 ", status='" + status + '\'' +
                 '}';
-    }
+        }
 }

@@ -59,45 +59,42 @@ public class DashboardFragment extends Fragment {
         CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
         Query query = usersCollection.whereEqualTo("username", userId);
 
-        query.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                if (task.isSuccessful()) {
-                    boolean userFound = false;
-                    for (QueryDocumentSnapshot document : task.getResult()) {
-                        String name = document.getString("name");
-                        String email = document.getString("Email");
-                        String designation = document.getString("Designation");
-                        String imageUrl = document.getString("profileImg");
+        query.get().addOnCompleteListener(task -> {
+            if (task.isSuccessful()) {
+                boolean userFound = false;
+                for (QueryDocumentSnapshot document : task.getResult()) {
+                    String name = document.getString("name");
+                    String email = document.getString("Email");
+                    String designation = document.getString("Designation");
+                    String imageUrl = document.getString("profileImg");
 
-                        binding. txtEmployeeId.setText("User ID: " + userId);
-                        binding.txtEmployeeName.setText("Name: " + name);
-                        binding.txtEmployeeMail.setText("Email: "+ email);
-                        binding.txtEmployeeDesignation.setText("Designation: "+ designation);
+                    binding. txtEmployeeId.setText("User ID: " + userId);
+                    binding.txtEmployeeName.setText("Name: " + name);
+                    binding.txtEmployeeMail.setText("Email: "+ email);
+                    binding.txtEmployeeDesignation.setText("Designation: "+ designation);
 
 
-                        userFound = true;
+                    userFound = true;
 
+                    if (imageUrl != null && !imageUrl.isEmpty()) {
+                        Picasso.get().load(imageUrl).into(profileImageView);
+                    }
+                    if (getActivity() != null) {
+                        TextView drawerName = getActivity().findViewById(R.id.name);
+                        CircleImageView drawerProfileImage = getActivity().findViewById(R.id.profileImg);
+                        drawerName.setText(name);
                         if (imageUrl != null && !imageUrl.isEmpty()) {
-                            Picasso.get().load(imageUrl).into(profileImageView);
+                            Picasso.get().load(imageUrl).into(drawerProfileImage);
                         }
-                        if (getActivity() != null) {
-                            TextView drawerName = getActivity().findViewById(R.id.name);
-                            CircleImageView drawerProfileImage = getActivity().findViewById(R.id.profileImg);
-                            drawerName.setText(name);
-                            if (imageUrl != null && !imageUrl.isEmpty()) {
-                                Picasso.get().load(imageUrl).into(drawerProfileImage);
-                            }
-                        }
-
-                        break;
                     }
 
-                    if (!userFound) {
-                      }
-                } else {
-                   task.getException().printStackTrace();
+                    break;
                 }
+
+                if (!userFound) {
+                  }
+            } else {
+               task.getException().printStackTrace();
             }
         });
 
@@ -113,9 +110,6 @@ public class DashboardFragment extends Fragment {
         if (imageUrl != null && !imageUrl.isEmpty()) {
             Picasso.get().load(imageUrl).into(profileImageView);
         }
-        //name = view.findViewById(R.id.name);
-        //name.setText(imageUrl);
-
 
         binding.cardViewEmployee.setOnClickListener(new View.OnClickListener() {
             @Override

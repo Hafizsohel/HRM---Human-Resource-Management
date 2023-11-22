@@ -29,13 +29,10 @@ import com.google.firebase.database.ValueEventListener;
 import com.suffixit.hrm_suffix.Adapter.ReportAdapter;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.FragmentReportBinding;
-import com.suffixit.hrm_suffix.databinding.FragmentScrumBinding;
 import com.suffixit.hrm_suffix.models.ReportModel;
-import com.suffixit.hrm_suffix.models.ScrumModel;
 import com.suffixit.hrm_suffix.preference.AppPreference;
 import com.suffixit.hrm_suffix.view.Activities.MainActivity;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;

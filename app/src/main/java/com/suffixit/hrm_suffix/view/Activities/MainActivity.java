@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboardFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.FrameLayoutID, new DashboardFragment()).commit();
 
         }
 

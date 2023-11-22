@@ -181,7 +181,4 @@ public class LeaveStatusFragment extends Fragment {
             cardRejected.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red));
         }
     }
-
-
-
 }

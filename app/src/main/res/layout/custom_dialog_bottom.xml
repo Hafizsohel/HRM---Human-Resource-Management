@@ -20,7 +20,7 @@
         android:layout_weight="1"
         android:layout_gravity="center"
         android:layout_marginEnd="2dp"
-        android:background="@drawable/blue_border_rounded_cornwe" />
+        android:background="@drawable/blue_border_rounded_corner" />
 
 
     <ImageButton
@@ -32,7 +32,7 @@
         android:layout_gravity="center"
         android:layout_marginStart="2dp"
         android:layout_marginEnd="2dp"
-        android:background="@drawable/blue_border_rounded_cornwe"/>
+        android:background="@drawable/blue_border_rounded_corner"/>
 
     <ImageButton
         android:id="@+id/emailButton"
@@ -42,6 +42,6 @@
         android:layout_weight="1"
         android:layout_gravity="center"
         android:layout_marginStart="2dp"
-        android:background="@drawable/blue_border_rounded_cornwe"/>
+        android:background="@drawable/blue_border_rounded_corner"/>
     </LinearLayout>
 </LinearLayout>
