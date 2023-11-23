@@ -28,6 +28,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.suffixit.hrm_suffix.Adapter.EmployeeAdapter;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.FragmentEmployeeBinding;
+import com.suffixit.hrm_suffix.databinding.FragmentLeaveApplicationBinding;
 import com.suffixit.hrm_suffix.models.EmplyeeModel;
 import com.suffixit.hrm_suffix.view.Activities.MainActivity;
 
@@ -53,14 +54,14 @@ public class EmployeeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentEmployeeBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
-        pleaseWaitText = binding.getRoot().findViewById(R.id.pleaseWaitText);
-
+        pleaseWaitText = binding.pleaseWaitText;
         setUpOnBackPressed();
         adaper();
         fetchDataFromFirebase();
 
-        return binding.getRoot();
+        return view;
     }
 
     private void setUpOnBackPressed() {

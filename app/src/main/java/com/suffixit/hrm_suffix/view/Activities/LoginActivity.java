@@ -24,6 +24,7 @@ import com.google.firebase.firestore.QueryDocumentSnapshot;
 import com.google.firebase.firestore.QuerySnapshot;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.ActivityLoginBinding;
+import com.suffixit.hrm_suffix.databinding.FragmentLeaveApplicationBinding;
 import com.suffixit.hrm_suffix.preference.AppPreference;
 import com.suffixit.hrm_suffix.utils.KeyboardUtils;
 import com.suffixit.hrm_suffix.utils.NetworkUtils;
@@ -146,7 +147,7 @@ public class LoginActivity extends AppCompatActivity {
         }
     }
 
-    private void checkAutoLogin() {
+  /*  private void checkAutoLogin() {
         String savedUsername = sharedPreferences.getString(KEY_USERNAME, null);
         String savedPassword = sharedPreferences.getString(KEY_PASSWORD, null);
         if (savedUsername != null && savedPassword != null) {
@@ -154,5 +155,15 @@ public class LoginActivity extends AppCompatActivity {
             startActivity(intent);
             finish();
         }
+    }*/
+
+    private void checkAutoLogin() {
+        if (localStorage.getLoginResponse()) {
+            localStorage.putLoginResponse(false); // Set login response to false
+            localStorage.clearUsername(); // Clear saved username
+            localStorage.clearPassword(); // Clear saved password
+        }
     }
+
+
 }

@@ -54,12 +54,10 @@ public class ReportFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-
         setUpOnBackPressed();
 
-
         binding = FragmentReportBinding.inflate(inflater, container, false);
-        View rootView = binding.getRoot();
+        View view = binding.getRoot();
 
         localStorage = new AppPreference(requireContext());
         String userId = localStorage.getUserName();
@@ -72,8 +70,10 @@ public class ReportFragment extends Fragment {
         pleaseWaitText = binding.getRoot().findViewById(R.id.pleaseWaitText);
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
+        binding.reportToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboardFragment()).commit());
+
         fetchUserDataFromFirebase(userId);
-        return rootView;
+        return view;
     }
 
     private void setUpOnBackPressed() {
@@ -95,18 +95,6 @@ public class ReportFragment extends Fragment {
             @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
             public void onDestroy() {
                 onBackPressedCallback.remove();
-            }
-        });
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        binding.reportToolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboardFragment()).commit();
             }
         });
     }

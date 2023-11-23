@@ -25,6 +25,7 @@ import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 import com.suffixit.hrm_suffix.Adapter.LeaveStatusAdapter;
 import com.suffixit.hrm_suffix.R;
+import com.suffixit.hrm_suffix.databinding.FragmentAttendanceBinding;
 import com.suffixit.hrm_suffix.databinding.FragmentLeaveStatusBinding;
 import com.suffixit.hrm_suffix.models.LeaveStatusModel;
 import com.suffixit.hrm_suffix.preference.AppPreference;
@@ -51,9 +52,8 @@ public class LeaveStatusFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.fragment_leave_status, container, false);
-
-
+        binding = FragmentLeaveStatusBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
 
         toolbar= view.findViewById(R.id.status_toolbar);
         cardPending = view.findViewById(R.id.cardPeding);

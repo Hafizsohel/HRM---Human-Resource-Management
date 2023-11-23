@@ -27,12 +27,7 @@ public class ApplicationDashboardFragment extends Fragment {
                              Bundle savedInstanceState) {
         setUpOnBackPressed();
         binding = FragmentScrumDashboardBinding.inflate(inflater, container, false);
-        return binding.getRoot();
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
+        View view = binding.getRoot();
 
         binding.applicationDashboardToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -55,8 +50,9 @@ public class ApplicationDashboardFragment extends Fragment {
 
             }
         });
-
+        return view;
     }
+
     private void setUpOnBackPressed() {
         OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
             @Override

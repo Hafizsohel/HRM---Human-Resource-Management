@@ -1,6 +1,5 @@
 package com.suffixit.hrm_suffix.view.Fragment;
 
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 
@@ -10,27 +9,19 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.view.GravityCompat;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.fragment.app.Fragment;
-
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
-
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
-
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QueryDocumentSnapshot;
-import com.google.firebase.firestore.QuerySnapshot;
-
-
 import com.squareup.picasso.Picasso;
 import com.suffixit.hrm_suffix.R;
-
 import com.suffixit.hrm_suffix.databinding.FragmentDashboadBinding;
+import com.suffixit.hrm_suffix.models.UserModel;
 import com.suffixit.hrm_suffix.preference.AppPreference;
 import com.suffixit.hrm_suffix.view.Activities.LoginActivity;
 
@@ -49,12 +40,11 @@ public class DashboardFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentDashboadBinding.inflate(inflater, container, false);
-
+        View view = binding.getRoot();
 
         localStorage = new AppPreference(requireContext());
         String userId = localStorage.getUserName();
-        Log.d(TAG, "userName: "+userId);
-
+        Log.d(TAG, "userName: " + userId);
 
         CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
         Query query = usersCollection.whereEqualTo("username", userId);
@@ -64,18 +54,13 @@ public class DashboardFragment extends Fragment {
                 boolean userFound = false;
                 for (QueryDocumentSnapshot document : task.getResult()) {
                     String name = document.getString("name");
-                    String email = document.getString("Email");
                     String designation = document.getString("Designation");
                     String imageUrl = document.getString("profileImg");
 
-                    binding. txtEmployeeId.setText("User ID: " + userId);
-                    binding.txtEmployeeName.setText("Name: " + name);
-                    binding.txtEmployeeMail.setText("Email: "+ email);
-                    binding.txtEmployeeDesignation.setText("Designation: "+ designation);
-
-
+                    UserModel user = new UserModel(userId, name, designation, imageUrl);
+                    binding.setUser(user);
                     userFound = true;
-
+                    
                     if (imageUrl != null && !imageUrl.isEmpty()) {
                         Picasso.get().load(imageUrl).into(profileImageView);
                     }
@@ -87,19 +72,18 @@ public class DashboardFragment extends Fragment {
                             Picasso.get().load(imageUrl).into(drawerProfileImage);
                         }
                     }
-
                     break;
                 }
 
                 if (!userFound) {
-                  }
+                }
             } else {
-               task.getException().printStackTrace();
+                task.getException().printStackTrace();
             }
         });
 
         profileImageView = binding.imgEmployeeProfile;
-        return binding.getRoot();
+         return view;
     }
 
     @Override
@@ -153,31 +137,28 @@ public class DashboardFragment extends Fragment {
         });
     }
 
+
     private void showLogoutConfirmationDialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
         builder.setMessage("Are you sure you want to log out?");
-        builder.setPositiveButton("Logout", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                navigateToLogoutPage();
-            }
-        });
-        builder.setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
+        builder.setPositiveButton("Logout", (dialog, which) -> navigateToLogoutPage());
+        builder.setNegativeButton("Cancel", (dialog, which) -> dialog.dismiss());
         AlertDialog dialog = builder.create();
         dialog.show();
     }
 
     private void navigateToLogoutPage() {
         // Clear saved username and password
+        localStorage.putLoginResponse(false);
+        localStorage.clearUsername();
+        localStorage.clearPassword();
+
         Intent intent = new Intent(requireContext(), LoginActivity.class);
         startActivity(intent);
         requireActivity().finish();
     }
+
+
     private void openDrawer(DrawerLayout drawerLayout){
         drawerLayout.openDrawer(GravityCompat.START);
     }

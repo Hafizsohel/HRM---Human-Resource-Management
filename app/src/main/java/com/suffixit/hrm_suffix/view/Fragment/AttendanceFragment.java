@@ -39,6 +39,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.suffixit.hrm_suffix.Adapter.AttendanceAdapter;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.FragmentAttendanceBinding;
+import com.suffixit.hrm_suffix.databinding.FragmentLeaveApplicationBinding;
 import com.suffixit.hrm_suffix.models.AttendanceModel;
 import com.suffixit.hrm_suffix.preference.AppPreference;
 import com.suffixit.hrm_suffix.view.Activities.MainActivity;
@@ -68,6 +69,8 @@ public class AttendanceFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentAttendanceBinding.inflate(inflater, container, false);
+        View view = binding.getRoot();
+
         sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
         localStorage = new AppPreference(requireContext());
@@ -242,7 +245,7 @@ public class AttendanceFragment extends Fragment {
                 updateDateAndDay();
             }
         });
-        return binding.getRoot();
+        return view;
     }
 
     private double calculateTotalHours(String checkInTime, String checkoutTime) {

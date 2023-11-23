@@ -37,6 +37,9 @@ public class AppPreference {
     public String getUserName() {
         return sharedPreferences.getString(AppConstants.USER_NAME, null);
     }
+    public String getPassword() {
+        return sharedPreferences.getString(AppConstants.USER_PASSWORD, null);
+    }
 
     public void putLoginResponse(boolean isLogin) {
         editor.putBoolean(AppConstants.IS_LOGIN, isLogin);
@@ -44,5 +47,51 @@ public class AppPreference {
     }
     public boolean getLoginResponse() {
         return sharedPreferences.getBoolean(AppConstants.IS_LOGIN, false);
+    }
+/*    public void putLogoutResponse(Boolean isLogout){
+        editor.putBoolean(AppConstants.IS_LOGOUT, isLogout);
+        editor.commit();
+    }
+    public boolean getLogoutResponse() {
+        return sharedPreferences.getBoolean(AppConstants.IS_LOGOUT, false);
+    }
+    public boolean isLoggedOut() {
+        return sharedPreferences.getBoolean(AppConstants.IS_LOGOUT, false);
+    }
+
+    // Clear logout flag
+    public void clearLogout() {
+        editor.putBoolean(AppConstants.IS_LOGOUT, false);
+        editor.apply();
+    }
+    // Clear saved username
+    public void clearUsername() {
+        editor.remove(AppConstants.USER_NAME);
+        editor.apply();
+    }
+
+    // Clear saved password
+    public void clearPassword() {
+        editor.remove(AppConstants.USER_PASSWORD);
+        editor.apply();
+    }*/
+
+    public void putLogoutResponse(boolean isLogout) {
+        editor.putBoolean(AppConstants.IS_LOGOUT, isLogout);
+        editor.apply();
+    }
+
+    public boolean getLogoutResponse() {
+        return sharedPreferences.getBoolean(AppConstants.IS_LOGOUT, false);
+    }
+
+    public void clearUsername() {
+        editor.remove(AppConstants.KEY_USER_ID);
+        editor.apply();
+    }
+
+    public void clearPassword() {
+        editor.remove(AppConstants.USER_PASSWORD);
+        editor.apply();
     }
 }

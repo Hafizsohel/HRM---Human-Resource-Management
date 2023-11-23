@@ -1,6 +1,12 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools">
+    <data>
+        <variable
+            name="user"
+            type="com.suffixit.hrm_suffix.models.UserModel" />
+    </data>
+
     <androidx.drawerlayout.widget.DrawerLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -51,7 +57,7 @@
                         android:layout_centerHorizontal="true"
                         android:padding="2dp"
                         android:background="#1566e0"
-                        android:src="@drawable/circle_shape"/>
+                        android:src="@{user.profileImg}" />
 
                 </RelativeLayout>
 
@@ -60,17 +66,17 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1.30dp"
-                    android:text="ID: "
                     android:textAlignment="center"
                     android:textColor="@color/white"
-                    android:textSize="10.40sp" />
+                    android:textSize="10.40sp"
+                    android:text="@{`User ID: ` +user.userId}"/>
 
                 <TextView
                     android:id="@+id/txtEmployeeName"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_marginTop="1.30dp"
-                    android:text="Name: "
+                    android:text="@{`Name: ` +user.name}"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="10.40sp" />
@@ -80,20 +86,12 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:paddingHorizontal="31.20dp"
-                    android:text="Designation: "
+                    android:text="@{`Designation: ` +user.Designation}"
                     android:textAlignment="center"
                     android:textColor="@color/white"
                     android:textSize="10.40sp" />
 
-                <TextView
-                    android:id="@+id/txtEmployeeMail"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:paddingHorizontal="31.20dp"
-                    android:text="Email: "
-                    android:textAlignment="center"
-                    android:textColor="@color/white"
-                    android:textSize="10.40sp" />
+
 
             </LinearLayout>
         </LinearLayout>
