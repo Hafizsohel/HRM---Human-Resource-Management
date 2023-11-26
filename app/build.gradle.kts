@@ -48,17 +48,19 @@ dependencies {
     //Circle imageView
     implementation("de.hdodenhof:circleimageview:3.1.0")
 
-    implementation ("com.google.firebase:firebase-auth:22.1.1")
-    implementation ("com.google.firebase:firebase-auth-ktx:22.1.1")
-    implementation ("com.google.firebase:firebase-firestore-ktx:24.7.1")
-    implementation ("com.google.firebase:firebase-firestore:24.7.1")
-    implementation ("com.google.firebase:firebase-database:20.2.2")
-    implementation ("com.google.firebase:firebase-storage:20.2.1")
+    implementation ("com.google.firebase:firebase-auth:22.3.0")
+    implementation ("com.google.firebase:firebase-auth-ktx:22.3.0")
+    implementation ("com.google.firebase:firebase-firestore-ktx:24.9.1")
+    implementation ("com.google.firebase:firebase-firestore:24.9.1")
+    implementation ("com.google.firebase:firebase-database:20.3.0")
+    implementation ("com.google.firebase:firebase-storage:20.3.0")
 
     //animated flash screen
     implementation ("com.daimajia.androidanimations:library:2.4@aar")
     //get image
     implementation ("com.squareup.picasso:picasso:2.71828")
+    implementation ("com.github.bumptech.glide:glide:4.15.1")
+
 
 
 

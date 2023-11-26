@@ -39,7 +39,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.suffixit.hrm_suffix.Adapter.AttendanceAdapter;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.FragmentAttendanceBinding;
-import com.suffixit.hrm_suffix.databinding.FragmentLeaveApplicationBinding;
 import com.suffixit.hrm_suffix.models.AttendanceModel;
 import com.suffixit.hrm_suffix.preference.AppPreference;
 import com.suffixit.hrm_suffix.view.Activities.MainActivity;
@@ -55,7 +54,7 @@ import java.util.Locale;
 public class AttendanceFragment extends Fragment {
     private static final String TAG = "AttendanceFragment";
     private FragmentAttendanceBinding binding;
-    private TextView pleaseWaitText;
+    private TextView pleaseWaitText, noDataText;
     private DatabaseReference databaseReference;
     private RecyclerView recyclerView;
     private AttendanceAdapter attendanceAdapter;
@@ -76,6 +75,7 @@ public class AttendanceFragment extends Fragment {
         localStorage = new AppPreference(requireContext());
         String userName = localStorage.getUserName();
         Log.d(TAG, "userName: "+userName);
+
 
         CollectionReference usersCollection = FirebaseFirestore.getInstance().collection("Users");
         com.google.firebase.firestore.Query query = usersCollection.whereEqualTo("username", userName);
@@ -102,6 +102,7 @@ public class AttendanceFragment extends Fragment {
         });
 
         pleaseWaitText = binding.getRoot().findViewById(R.id.pleaseWaitText);
+        noDataText = binding.getRoot().findViewById(R.id.no_data_text_view);
         autoCheckoutAtMidnight();
         setUpOnBackPressed();
         recyclerView = binding.recyclerViewId;
@@ -351,13 +352,16 @@ public class AttendanceFragment extends Fragment {
                 pleaseWaitText.setVisibility(View.GONE);
                 employeeList.clear();
 
+                if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                     Log.d("FirebaseData", snapshot.getValue().toString());
                     AttendanceModel attendance = snapshot.getValue(AttendanceModel.class);
                     employeeList.add(attendance);
                 }
-
                 attendanceAdapter.notifyDataSetChanged();
+            } else{
+                    showNoDataMessage();
+                }
             }
 
             @Override
@@ -366,6 +370,11 @@ public class AttendanceFragment extends Fragment {
                 Toast.makeText(getActivity(), "Failed to fetch data", Toast.LENGTH_SHORT).show();
             }
         });
+    }
+
+    // Method to show a message when no data is found
+    private void showNoDataMessage() {
+        noDataText.setVisibility(View.VISIBLE);
     }
 
     private String getCurrentTime() {
@@ -419,7 +428,7 @@ public class AttendanceFragment extends Fragment {
         binding.Toolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboardFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboadFragment()).commit();
             }
         });
     }

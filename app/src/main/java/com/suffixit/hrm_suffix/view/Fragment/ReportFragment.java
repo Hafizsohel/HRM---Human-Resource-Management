@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 
 import androidx.activity.OnBackPressedCallback;
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -47,7 +45,7 @@ public class ReportFragment extends Fragment {
     private DatabaseReference databaseReference;
     List<ReportModel> reportModelList = new ArrayList();
     private ReportAdapter adapter;
-    private TextView pleaseWaitText;
+    private TextView pleaseWaitText,noDataText;
     private AppPreference localStorage;
 
 
@@ -68,9 +66,10 @@ public class ReportFragment extends Fragment {
         recyclerView.setAdapter(adapter);
 
         pleaseWaitText = binding.getRoot().findViewById(R.id.pleaseWaitText);
+        noDataText = binding.getRoot().findViewById(R.id.no_data_text_view);
         databaseReference = FirebaseDatabase.getInstance().getReference();
 
-        binding.reportToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboardFragment()).commit());
+        binding.reportToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboadFragment()).commit());
 
         fetchUserDataFromFirebase(userId);
         return view;
@@ -112,37 +111,39 @@ public class ReportFragment extends Fragment {
 
                 List<String> existingDates = new ArrayList<>();
 
+                if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        String userId = userSnapshot.child("userId").getValue(String.class);
+                        String name = userSnapshot.child("name").getValue(String.class);
+                        String date = userSnapshot.child("date").getValue(String.class);
 
+                        if (userId != null && name != null && date != null) {
 
-                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    String userId = userSnapshot.child("userId").getValue(String.class);
-                    String name = userSnapshot.child("name").getValue(String.class);
-                    String date = userSnapshot.child("date").getValue(String.class);
-
-                    if (userId != null && name != null && date != null) {
-
-                        ReportModel report = new ReportModel(userId, name, date,"P");
-                        reportModelList.add(report);
-                        existingDates.add(date);
-                    }
-                }
-
-                String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
-                Calendar calendar = Calendar.getInstance();
-                for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
-                    String defaultName = userSnapshot.child("name").getValue(String.class);
-
-                    for (int i = 0; i < 30; i++) {
-                        calendar.add(Calendar.DAY_OF_MONTH, -1);
-                        String pastDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.getTime());
-                        if (!existingDates.contains(pastDate)) {
-                            ReportModel absentReport = new ReportModel(userId, defaultName, pastDate, "A");
-                            reportModelList.add(absentReport);
+                            ReportModel report = new ReportModel(userId, name, date, "P");
+                            reportModelList.add(report);
+                            existingDates.add(date);
                         }
                     }
-                }
 
-                adapter.notifyDataSetChanged();
+                    String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
+                    Calendar calendar = Calendar.getInstance();
+                    for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                        String defaultName = userSnapshot.child("name").getValue(String.class);
+
+                        for (int i = 0; i < 30; i++) {
+                            calendar.add(Calendar.DAY_OF_MONTH, -1);
+                            String pastDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(calendar.getTime());
+                            if (!existingDates.contains(pastDate)) {
+                                ReportModel absentReport = new ReportModel(userId, defaultName, pastDate, "A");
+                                reportModelList.add(absentReport);
+                            }
+                        }
+                    }
+
+                    adapter.notifyDataSetChanged();
+                } else {
+                    showNoDataMessage();
+                }
             }
 
             @Override
@@ -153,5 +154,7 @@ public class ReportFragment extends Fragment {
             }
         });
     }
-
+    private void showNoDataMessage() {
+        noDataText.setVisibility(View.VISIBLE);
+    }
 }

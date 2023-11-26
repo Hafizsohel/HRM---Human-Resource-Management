@@ -4,16 +4,14 @@ public class UserModel {
     private String userId;
     private String name;
     private String Designation;
-    private String profileImg;
 
     public UserModel() {
     }
 
-    public UserModel(String userId, String name, String designation, String profileImg) {
+    public UserModel(String userId, String name, String designation) {
         this.userId = userId;
         this.name = name;
         Designation = designation;
-        this.profileImg = profileImg;
     }
 
     public String getUserId() {
@@ -40,13 +38,6 @@ public class UserModel {
         Designation = designation;
     }
 
-    public String getProfileImg() {
-        return profileImg;
-    }
-
-    public void setProfileImg(String profileImg) {
-        this.profileImg = profileImg;
-    }
 
     @Override
     public String toString() {
@@ -54,7 +45,6 @@ public class UserModel {
                 "userId='" + userId + '\'' +
                 ", name='" + name + '\'' +
                 ", Designation='" + Designation + '\'' +
-                ", profileImg='" + profileImg + '\'' +
                 '}';
     }
 }

@@ -7,7 +7,7 @@ import android.os.Bundle;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.ActivityMainBinding;
 
-import com.suffixit.hrm_suffix.view.Fragment.DashboardFragment;
+import com.suffixit.hrm_suffix.view.Fragment.DashboadFragment;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -21,7 +21,7 @@ public class MainActivity extends AppCompatActivity {
 
 
         if (savedInstanceState == null) {
-            getSupportFragmentManager().beginTransaction().add(R.id.FrameLayoutID, new DashboardFragment()).commit();
+            getSupportFragmentManager().beginTransaction().add(R.id.FrameLayoutID, new DashboadFragment()).commit();
 
         }
 

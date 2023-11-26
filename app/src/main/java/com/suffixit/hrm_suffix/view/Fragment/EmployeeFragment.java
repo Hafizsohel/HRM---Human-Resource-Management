@@ -28,7 +28,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import com.suffixit.hrm_suffix.Adapter.EmployeeAdapter;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.FragmentEmployeeBinding;
-import com.suffixit.hrm_suffix.databinding.FragmentLeaveApplicationBinding;
 import com.suffixit.hrm_suffix.models.EmplyeeModel;
 import com.suffixit.hrm_suffix.view.Activities.MainActivity;
 
@@ -133,7 +132,7 @@ public class EmployeeFragment extends Fragment {
         binding.employeeToolbar.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboardFragment()).commit();
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboadFragment()).commit();
             }
         });
     }

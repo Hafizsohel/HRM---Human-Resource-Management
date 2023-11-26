@@ -1,6 +1,7 @@
 package com.suffixit.hrm_suffix.view.Fragment;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -14,6 +15,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+
+import com.bumptech.glide.Glide;
 import com.google.firebase.firestore.CollectionReference;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
@@ -27,7 +30,7 @@ import com.suffixit.hrm_suffix.view.Activities.LoginActivity;
 
 import de.hdodenhof.circleimageview.CircleImageView;
 
-public class DashboardFragment extends Fragment {
+public class DashboadFragment extends Fragment {
     private static final String TAG = "DashboadFragment";
     private FragmentDashboadBinding binding;
     private AppPreference localStorage;
@@ -57,9 +60,18 @@ public class DashboardFragment extends Fragment {
                     String designation = document.getString("Designation");
                     String imageUrl = document.getString("profileImg");
 
-                    UserModel user = new UserModel(userId, name, designation, imageUrl);
+                    UserModel user = new UserModel(userId, name, designation);
                     binding.setUser(user);
-                    userFound = true;
+
+
+                    if (isAdded() && getActivity() != null && imageUrl != null && !imageUrl.isEmpty()) {
+                        Uri imageUrlUri = Uri.parse(imageUrl);
+                        Glide.with(this)
+                                .load(imageUrlUri)
+                                .into(binding.imgEmployeeProfile);
+                    } else {
+                        binding.imgEmployeeProfile.setImageResource(R.drawable.img);
+                    }
                     
                     if (imageUrl != null && !imageUrl.isEmpty()) {
                         Picasso.get().load(imageUrl).into(profileImageView);

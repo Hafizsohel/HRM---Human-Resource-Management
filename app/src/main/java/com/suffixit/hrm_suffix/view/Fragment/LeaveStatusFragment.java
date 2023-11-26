@@ -44,7 +44,7 @@ public class LeaveStatusFragment extends Fragment {
     private CardView cardPending,cardApproved,cardRejected;
     private Toolbar toolbar;
 
-    private TextView pendingCountTextView, approvedCountTextView, rejectedCountTextView;
+    private TextView pendingCountTextView, approvedCountTextView, rejectedCountTextView,noDataText;
     private int pendingCount = 0;
     private int approvedCount = 0;
     private int rejectedCount = 0;
@@ -62,6 +62,7 @@ public class LeaveStatusFragment extends Fragment {
         pendingCountTextView = view.findViewById(R.id.pendingCount);
         approvedCountTextView = view.findViewById(R.id.approvedCount);
         rejectedCountTextView = view.findViewById(R.id.rejectedCount);
+        noDataText = view.findViewById(R.id.no_data_text_view);
         cardPending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -128,6 +129,7 @@ public class LeaveStatusFragment extends Fragment {
                 pendingCount = 0;
                 rejectedCount = 0;
 
+                if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                     String status = userSnapshot.child("status").getValue(String.class);
 
@@ -157,6 +159,9 @@ public class LeaveStatusFragment extends Fragment {
 
                     adapter.notifyDataSetChanged();
                 }
+                }else {
+                    showNoDataMessage();
+                }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
@@ -180,5 +185,8 @@ public class LeaveStatusFragment extends Fragment {
         if (cardView != cardRejected) {
             cardRejected.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red));
         }
+    }
+    private void showNoDataMessage() {
+        noDataText.setVisibility(View.VISIBLE);
     }
 }

@@ -56,8 +56,7 @@
                         android:layout_height="65dp"
                         android:layout_centerHorizontal="true"
                         android:padding="2dp"
-                        android:background="#1566e0"
-                        android:src="@{user.profileImg}" />
+                        android:background="#1566e0" />
 
                 </RelativeLayout>
 
