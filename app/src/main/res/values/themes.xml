@@ -61,6 +61,11 @@
         <item name="boxStrokeColor">@color/blue</item>
     </style>
 
+    <style name="DatePickerTheme" parent="Theme.AppCompat.Light.Dialog">
+        <item name="colorAccent">@color/blue</item>
+    </style>
+
+
 
 
 

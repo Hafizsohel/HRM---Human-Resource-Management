@@ -3,6 +3,7 @@ package com.suffixit.hrm_suffix.view.Fragment;
 import android.Manifest;
 import android.app.DatePickerDialog;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -15,6 +16,7 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.core.app.ActivityCompat;
 import androidx.core.app.NotificationCompat;
 import androidx.core.app.NotificationManagerCompat;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Lifecycle;
 import androidx.lifecycle.LifecycleObserver;
@@ -25,6 +27,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.RadioButton;
@@ -35,6 +38,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
@@ -68,8 +72,7 @@ public class LeaveApplicationFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        binding = FragmentLeaveApplicationBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
+        binding = FragmentLeaveApplicationBinding.inflate(getLayoutInflater());
 
         mAuth = FirebaseAuth.getInstance();
         pleaseWaitText = binding.getRoot().findViewById(R.id.pleaseWaitText);
@@ -187,6 +190,10 @@ public class LeaveApplicationFragment extends Fragment {
                     binding.editTextContactNumber.requestFocus();
                     Toast.makeText(getContext(), "Please enter alternative contact number", Toast.LENGTH_SHORT).show();
                     return;
+                }else if(!validateNumber(binding.editTextContactNumber.getText().toString())) {
+                    binding.editTextContactNumber.requestFocus();
+                    Toast.makeText(getContext(), "Enter correct phone number", Toast.LENGTH_SHORT).show();
+                    return;
                 }
                 DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child("leave_applications");
 
@@ -220,7 +227,7 @@ public class LeaveApplicationFragment extends Fragment {
                 }
         });
 
-        return view;
+        return binding.getRoot();
     }
 
     private void showDatePickerDialog(final EditText editText) {
@@ -231,26 +238,36 @@ public class LeaveApplicationFragment extends Fragment {
 
         DatePickerDialog datePickerDialog = new DatePickerDialog(
                 requireContext(),
-                new DatePickerDialog.OnDateSetListener() {
-                    @Override
-                    public void onDateSet(android.widget.DatePicker view, int year, int month, int dayOfMonth) {
-                        Calendar selectedCalendar = Calendar.getInstance();
-                        selectedCalendar.set(year, month, dayOfMonth);
+                R.style.DatePickerTheme,
 
-                        if (selectedCalendar.before(calendar)) {
-                            Toast.makeText(requireContext(), "Please select a future or current date", Toast.LENGTH_SHORT).show();
-                        } else {
-                            String selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
-                            editText.setText(selectedDate);
-                        }
+
+
+                (view, year, month, dayOfMonth) -> {
+                    Calendar selectedCalendar = Calendar.getInstance();
+                    selectedCalendar.set(year, month, dayOfMonth);
+
+                    if (selectedCalendar.before(calendar)) {
+                        Toast.makeText(requireContext(), "Please select a future or current date", Toast.LENGTH_SHORT).show();
+                    } else {
+                        String selectedDate = String.format("%04d-%02d-%02d", year, month + 1, dayOfMonth);
+                        editText.setText(selectedDate);
                     }
                 },
+
                 currentYear,
                 currentMonth,
                 currentDay
-        );
-        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
 
+        );
+
+        datePickerDialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
         datePickerDialog.show();
+
+        datePickerDialog.getButton(DatePickerDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(getContext(),R.color.blue));
+        datePickerDialog.getButton(DatePickerDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(getContext(),R.color.blue));
     }
+    public boolean validateNumber(String mobileNumber) {
+        return mobileNumber.matches("^(?:\\+88|88)?(01[3-9]\\d{8})$");
+    }
+
 }

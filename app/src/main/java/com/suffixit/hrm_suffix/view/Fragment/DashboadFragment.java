@@ -42,8 +42,7 @@ public class DashboadFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentDashboadBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
+        binding = FragmentDashboadBinding.inflate(getLayoutInflater());
 
         localStorage = new AppPreference(requireContext());
         String userId = localStorage.getUserName();
@@ -60,22 +59,9 @@ public class DashboadFragment extends Fragment {
                     String designation = document.getString("Designation");
                     String imageUrl = document.getString("profileImg");
 
-                    UserModel user = new UserModel(userId, name, designation);
+                    UserModel user = new UserModel(userId, name, designation,imageUrl);
                     binding.setUser(user);
 
-
-                    if (isAdded() && getActivity() != null && imageUrl != null && !imageUrl.isEmpty()) {
-                        Uri imageUrlUri = Uri.parse(imageUrl);
-                        Glide.with(this)
-                                .load(imageUrlUri)
-                                .into(binding.imgEmployeeProfile);
-                    } else {
-                        binding.imgEmployeeProfile.setImageResource(R.drawable.img);
-                    }
-                    
-                    if (imageUrl != null && !imageUrl.isEmpty()) {
-                        Picasso.get().load(imageUrl).into(profileImageView);
-                    }
                     if (getActivity() != null) {
                         TextView drawerName = getActivity().findViewById(R.id.name);
                         CircleImageView drawerProfileImage = getActivity().findViewById(R.id.profileImg);
@@ -86,7 +72,6 @@ public class DashboadFragment extends Fragment {
                     }
                     break;
                 }
-
                 if (!userFound) {
                 }
             } else {
@@ -95,7 +80,7 @@ public class DashboadFragment extends Fragment {
         });
 
         profileImageView = binding.imgEmployeeProfile;
-         return view;
+         return binding.getRoot();
     }
 
     @Override

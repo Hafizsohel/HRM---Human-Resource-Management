@@ -1,17 +1,27 @@
 package com.suffixit.hrm_suffix.models;
 
+import android.widget.ImageView;
+
+import androidx.databinding.BindingAdapter;
+
+import com.bumptech.glide.Glide;
+
+import de.hdodenhof.circleimageview.CircleImageView;
+
+
 public class UserModel {
     private String userId;
     private String name;
     private String Designation;
-
+    private String profileImg;
     public UserModel() {
     }
 
-    public UserModel(String userId, String name, String designation) {
+    public UserModel(String userId, String name, String designation, String profileImg) {
         this.userId = userId;
         this.name = name;
         Designation = designation;
+        this.profileImg = profileImg;
     }
 
     public String getUserId() {
@@ -38,6 +48,13 @@ public class UserModel {
         Designation = designation;
     }
 
+    public String getProfileImg() {
+        return profileImg;
+    }
+
+    public void setProfileImg(String profileImg) {
+        this.profileImg = profileImg;
+    }
 
     @Override
     public String toString() {
@@ -45,6 +62,14 @@ public class UserModel {
                 "userId='" + userId + '\'' +
                 ", name='" + name + '\'' +
                 ", Designation='" + Designation + '\'' +
+                ", profileImg='" + profileImg + '\'' +
                 '}';
+    }
+
+    @BindingAdapter("android:loadImage")
+    public static void loadImage(ImageView imageView, String profileImg){
+        Glide.with(imageView)
+                .load(profileImg)
+                .into(imageView);
     }
 }

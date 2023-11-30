@@ -63,6 +63,7 @@ public class LeaveStatusFragment extends Fragment {
         approvedCountTextView = view.findViewById(R.id.approvedCount);
         rejectedCountTextView = view.findViewById(R.id.rejectedCount);
         noDataText = view.findViewById(R.id.no_data_text_view);
+
         cardPending.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -173,8 +174,9 @@ public class LeaveStatusFragment extends Fragment {
 
     private void changeCardColor(CardView cardView) {
 
-        int color = ContextCompat.getColor(requireContext(), R.color.blue);
-        cardView.setCardBackgroundColor(color);
+            int color = ContextCompat.getColor(requireContext(), R.color.blue);
+            cardView.setCardBackgroundColor(color);
+
 
         if (cardView != cardPending) {
             cardPending.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gradiant));
@@ -186,6 +188,7 @@ public class LeaveStatusFragment extends Fragment {
             cardRejected.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red));
         }
     }
+
     private void showNoDataMessage() {
         noDataText.setVisibility(View.VISIBLE);
     }

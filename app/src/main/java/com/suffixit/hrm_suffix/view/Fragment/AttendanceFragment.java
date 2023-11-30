@@ -372,7 +372,6 @@ public class AttendanceFragment extends Fragment {
         });
     }
 
-    // Method to show a message when no data is found
     private void showNoDataMessage() {
         noDataText.setVisibility(View.VISIBLE);
     }
@@ -420,7 +419,6 @@ public class AttendanceFragment extends Fragment {
             }
         });
     }
-
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
@@ -432,7 +430,6 @@ public class AttendanceFragment extends Fragment {
             }
         });
     }
-
     interface OnCheckedInCallback {
         void onCheckedIn(boolean checkedIn);
     }
@@ -450,7 +447,6 @@ public class AttendanceFragment extends Fragment {
                 }
                 callback.onCheckedIn(checkedIn);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
             }
