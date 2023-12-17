@@ -1,6 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+        <import type="com.suffixit.hrm_suffix.models.EmplyeeModel" />
+
+        <variable
+            name="employee"
+            type="EmplyeeModel" />
+    </data>
+
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="70dp"
     android:layout_marginStart="8dp"
@@ -14,7 +25,8 @@
         android:layout_width="70dp"
         android:layout_height="70dp"
         android:layout_gravity="center"
-        android:src="@drawable/circle_shape" />
+        android:src="@drawable/placeholder"
+        android:loadImage="@{employee.profileImg}" />
 
     <LinearLayout
         android:layout_width="wrap_content"
@@ -27,18 +39,21 @@
             android:id="@+id/empID"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="SIL-163"
+            android:hint="SIL-163"
             android:textColor="#000000"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:text="@{employee.username}"/>
 
         <TextView
             android:id="@+id/empName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Hafizur Rahman"
+            android:hint="Hafizur Rahman"
             android:textColor="#000000"
-            android:textStyle="bold" />
+            android:textStyle="bold"
+            android:text="@{employee.name}"/>
 
     </LinearLayout>
 
 </RelativeLayout>
+</layout>

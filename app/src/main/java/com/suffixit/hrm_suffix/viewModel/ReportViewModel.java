@@ -1,24 +1,30 @@
 package com.suffixit.hrm_suffix.viewModel;
 
+import android.app.Application;
+
+import androidx.annotation.NonNull;
 import androidx.lifecycle.LiveData;
 import androidx.lifecycle.ViewModel;
 
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 import com.suffixit.hrm_suffix.models.ReportModel;
 import com.suffixit.hrm_suffix.repository.ReportRepository;
 
 import java.util.List;
 
 public class ReportViewModel extends ViewModel {
-    private final ReportRepository reportRepository;
-    private LiveData<List<ReportModel>> reportLiveData;
+    private ReportRepository reportRepository;
+    private final DatabaseReference databaseReference;
 
-    public ReportViewModel() {
-        reportRepository = new ReportRepository();
-        reportLiveData = reportRepository.getReportData();
+    {
+        databaseReference = FirebaseDatabase.getInstance().getReference();
+        reportRepository = new ReportRepository(databaseReference);
     }
 
-    public LiveData<List<ReportModel>> getReportLiveData() {
-        return reportLiveData;
+    public LiveData<List<ReportModel>> getUserResponse = reportRepository.getReportModelList();
+
+    public void getUserReports(String userId) {
+        reportRepository.getUserReports(userId);
     }
 }
-

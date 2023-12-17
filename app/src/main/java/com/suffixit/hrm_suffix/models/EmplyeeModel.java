@@ -1,8 +1,13 @@
 package com.suffixit.hrm_suffix.models;
 
+import android.widget.ImageView;
+
+import androidx.databinding.BindingAdapter;
 import androidx.room.Entity;
 import androidx.room.Index;
 import androidx.room.PrimaryKey;
+
+import com.bumptech.glide.Glide;
 
 import java.io.Serializable;
 
@@ -116,6 +121,12 @@ public class EmplyeeModel implements Serializable {
                 ", PhoneNumber='" + PhoneNumber + '\'' +
                 ", profileImg='" + profileImg + '\'' +
                 '}';
+    }
+    @BindingAdapter("android:loadImage")
+    public static void loadImage(ImageView imageView, String profileImg){
+        Glide.with(imageView)
+                .load(profileImg)
+                .into(imageView);
     }
 }
 

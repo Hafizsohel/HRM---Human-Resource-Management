@@ -1,14 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
-<androidx.cardview.widget.CardView xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="horizontal"
-    android:padding="8dp"
-    android:layout_marginTop="2dp"
-    android:background="@drawable/neumorphic_background"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="3dp">
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="com.suffixit.hrm_suffix.models.AttendanceModel" />
+
+        <variable
+            name="attendance"
+            type="AttendanceModel" />
+    </data>
+
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="2dp"
+        android:background="@drawable/neumorphic_background"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        app:cardCornerRadius="8dp"
+        app:cardElevation="3dp">
 
         <RelativeLayout
             android:id="@+id/checkinOut"
@@ -16,8 +29,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="2dp"
             android:layout_marginEnd="2dp"
-            android:background="@color/white"
-            >
+            android:background="@color/white">
 
             <LinearLayout
                 android:id="@+id/layout1"
@@ -33,60 +45,66 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
+                    android:hint="Date"
                     android:textAlignment="center"
-                    android:text="Date"
                     android:textColor="@color/blue"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:text="@{attendance.date}"/>
 
                 <TextView
                     android:id="@+id/txtDay"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Day"
+                    android:hint="Day"
                     android:textAlignment="center"
                     android:textColor="@color/blue"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:text="@{attendance.day}"/>
 
                 <TextView
                     android:id="@+id/txtCheckIn"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="CheckIn"
+                    android:hint="CheckIn"
                     android:textAlignment="center"
                     android:textColor="@color/blue"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:text="@{attendance.checkInTime}"/>
 
                 <TextView
                     android:id="@+id/txtCheckOut"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="CheckOut"
+                    android:hint="CheckOut"
                     android:textAlignment="center"
                     android:textColor="@color/blue"
-                    android:textSize="12sp" />
+                    android:textSize="12sp"
+                    android:text="@{attendance.checkoutTime}"/>
 
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="80dp"
                 android:layout_height="wrap_content"
-                android:background="#bebebc"
+                android:layout_alignParentEnd="true"
                 android:layout_marginTop="4dp"
-                android:layout_alignParentEnd="true">
+                android:background="#bebebc">
 
                 <TextView
                     android:id="@+id/txtTotalHrs"
                     android:layout_width="match_parent"
                     android:layout_height="45dp"
                     android:gravity="center"
-                    android:text="Total hrs:"
+                    android:hint="Total hrs:"
                     android:textColor="@color/blue"
                     android:textSize="12sp"
-                    android:textStyle="bold" />
+                    android:textStyle="bold"
+                    app:totalHrsFormatted="@{Double.parseDouble(attendance.totalHrs)}"/>
             </LinearLayout>
         </RelativeLayout>
 
-</androidx.cardview.widget.CardView>
+    </androidx.cardview.widget.CardView>
+</layout>

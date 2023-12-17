@@ -4,66 +4,69 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
+
+        <import type="com.suffixit.hrm_suffix.models.ReportModel" />
+
         <variable
             name="reportModel"
-            type="com.suffixit.hrm_suffix.models.ReportModel" />
+            type="ReportModel" />
     </data>
 
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="50dp"
-    android:layout_marginStart="4dp"
-    android:layout_marginTop="4dp"
-    android:layout_marginEnd="4dp"
-    android:background="@drawable/neumorphic_background"
-    android:padding="16dp">
-
-    <LinearLayout
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal"
-        android:weightSum="5">
+        android:layout_height="50dp"
+        android:layout_marginStart="4dp"
+        android:layout_marginTop="4dp"
+        android:layout_marginEnd="4dp"
+        android:background="@drawable/neumorphic_background"
+        android:padding="16dp">
 
-        <TextView
-            android:id="@+id/txtDate"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="06-11-23"
-            android:textColor="#000000"
-            android:textStyle="bold"
-            android:text="@{reportModel.date}"/>
+            android:orientation="horizontal"
+            android:weightSum="5">
 
-        <TextView
-            android:id="@+id/txtID"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="20dp"
-            android:hint="SIL-163"
-            android:textColor="#000000"
-            android:textStyle="bold"
-            android:text="@{reportModel.userId}"/>
+            <TextView
+                android:id="@+id/txtDate"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:hint="06-11-23"
+                android:text="@{reportModel.date}"
+                android:textColor="#000000"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/txtName"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:hint="Hafizur Rahman"
-            android:layout_marginStart="30dp"
-            android:textColor="#000000"
-            android:textStyle="bold"
-            android:text="@{reportModel.name}"/>
+            <TextView
+                android:id="@+id/txtID"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="20dp"
+                android:hint="SIL-163"
+                android:text="@{reportModel.userId}"
+                android:textColor="#000000"
+                android:textStyle="bold" />
 
-        <TextView
-            android:id="@+id/txtStatus"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="3"
-            android:hint="P"
-            android:textColor="#000000"
-            android:textStyle="bold"
-            android:gravity="center|end"
-            android:text="@{reportModel.status}"/>
-    </LinearLayout>
-</RelativeLayout>
+            <TextView
+                android:id="@+id/txtName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="30dp"
+                android:hint="Hafizur Rahman"
+                android:text="@{reportModel.name}"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+
+            <TextView
+                android:id="@+id/txtStatus"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="3"
+                android:gravity="center|end"
+                android:hint="P"
+                android:text="@{reportModel.status}"
+                android:textColor="#000000"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </RelativeLayout>
 </layout>

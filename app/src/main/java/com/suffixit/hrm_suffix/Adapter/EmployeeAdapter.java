@@ -3,6 +3,8 @@ package com.suffixit.hrm_suffix.Adapter;
 import static android.view.Gravity.CENTER;
 import static android.view.Gravity.START;
 
+import static java.security.AccessController.getContext;
+
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
@@ -22,7 +24,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.squareup.picasso.Picasso;
 import com.suffixit.hrm_suffix.R;
+import com.suffixit.hrm_suffix.databinding.EmployeeItemBinding;
+import com.suffixit.hrm_suffix.databinding.StatusListBinding;
 import com.suffixit.hrm_suffix.models.EmplyeeModel;
+import com.suffixit.hrm_suffix.models.LeaveStatusModel;
 
 import java.util.List;
 
@@ -30,39 +35,43 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.EmployeeViewHolder> {
 
-    private List<EmplyeeModel> emplyeeList;
+    private List<EmplyeeModel> employeeModelList;
     private Context context;
 
-    public EmployeeAdapter(List<EmplyeeModel> emplyeeList, Context context) {
-        this.emplyeeList = emplyeeList;
+    public EmployeeAdapter(List<EmplyeeModel> employeeModelList, Context context) {
+        this.employeeModelList = employeeModelList;
         this.context = context;
     }
+
     @NonNull
     @Override
     public EmployeeViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext())
-                .inflate(R.layout.employee_item, parent, false);
-        return new EmployeeViewHolder(view);
+
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        EmployeeItemBinding employeeItemBinding = EmployeeItemBinding.inflate(layoutInflater, parent, false);
+        return new EmployeeAdapter.EmployeeViewHolder(employeeItemBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull EmployeeAdapter.EmployeeViewHolder holder, int position) {
-        EmplyeeModel employee = emplyeeList.get(position);
-        holder.username.setText(employee.getUsername());
-        holder.nameText.setText(employee.getName());
+        EmplyeeModel employee = employeeModelList.get(position);
+        holder.employeeItemBinding.setEmployee(employee);
 
-        // Load and display the profile image using Picasso (make sure to have Picasso imported)
-        if (employee.getProfileImg() != null && !employee.getProfileImg().isEmpty()) {
-            Picasso.get().load(Uri.parse(employee.getProfileImg())).into(holder.profileImg);
-        }
 
         holder.itemView.setOnClickListener(v -> {
-            showDetailsForItem(position);
+            if (position >= 0 && position < employeeModelList.size()) {
+                showDetailsForItem(position);
+            }
         });
     }
 
+     /*   public void setData(List<EmplyeeModel> emplyeeModelList) {
+        this.employeeModelList = emplyeeModelList;
+        notifyDataSetChanged();
+    }*/
+
     private void showDetailsForItem(int position) {
-        EmplyeeModel clickedItem = emplyeeList.get(position);
+        EmplyeeModel clickedItem = employeeModelList.get(position);
 
         String detailsBuilder =
                 "User Name: " + clickedItem.getUsername() + "\n" +
@@ -72,6 +81,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
                 "Email: " + clickedItem.getEmail() + "\n" +
                 "Gender: " + clickedItem.getGender() + "\n" +
                 "Blood Group: " + clickedItem.getBloodGroup();
+
 
         LinearLayout layout = new LinearLayout(context);
         View customBottomView = LayoutInflater.from(context).inflate(R.layout.custom_dialog_bottom, null);
@@ -101,16 +111,17 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         callButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EmplyeeModel employee = emplyeeList.get(position);
+                EmplyeeModel employee = employeeModelList.get(position);
                 String phoneNumber = String.valueOf(employee.getPhoneNumber());
                 initiatePhoneDial(phoneNumber);
             }
         });
 
+
         smsButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EmplyeeModel employee = emplyeeList.get(position);
+                EmplyeeModel employee = employeeModelList.get(position);
                 String phoneNumber = String.valueOf(employee.getPhoneNumber());
                 initiateSms(phoneNumber);
             }
@@ -119,7 +130,7 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         emailButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                EmplyeeModel employee = emplyeeList.get(position);
+                EmplyeeModel employee = employeeModelList.get(position);
                 String email = String.valueOf(employee.getEmail());
                 initiateEmail(email);
             }
@@ -158,20 +169,27 @@ public class EmployeeAdapter extends RecyclerView.Adapter<EmployeeAdapter.Employ
         intent.setPackage("com.google.android.gm");
         context.startActivity(intent);
     }
+
+
     @Override
     public int getItemCount() {
-        return emplyeeList.size();
+        if (employeeModelList != null) {
+            return employeeModelList.size();
+        } else {
+            return 0;
+        }
     }
     public class EmployeeViewHolder extends RecyclerView.ViewHolder {
-        public TextView username,nameText;
-        public CircleImageView profileImg;
+        EmployeeItemBinding employeeItemBinding;
 
 
-        public EmployeeViewHolder(View itemView) {
-            super(itemView);
-            username = itemView.findViewById(R.id.empID);
-            nameText = itemView.findViewById(R.id.empName);
-            profileImg=itemView.findViewById(R.id.imgEmployee);
+        public EmployeeViewHolder(EmployeeItemBinding employeeItemBinding) {
+            super(employeeItemBinding.getRoot());
+            this.employeeItemBinding=employeeItemBinding;
+
         }
+    }
+    public void setContext(Context context) {
+        this.context = context;
     }
 }

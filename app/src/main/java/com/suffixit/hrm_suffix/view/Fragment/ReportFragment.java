@@ -1,3 +1,4 @@
+/*
 package com.suffixit.hrm_suffix.view.Fragment;
 
 import android.content.Intent;
@@ -41,11 +42,10 @@ import java.util.Locale;
 
 public class ReportFragment extends Fragment {
     private static final String TAG = "ReportFragment";
-    FragmentReportBinding binding;
+   private FragmentReportBinding binding;
     private DatabaseReference databaseReference;
-    List<ReportModel> reportModelList = new ArrayList();
+    private List<ReportModel> reportModelList = new ArrayList();
     private ReportAdapter adapter;
-    private TextView pleaseWaitText,noDataText;
     private AppPreference localStorage;
 
 
@@ -53,26 +53,20 @@ public class ReportFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         setUpOnBackPressed();
-
-        binding = FragmentReportBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
+        binding = FragmentReportBinding.inflate(getLayoutInflater());
 
         localStorage = new AppPreference(requireContext());
         String userId = localStorage.getUserName();
 
-        RecyclerView recyclerView = binding.getRoot().findViewById(R.id.recyclerId);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        adapter = new ReportAdapter(reportModelList);
-        recyclerView.setAdapter(adapter);
+        binding.recyclerId.setLayoutManager(new LinearLayoutManager(getActivity()));
+        adapter = new ReportAdapter();
+        binding.recyclerId.setAdapter(adapter);
 
-        pleaseWaitText = binding.getRoot().findViewById(R.id.pleaseWaitText);
-        noDataText = binding.getRoot().findViewById(R.id.no_data_text_view);
         databaseReference = FirebaseDatabase.getInstance().getReference();
-
         binding.reportToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboadFragment()).commit());
 
         fetchUserDataFromFirebase(userId);
-        return view;
+        return binding.getRoot();
     }
 
     private void setUpOnBackPressed() {
@@ -99,14 +93,14 @@ public class ReportFragment extends Fragment {
     }
 
     private void fetchUserDataFromFirebase(String userId) {
-        pleaseWaitText.setVisibility(View.VISIBLE);
+        binding.pleaseWaitText.setVisibility(View.VISIBLE);
         DatabaseReference usersReference = databaseReference.child("Users").child("username");
 
         Query query = usersReference.orderByChild("userId").equalTo(userId);
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                pleaseWaitText.setVisibility(View.GONE);
+                binding.pleaseWaitText.setVisibility(View.GONE);
                 reportModelList.clear();
 
                 List<String> existingDates = new ArrayList<>();
@@ -124,8 +118,6 @@ public class ReportFragment extends Fragment {
                             existingDates.add(date);
                         }
                     }
-
-                    String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
                     Calendar calendar = Calendar.getInstance();
                     for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
                         String defaultName = userSnapshot.child("name").getValue(String.class);
@@ -140,7 +132,9 @@ public class ReportFragment extends Fragment {
                         }
                     }
 
-                    adapter.notifyDataSetChanged();
+                    if (reportModelList != null) {
+                        adapter.setData(reportModelList);
+                    }
                 } else {
                     showNoDataMessage();
                 }
@@ -148,13 +142,100 @@ public class ReportFragment extends Fragment {
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                pleaseWaitText.setVisibility(View.GONE);
+                binding.pleaseWaitText.setVisibility(View.GONE);
                 Toast.makeText(getActivity(), "Failed to fetch data", Toast.LENGTH_SHORT).show();
                 Log.e(TAG, "Failed to fetch data: " + databaseError.getMessage());
             }
         });
     }
+
     private void showNoDataMessage() {
-        noDataText.setVisibility(View.VISIBLE);
+        binding.pleaseWaitText.setVisibility(View.VISIBLE);
+    }
+}*/
+package com.suffixit.hrm_suffix.view.Fragment;
+
+import android.content.Intent;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+
+import androidx.activity.OnBackPressedCallback;
+import androidx.fragment.app.Fragment;
+import androidx.lifecycle.Lifecycle;
+import androidx.lifecycle.LifecycleObserver;
+import androidx.lifecycle.OnLifecycleEvent;
+import androidx.lifecycle.ViewModelProvider;
+import androidx.recyclerview.widget.LinearLayoutManager;
+
+import com.suffixit.hrm_suffix.Adapter.ReportAdapter;
+import com.suffixit.hrm_suffix.R;
+import com.suffixit.hrm_suffix.databinding.FragmentReportBinding;
+import com.suffixit.hrm_suffix.preference.AppPreference;
+import com.suffixit.hrm_suffix.view.Activities.MainActivity;
+import com.suffixit.hrm_suffix.viewModel.ReportViewModel;
+
+public class ReportFragment extends Fragment {
+    private ReportViewModel reportViewModel;
+    private AppPreference localStorage;
+    private ReportAdapter adapter;
+    private FragmentReportBinding binding;
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        binding = FragmentReportBinding.inflate(getLayoutInflater());
+
+        reportViewModel= new ViewModelProvider(this).get(ReportViewModel.class);
+
+        setUpOnBackPressed();
+        localStorage = new AppPreference(requireContext());
+        String userId = localStorage.getUserName();
+
+        adapter = new ReportAdapter();
+        binding.recyclerId.setLayoutManager(new LinearLayoutManager(getActivity()));
+        binding.recyclerId.setAdapter(adapter);
+
+        reportViewModel.getUserReports(userId);
+
+        reportViewModel.getUserResponse.observe(getViewLifecycleOwner(), reportModels -> {
+            if (reportModels != null) {
+                adapter.setData(reportModels);
+                binding.pleaseWaitText.setVisibility(View.GONE);
+            } else {
+                showNoDataMessage();
+            }
+        });
+
+        binding.reportToolbar.setOnClickListener(view1 -> getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboadFragment()).commit());
+        return binding.getRoot();
+    }
+
+    private void showNoDataMessage() {
+        binding.noDataTextView.setVisibility(View.VISIBLE);
+    }
+
+    private void setUpOnBackPressed() {
+        OnBackPressedCallback onBackPressedCallback = new OnBackPressedCallback(true) {
+            @Override
+            public void handleOnBackPressed() {
+                if (isAdded()) {
+                    setEnabled(false);
+                    Intent intent = new Intent(getActivity(), MainActivity.class);
+                    startActivity(intent);
+                    getActivity().finish();
+                }
+
+            }
+        };
+        requireActivity().getOnBackPressedDispatcher().addCallback(getViewLifecycleOwner(), onBackPressedCallback);
+
+        getLifecycle().addObserver(new LifecycleObserver() {
+            @OnLifecycleEvent(Lifecycle.Event.ON_DESTROY)
+            public void onDestroy() {
+                onBackPressedCallback.remove();
+            }
+        });
     }
 }
+

@@ -40,27 +40,32 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class EmployeeFragment extends Fragment {
-
-    private TextView pleaseWaitText;
     private FragmentEmployeeBinding binding;
-    private RecyclerView recyclerView;
-    private EmployeeAdapter employeeAdapter;
-    private List<EmplyeeModel> employeeList;
-    private CircleImageView profileImageView;
+    private EmployeeAdapter adapter;
+    private List<EmplyeeModel> employeeList = new ArrayList<>();;
 
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentEmployeeBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
+        binding = FragmentEmployeeBinding.inflate(getLayoutInflater());
 
-        pleaseWaitText = binding.pleaseWaitText;
         setUpOnBackPressed();
-        adaper();
         fetchDataFromFirebase();
 
-        return view;
+
+        binding.recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new EmployeeAdapter(employeeList, getContext());
+        binding.recyclerView.setAdapter(adapter);
+
+        binding.employeeToolbar.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboadFragment()).commit();
+            }
+        });
+
+        return binding.getRoot();
     }
 
     private void setUpOnBackPressed() {
@@ -87,15 +92,15 @@ public class EmployeeFragment extends Fragment {
 
 
     private void fetchDataFromFirebase() {
-        pleaseWaitText.setVisibility(View.VISIBLE);
+        binding.pleaseWaitText.setVisibility(View.VISIBLE);
         FirebaseFirestore db = FirebaseFirestore.getInstance();
         CollectionReference usersCollection = db.collection("Users");
 
         usersCollection.get().addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
             @Override
             public void onSuccess(QuerySnapshot documentSnapshots) {
-                pleaseWaitText.setVisibility(View.GONE);
-                employeeList.clear(); // Clear the list before adding data
+                binding.pleaseWaitText.setVisibility(View.GONE);
+                employeeList.clear();
                 for (QueryDocumentSnapshot document : documentSnapshots) {
                     EmplyeeModel employee = document.toObject(EmplyeeModel.class);
                     employeeList.add(employee);
@@ -106,33 +111,13 @@ public class EmployeeFragment extends Fragment {
                         return employee1.getUsername().compareTo(employee2.getUsername());
                     }
                 });
-                employeeAdapter.notifyDataSetChanged();
+               adapter.notifyDataSetChanged();
             }
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                pleaseWaitText.setVisibility(View.GONE);
+                binding.pleaseWaitText.setVisibility(View.GONE);
                 Log.e("EmployeeFragment", "Failed to fetch data: " + e.getMessage());
-            }
-        });
-    }
-
-    private void adaper() {
-        recyclerView = binding.recyclerView;
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        employeeList = new ArrayList<>();
-        employeeAdapter = new EmployeeAdapter(employeeList, getContext());
-        recyclerView.setAdapter(employeeAdapter);
-    }
-
-    @Override
-    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
-        super.onViewCreated(view, savedInstanceState);
-
-        binding.employeeToolbar.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                getActivity().getSupportFragmentManager().beginTransaction().replace(R.id.FrameLayoutID, new DashboadFragment()).commit();
             }
         });
     }

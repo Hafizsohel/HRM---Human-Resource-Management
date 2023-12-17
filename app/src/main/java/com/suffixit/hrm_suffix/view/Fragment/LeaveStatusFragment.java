@@ -38,13 +38,8 @@ public class LeaveStatusFragment extends Fragment {
     FragmentLeaveStatusBinding binding;
     private DatabaseReference databaseReference;
     private LeaveStatusAdapter adapter;
-    private List<LeaveStatusModel> leaveStatusList;
+    private List<LeaveStatusModel> leaveStatusList = new ArrayList<>();;
     private AppPreference localStorage;
-    private TextView pleaseWaitText;
-    private CardView cardPending,cardApproved,cardRejected;
-    private Toolbar toolbar;
-
-    private TextView pendingCountTextView, approvedCountTextView, rejectedCountTextView,noDataText;
     private int pendingCount = 0;
     private int approvedCount = 0;
     private int rejectedCount = 0;
@@ -53,38 +48,28 @@ public class LeaveStatusFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         binding = FragmentLeaveStatusBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
 
-        toolbar= view.findViewById(R.id.status_toolbar);
-        cardPending = view.findViewById(R.id.cardPeding);
-        cardApproved = view.findViewById(R.id.cardApproved);
-        cardRejected = view.findViewById(R.id.cardRejected);
-        pendingCountTextView = view.findViewById(R.id.pendingCount);
-        approvedCountTextView = view.findViewById(R.id.approvedCount);
-        rejectedCountTextView = view.findViewById(R.id.rejectedCount);
-        noDataText = view.findViewById(R.id.no_data_text_view);
-
-        cardPending.setOnClickListener(new View.OnClickListener() {
+        binding.cardPeding.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fetchLeaveStatus(localStorage.getUserName(), "Pending");
-                changeCardColor(cardPending);
+                changeCardColor(binding.cardPeding);
             }
         });
 
-        cardApproved.setOnClickListener(new View.OnClickListener() {
+        binding.cardApproved.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fetchLeaveStatus(localStorage.getUserName(), "Approved");
-                changeCardColor(cardApproved);
+                changeCardColor(binding.cardApproved);
             }
         });
 
-        cardRejected.setOnClickListener(new View.OnClickListener() {
+        binding.cardRejected.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 fetchLeaveStatus(localStorage.getUserName(), "Rejected");
-                changeCardColor(cardRejected);
+                changeCardColor(binding.cardRejected);
             }
         });
 
@@ -94,10 +79,8 @@ public class LeaveStatusFragment extends Fragment {
 
         localStorage = new AppPreference(requireContext());
         String userName = localStorage.getUserName();
-        pleaseWaitText=view.findViewById(R.id.pleaseWaitText);
-
-        if (toolbar != null) {
-            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+        if (binding.statusToolbar != null) {
+            binding.statusToolbar.setNavigationOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View view) {
                     requireActivity().onBackPressed();
@@ -105,25 +88,23 @@ public class LeaveStatusFragment extends Fragment {
             });
         }
 
-        RecyclerView recyclerView = view.findViewById(R.id.recyclerStatusId);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        leaveStatusList = new ArrayList<>();
-        adapter = new LeaveStatusAdapter(leaveStatusList);
-        recyclerView.setAdapter(adapter);
+        binding.recyclerStatusId.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new LeaveStatusAdapter();
+        binding.recyclerStatusId.setAdapter(adapter);
 
         fetchLeaveStatus(localStorage.getUserName(), "Approved");
 
-        return view;
+        return binding.getRoot();
     }
 
     private void fetchLeaveStatus(String userId, String statusFilter) {
-        pleaseWaitText.setVisibility(View.VISIBLE);
+        binding.pleaseWaitText.setVisibility(View.VISIBLE);
         Query usersReference = databaseReference.orderByChild("userId").equalTo(userId);
 
         usersReference.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                pleaseWaitText.setVisibility(View.GONE);
+                binding.pleaseWaitText.setVisibility(View.GONE);
                 leaveStatusList.clear();
 
                 approvedCount = 0;
@@ -154,19 +135,21 @@ public class LeaveStatusFragment extends Fragment {
 
                         }
                     }
-                    approvedCountTextView.setText(String.valueOf(approvedCount));
-                    pendingCountTextView.setText(String.valueOf(pendingCount));
-                    rejectedCountTextView.setText(String.valueOf(rejectedCount));
+                    binding.approvedCount.setText(String.valueOf(approvedCount));
+                    binding.pendingCount.setText(String.valueOf(pendingCount));
+                    binding.rejectedCount.setText(String.valueOf(rejectedCount));
 
-                    adapter.notifyDataSetChanged();
+                    if (leaveStatusList != null) {
+                        adapter.setData(leaveStatusList);
+                    }else {
+                        showNoDataMessage();
+                    }
                 }
-                }else {
-                    showNoDataMessage();
                 }
             }
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                pleaseWaitText.setVisibility(View.GONE);
+                binding.pleaseWaitText.setVisibility(View.GONE);
                 Toast.makeText(getActivity(), "Failed to fetch data", Toast.LENGTH_SHORT).show();
             }
         });
@@ -177,19 +160,17 @@ public class LeaveStatusFragment extends Fragment {
             int color = ContextCompat.getColor(requireContext(), R.color.blue);
             cardView.setCardBackgroundColor(color);
 
-
-        if (cardView != cardPending) {
-            cardPending.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gradiant));
+        if (cardView != binding.cardPeding) {
+            binding.cardPeding.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.gradiant));
         }
-        if (cardView != cardApproved) {
-            cardApproved.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green));
+        if (cardView != binding.cardApproved) {
+            binding.cardApproved.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.green));
         }
-        if (cardView != cardRejected) {
-            cardRejected.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red));
+        if (cardView != binding.cardRejected) {
+            binding.cardRejected.setCardBackgroundColor(ContextCompat.getColor(requireContext(), R.color.red));
         }
     }
-
     private void showNoDataMessage() {
-        noDataText.setVisibility(View.VISIBLE);
+        binding.noDataTextView.setVisibility(View.VISIBLE);
     }
 }

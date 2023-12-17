@@ -8,36 +8,34 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 import com.suffixit.hrm_suffix.R;
+import com.suffixit.hrm_suffix.databinding.CheckinCheckoutListBinding;
+import com.suffixit.hrm_suffix.databinding.ScrumListBinding;
 import com.suffixit.hrm_suffix.models.AttendanceModel;
+import com.suffixit.hrm_suffix.models.ReportModel;
 
 import java.util.List;
 
 public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.ViewHolder> {
     private Context context;
-    private List<AttendanceModel> checkinCheckoutList;
+    private List<AttendanceModel> attendanceModelList;
 
-    public AttendanceAdapter(Context context, List<AttendanceModel> checkinCheckoutList) {
-        this.context = context;
-        this.checkinCheckoutList = checkinCheckoutList;
-    }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(context).inflate(R.layout.checkin_checkout_list, parent, false);
-        return new ViewHolder(view);
+
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        CheckinCheckoutListBinding checkinCheckoutListBinding = CheckinCheckoutListBinding.inflate(layoutInflater, parent, false);
+        return new AttendanceAdapter.ViewHolder(checkinCheckoutListBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        AttendanceModel item = checkinCheckoutList.get(checkinCheckoutList.size() - 1 - position);
 
-        holder.txtDate.setText(item.getDate());
-        holder.txtDay.setText(item.getDay());
-        holder.txtCheckIn.setText(item.getCheckInTime());
-        holder.txtCheckOut.setText(item.getCheckoutTime());
-        holder.txtTotalHrs.setText(item.getTotalHrs());
-        holder.txtTotalHrs.setText(formatTotalHrsString(Double.parseDouble(item.getTotalHrs())));
+
+
+        AttendanceModel attendance = attendanceModelList.get(attendanceModelList.size() - 1 - position);
+        holder.checkinCheckoutListBinding.setAttendance(attendance);
 
     }
 
@@ -48,22 +46,26 @@ public class AttendanceAdapter extends RecyclerView.Adapter<AttendanceAdapter.Vi
         return String.format("%d:%02d %s", hours, minutes, (hours >= 12 ? "h" : "m"));
     }
 
-
+    public void setData(List<AttendanceModel> attendanceModelList) {
+        this.attendanceModelList = attendanceModelList;
+        notifyDataSetChanged();
+    }
     @Override
     public int getItemCount() {
-        return Math.min(checkinCheckoutList.size(), 30);
+        if (attendanceModelList != null) {
+            return Math.min(attendanceModelList.size(), 30);
+        } else {
+            return 0;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView txtDate, txtDay, txtCheckIn, txtCheckOut, txtTotalHrs;
 
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            txtDate = itemView.findViewById(R.id.txtDate);
-            txtDay = itemView.findViewById(R.id.txtDay);
-            txtCheckIn = itemView.findViewById(R.id.txtCheckIn);
-            txtCheckOut = itemView.findViewById(R.id.txtCheckOut);
-            txtTotalHrs = itemView.findViewById(R.id.txtTotalHrs);
+        CheckinCheckoutListBinding checkinCheckoutListBinding;
+
+        public ViewHolder(@NonNull CheckinCheckoutListBinding checkinCheckoutListBinding) {
+            super(checkinCheckoutListBinding.getRoot());
+            this.checkinCheckoutListBinding=checkinCheckoutListBinding;
         }
     }
 }

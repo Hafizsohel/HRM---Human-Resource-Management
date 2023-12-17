@@ -221,7 +221,7 @@
                     android:visibility="visible" />
 
                 <TextView
-                    android:id="@+id/no_data_text_view"
+                    android:id="@+id/noDataTextView"
                     android:layout_width="match_parent"
                     android:layout_height="650dp"
                     android:layout_centerInParent="true"

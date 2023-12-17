@@ -40,6 +40,7 @@ import com.suffixit.hrm_suffix.Adapter.AttendanceAdapter;
 import com.suffixit.hrm_suffix.R;
 import com.suffixit.hrm_suffix.databinding.FragmentAttendanceBinding;
 import com.suffixit.hrm_suffix.models.AttendanceModel;
+import com.suffixit.hrm_suffix.models.ReportModel;
 import com.suffixit.hrm_suffix.preference.AppPreference;
 import com.suffixit.hrm_suffix.view.Activities.MainActivity;
 
@@ -54,11 +55,9 @@ import java.util.Locale;
 public class AttendanceFragment extends Fragment {
     private static final String TAG = "AttendanceFragment";
     private FragmentAttendanceBinding binding;
-    private TextView pleaseWaitText, noDataText;
     private DatabaseReference databaseReference;
-    private RecyclerView recyclerView;
-    private AttendanceAdapter attendanceAdapter;
-    private List<AttendanceModel> employeeList;
+    private AttendanceAdapter adapter;
+    private List<AttendanceModel> attendanceModelList= new ArrayList();;
     private SharedPreferences sharedPreferences;
     private AppPreference localStorage;
     private boolean hasCheckedInForDay = false;
@@ -67,8 +66,7 @@ public class AttendanceFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentAttendanceBinding.inflate(inflater, container, false);
-        View view = binding.getRoot();
+        binding = FragmentAttendanceBinding.inflate(getLayoutInflater());
 
         sharedPreferences = requireActivity().getSharedPreferences("MyPrefs", Context.MODE_PRIVATE);
 
@@ -101,16 +99,12 @@ public class AttendanceFragment extends Fragment {
             }
         });
 
-        pleaseWaitText = binding.getRoot().findViewById(R.id.pleaseWaitText);
-        noDataText = binding.getRoot().findViewById(R.id.no_data_text_view);
         autoCheckoutAtMidnight();
         setUpOnBackPressed();
-        recyclerView = binding.recyclerViewId;
-        employeeList = new ArrayList<>();
 
-        attendanceAdapter = new AttendanceAdapter(getActivity(), employeeList);
-        recyclerView.setLayoutManager(new LinearLayoutManager(getContext()));
-        recyclerView.setAdapter(attendanceAdapter);
+        binding.recyclerViewId.setLayoutManager(new LinearLayoutManager(getContext()));
+        adapter = new AttendanceAdapter();
+        binding.recyclerViewId.setAdapter(adapter);
 
         String savedCheckInTime = sharedPreferences.getString(PREFS_KEY_CHECKIN_TIME, "");
 
@@ -132,7 +126,6 @@ public class AttendanceFragment extends Fragment {
                     SharedPreferences.Editor editor = sharedPreferences.edit();
                     editor.putString(PREFS_KEY_CHECKIN_TIME, checkInTime);
                     editor.apply();
-
 
 
                     String currentDate = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault()).format(new Date());
@@ -162,9 +155,11 @@ public class AttendanceFragment extends Fragment {
                                                 String fullName = name;
 
                                                 AttendanceModel userDetails = new AttendanceModel(username, fullName, currentDate, currentDay, checkInTime, checkoutTime, totalHrs);
-                                                employeeList.add(userDetails);
-                                                attendanceAdapter.notifyDataSetChanged();
+                                                attendanceModelList.add(userDetails);
 
+                                                if (attendanceModelList != null) {
+                                                    adapter.setData(attendanceModelList);
+                                                }
                                                 DatabaseReference checkInRef = FirebaseDatabase.getInstance().getReference().child("Users").child("username").push();
                                                 checkInRef.setValue(userDetails)
                                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -215,7 +210,9 @@ public class AttendanceFragment extends Fragment {
                                         snapshot.getRef().child("checkoutTime").setValue(finalCheckoutTime);
                                         snapshot.getRef().child("totalHrs").setValue(String.format("%.2f", totalHrs));
                                     }
-                                    attendanceAdapter.notifyDataSetChanged();
+                                    if (attendanceModelList != null) {
+                                        adapter.setData(attendanceModelList);
+                                    }
 
                                     SharedPreferences.Editor editor = sharedPreferences.edit();
                                     editor.remove(PREFS_KEY_CHECKIN_TIME);
@@ -246,7 +243,7 @@ public class AttendanceFragment extends Fragment {
                 updateDateAndDay();
             }
         });
-        return view;
+        return binding.getRoot();
     }
 
     private double calculateTotalHours(String checkInTime, String checkoutTime) {
@@ -288,7 +285,9 @@ public class AttendanceFragment extends Fragment {
                                 snapshot.getRef().child("totalHrs").setValue(String.format("%.2f", totalHrs));
                             }
 
-                            attendanceAdapter.notifyDataSetChanged();
+                            if (attendanceModelList != null) {
+                                adapter.setData(attendanceModelList);
+                            }
 
                             SharedPreferences.Editor editor = sharedPreferences.edit();
                             editor.remove(PREFS_KEY_CHECKIN_TIME);
@@ -343,37 +342,39 @@ public class AttendanceFragment extends Fragment {
     }
 
     private void fetchDataFromFirebase(String userId) {
-        pleaseWaitText.setVisibility(View.VISIBLE);
+        binding.pleaseWaitText.setVisibility(View.VISIBLE);
         Query query = databaseReference.orderByChild("userId").equalTo(userId);
 
         query.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                pleaseWaitText.setVisibility(View.GONE);
-                employeeList.clear();
+                binding.pleaseWaitText.setVisibility(View.GONE);
+                attendanceModelList.clear();
 
                 if (dataSnapshot.exists() && dataSnapshot.getChildrenCount() > 0) {
-                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
-                    Log.d("FirebaseData", snapshot.getValue().toString());
-                    AttendanceModel attendance = snapshot.getValue(AttendanceModel.class);
-                    employeeList.add(attendance);
-                }
-                attendanceAdapter.notifyDataSetChanged();
-            } else{
-                    showNoDataMessage();
+                    for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                        Log.d("FirebaseData", snapshot.getValue().toString());
+                        AttendanceModel attendance = snapshot.getValue(AttendanceModel.class);
+                        attendanceModelList.add(attendance);
+                    }
+                    if (attendanceModelList != null) {
+                        adapter.setData(attendanceModelList);
+                    } else {
+                        showNoDataMessage();
+                    }
                 }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
-                pleaseWaitText.setVisibility(View.GONE);
+                binding.pleaseWaitText.setVisibility(View.GONE);
                 Toast.makeText(getActivity(), "Failed to fetch data", Toast.LENGTH_SHORT).show();
             }
         });
     }
 
     private void showNoDataMessage() {
-        noDataText.setVisibility(View.VISIBLE);
+        binding.noDataTextView.setVisibility(View.VISIBLE);
     }
 
     private String getCurrentTime() {

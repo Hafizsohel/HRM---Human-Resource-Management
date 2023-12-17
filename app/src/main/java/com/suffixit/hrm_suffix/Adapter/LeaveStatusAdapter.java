@@ -9,46 +9,52 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.suffixit.hrm_suffix.R;
+import com.suffixit.hrm_suffix.databinding.ScrumListBinding;
+import com.suffixit.hrm_suffix.databinding.StatusListBinding;
 import com.suffixit.hrm_suffix.models.LeaveStatusModel;
+import com.suffixit.hrm_suffix.models.ReportModel;
 
 import java.util.List;
 
 public class LeaveStatusAdapter extends RecyclerView.Adapter<LeaveStatusAdapter.ViewHolder> {
     private List<LeaveStatusModel> leaveStatusModelList;
 
-    public LeaveStatusAdapter(List<LeaveStatusModel> leaveStatusModelList) {
-        this.leaveStatusModelList = leaveStatusModelList;
-    }
 
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.status_list, parent, false);
-        return new ViewHolder(view);
+
+        LayoutInflater layoutInflater = LayoutInflater.from(parent.getContext());
+        StatusListBinding statusListBinding = StatusListBinding.inflate(layoutInflater, parent, false);
+        return new LeaveStatusAdapter.ViewHolder(statusListBinding);
     }
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         LeaveStatusModel status = leaveStatusModelList.get(position);
+        holder.statusListBinding.setLeave(status);
+    }
 
-        if (status != null) {
-            holder.txtDateOfApplication.setText(status.getDateOfApplication());
-            holder.txtUserId.setText(status.getUserId());
-        }
+    public void setData(List<LeaveStatusModel> leaveStatusModelList) {
+        this.leaveStatusModelList = leaveStatusModelList;
+        notifyDataSetChanged();
     }
 
     @Override
     public int getItemCount() {
-        return leaveStatusModelList.size();
+        if (leaveStatusModelList != null) {
+            return Math.min(leaveStatusModelList.size(), 30);
+        } else {
+            return 0;
+        }
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private TextView txtDateOfApplication,txtUserId;
+        StatusListBinding statusListBinding;
 
-        public ViewHolder(@NonNull View itemView) {
-            super(itemView);
-            txtDateOfApplication = itemView.findViewById(R.id.txtApplicationDate);
-            txtUserId = itemView.findViewById(R.id.txtUserID);
+        public ViewHolder(StatusListBinding statusListBinding) {
+            super(statusListBinding.getRoot());
+            this.statusListBinding = statusListBinding;
         }
     }
 }
