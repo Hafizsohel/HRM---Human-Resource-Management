@@ -31,6 +31,14 @@ public class LeaveStatusModel {
         this.dateOfApplication = dateOfApplication;
     }
 
+    public String getStatus() {
+        return status;
+    }
+
+    public void setStatus(String status) {
+        this.status = status;
+    }
+
     @Override
     public String toString() {
         return "LeaveStatusModel{" +
@@ -38,5 +46,5 @@ public class LeaveStatusModel {
                 ", dateOfApplication='" + dateOfApplication + '\'' +
                 ", status='" + status + '\'' +
                 '}';
-        }
+    }
 }

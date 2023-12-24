@@ -14,6 +14,7 @@ import com.suffixit.hrm_suffix.databinding.StatusListBinding;
 import com.suffixit.hrm_suffix.models.LeaveStatusModel;
 import com.suffixit.hrm_suffix.models.ReportModel;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class LeaveStatusAdapter extends RecyclerView.Adapter<LeaveStatusAdapter.ViewHolder> {
@@ -34,9 +35,14 @@ public class LeaveStatusAdapter extends RecyclerView.Adapter<LeaveStatusAdapter.
         LeaveStatusModel status = leaveStatusModelList.get(position);
         holder.statusListBinding.setLeave(status);
     }
+    public LeaveStatusAdapter() {
+        this.leaveStatusModelList = new ArrayList<>();
+    }
+
 
     public void setData(List<LeaveStatusModel> leaveStatusModelList) {
-        this.leaveStatusModelList = leaveStatusModelList;
+        this.leaveStatusModelList.clear();
+        this.leaveStatusModelList.addAll(leaveStatusModelList);
         notifyDataSetChanged();
     }
 

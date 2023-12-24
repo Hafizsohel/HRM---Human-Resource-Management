@@ -17,11 +17,11 @@ public class ReportViewModel extends ViewModel {
     private ReportRepository reportRepository;
     private final DatabaseReference databaseReference;
 
+    //init
     {
         databaseReference = FirebaseDatabase.getInstance().getReference();
         reportRepository = new ReportRepository(databaseReference);
     }
-
     public LiveData<List<ReportModel>> getUserResponse = reportRepository.getReportModelList();
 
     public void getUserReports(String userId) {
