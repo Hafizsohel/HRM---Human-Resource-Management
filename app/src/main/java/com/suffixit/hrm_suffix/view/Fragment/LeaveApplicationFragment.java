@@ -240,8 +240,6 @@ public class LeaveApplicationFragment extends Fragment {
                 requireContext(),
                 R.style.DatePickerTheme,
 
-
-
                 (view, year, month, dayOfMonth) -> {
                     Calendar selectedCalendar = Calendar.getInstance();
                     selectedCalendar.set(year, month, dayOfMonth);

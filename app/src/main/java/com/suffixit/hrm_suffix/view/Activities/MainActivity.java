@@ -18,7 +18,6 @@ public class MainActivity extends AppCompatActivity {
         setContentView(binding.getRoot());
         if (savedInstanceState == null) {
             getSupportFragmentManager().beginTransaction().add(R.id.FrameLayoutID, new DashboadFragment()).commit();
-
         }
     }
 }

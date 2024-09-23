@@ -14,11 +14,11 @@ public class LeaveStatusRepository {
 
     private MutableLiveData<List<LeaveStatusModel>> leaveStatusModelList;
     private DatabaseReference databaseReference;
+
     public LeaveStatusRepository(DatabaseReference databaseReference) {
         this.databaseReference = databaseReference;
         leaveStatusModelList = new MutableLiveData<>();
     }
-
     public LiveData<List<LeaveStatusModel>> getLeaveStatusList() {
         return leaveStatusModelList;
     }
@@ -49,7 +49,6 @@ public class LeaveStatusRepository {
                 }
                 leaveStatusModelList.setValue(leaveStatusList);
             }
-
             @Override
             public void onCancelled(DatabaseError databaseError) {
                 leaveStatusModelList.setValue(null);

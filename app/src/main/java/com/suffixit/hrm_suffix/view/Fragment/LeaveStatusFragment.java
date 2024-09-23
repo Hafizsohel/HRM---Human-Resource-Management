@@ -30,8 +30,7 @@ public class LeaveStatusFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
-        binding = FragmentLeaveStatusBinding.inflate(inflater, container, false);
-
+        binding = FragmentLeaveStatusBinding.inflate(getLayoutInflater());
         leaveStatusViewModel = new ViewModelProvider(this).get(LeaveStatusViewModel.class);
 
         localStorage = new AppPreference(requireContext());
@@ -47,12 +46,12 @@ public class LeaveStatusFragment extends Fragment {
 
         setupViews();
         observeLeaveStatus();
-
-
         changeCardColor(binding.cardApproved);
 
         return binding.getRoot();
     }
+
+
 
     private void setupViews() {
         binding.recyclerStatusId.setLayoutManager(new LinearLayoutManager(getContext()));
@@ -94,6 +93,7 @@ public class LeaveStatusFragment extends Fragment {
     private void fetchLeaveStatus(String userId, String statusFilter) {
         leaveStatusViewModel.fetchLeaveStatus(userId, statusFilter);
         binding.pleaseWaitText.setVisibility(View.VISIBLE);
+
     }
 
     private void countStatuses(List<LeaveStatusModel> leaveStatusModels) {
@@ -131,6 +131,9 @@ public class LeaveStatusFragment extends Fragment {
             showNoDataMessage();
         }
 }
+
+
+
 
     private void changeCardColor(CardView cardView) {
 
